@@ -1,11 +1,5 @@
 #import('dart:io');
 
-Map<String, String> contentTypes = const {
-  "html": "text/html; charset=UTF-8",
-  "dart": "application/dart",
-  "js": "application/javascript", 
-};
-
 List<WebSocketConnection> connections;
 
 
@@ -68,7 +62,7 @@ void serveFile(HttpRequest req, HttpResponse resp) {
   print("requested $path");
   
   //login post
-  if(path.contains("security_check")){
+  if(path.contains("client.html") && req.method == "POST"){
     
     print("matched");
     
@@ -109,6 +103,11 @@ void serveFile(HttpRequest req, HttpResponse resp) {
 
           
           if(valid){
+            
+            File client = new File("./client/client.html");
+            
+            resp.outputStream.writeString(client.readAsTextSync());
+            resp.outputStream.close();
 
             
           } else {
@@ -117,13 +116,14 @@ void serveFile(HttpRequest req, HttpResponse resp) {
           }
         });      
       } else {
-        //resp.statusCode = HttpStatus.NOT_FOUND;
         resp.outputStream.close();
       }
     });
     
     
   } else {
+    
+    if(!path.contains("client.html")){
   
     File file = new File(path);
     file.exists().then((bool exists) {
@@ -134,15 +134,17 @@ void serveFile(HttpRequest req, HttpResponse resp) {
           resp.outputStream.close();
         });      
       } else {
-        //resp.statusCode = HttpStatus.NOT_FOUND;
         resp.outputStream.close();
       }
     });
   
+    }
+    else {
+      resp.outputStream.writeString("login denied");
+      resp.outputStream.close();
+    }
   }
 }
-
-String getContentType(File file) => contentTypes[file.name.split('.').last()];
 
 void removeConnection(WebSocketConnection conn) {
   int index = connections.indexOf(conn);
