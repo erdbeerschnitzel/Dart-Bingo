@@ -10,19 +10,36 @@ List<WebSocketConnection> connections;
 
 
 void main() {
-  connections = new List();
   
+  connections = new List();
   WebSocketHandler wsHandler = new WebSocketHandler();
+  addWebSocketHandlers(wsHandler);
+  
+
+  HttpServer server = new HttpServer();
+  server.addRequestHandler((HttpRequest req) => (req.path == "/time"), wsHandler.onRequest);
+  server.addRequestHandler((_) => true, serveFile); 
+
+
+  startTimer();
+  
+  server.listen("127.0.0.1", 8080);  
+  
+  print("running...");
+
+}
+
+void addWebSocketHandlers(WebSocketHandler wsHandler){
+  
   wsHandler.onOpen = (WebSocketConnection conn) {
     connections.add(conn);    
     conn.onClosed = (a, b) => removeConnection(conn);
     conn.onError = (_) => removeConnection(conn);
   };
 
-  HttpServer server = new HttpServer();
-  server.addRequestHandler((HttpRequest req) => (req.path == "/time"), wsHandler.onRequest);
-  server.addRequestHandler((_) => true, serveFile); 
+}
 
+void startTimer(){
   
   List<int> done = new List<int>();
   
@@ -42,13 +59,7 @@ void main() {
       print('not adding $time');
     }
   });
-  
-  server.listen("127.0.0.1", 8080);  
-  
-  print("running...");
-
 }
-
 
 void serveFile(HttpRequest req, HttpResponse resp) {
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
