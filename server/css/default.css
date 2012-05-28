@@ -1,0 +1,83 @@
+body {
+	background-image: url("../img/bg.png");
+	background-repeat: repeat-x;
+	background-color: #EAEAEA;
+	color: white;
+	margin: 0px;
+	padding: 0px;
+	font-size: 1em;
+}
+
+h1 {
+	font-size: 2em;	
+	font-style: italic;
+}
+
+a {
+	color: #D0D0D0;
+}
+
+textarea {
+	width: 100%;
+}
+
+/* styling primefaces */
+.ui-datatable th, .ui-datatable tfoot td {
+    padding: 0px 0px;
+    text-align: center;
+    white-space: nowrap;
+}
+.ui-widget, 
+.ui-widget .ui-widget {
+	font-size: 12px;
+}
+
+.ui-panel {
+	margin-bottom: 20px;
+}
+
+.dark-box {
+	background-color: #333333;
+}
+
+.dark-box-top {
+	background-color: #333333;
+	border: 1px solid #333333;
+}
+
+.pos-right {
+	float: right;
+}
+
+.inner-Panel {
+	margin: 0px;
+}
+
+#content {
+	width: 80%;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;		
+}
+
+#footer {
+	font-size: 0.7em;
+	text-align: center;	
+	color: black;
+}
+
+#stovemgmt-label-login {
+	margin-left: 40px;  
+	margin-top: 100px;	
+}
+
+#stovemgmt-label {
+	margin-left: 100px;  
+	font-size: 1.5em;
+	font-style: italic;	
+}
+
+#account-panel {	
+	margin-right: 5px;
+	font-size: 0.8em;
+}
