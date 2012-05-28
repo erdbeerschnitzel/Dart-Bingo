@@ -45,43 +45,10 @@ void main() {
   
   server.listen("127.0.0.1", 8080);  
   
-  print("file...");
+  print("running...");
 
-  
-  print("reading file...");
-
-  
-  doThis().then((b) => print('exists: $b'));
-
-
-   print("after future");
 }
 
-
-Future doThis(){
-  
-  Completer c = new Completer();
-  
-  var a = 1;
-
-    for(int i = 0; i < 100; i++){
-      
-      a = a + 1;
-      
-      for(int b = 0; b < 1000; b++){
-        
-        a = a - 1;
-        
-        for(int cc = 0; cc < 1000; cc++){
-          
-          a = a + 1;
-        }
-      }
-    }
-  c.complete("Wait for me: $a");
-
-  return c.future; 
-}
 
 void serveFile(HttpRequest req, HttpResponse resp) {
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
