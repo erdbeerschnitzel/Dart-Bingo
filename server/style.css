@@ -1,0 +1,44 @@
+
+BODY { background-color:white }
+BODY,TABLE{ font-size:12pt; font-family:Arial, Tahoma, Roman; }
+BUTTON{ font-size:9pt;  }
+
+.boardcell{
+	background-color:#FFC6A5;
+	width:30px;
+	color:red;
+	font-weight:bold;
+}
+.boardheader{
+	background-color:#FF7B29;
+	width:60px;
+}
+.top{
+	background-color:#FF7B29;
+	width:30px;
+}
+.submitbut{
+	width:150px
+}
+
+.showncard1{
+	background-color:darkgreen;
+	color:white;
+}
+.showncard2{
+	background-color:darkblue;
+	color:white;
+}
+.closecard1{
+	background-color:lightgreen;
+	color:black;
+}
+.closecard2{
+	background-color:lightblue;
+	color:black;
+}
+
+.wincard{
+	background-color:yellow;
+	color:black;
+}
