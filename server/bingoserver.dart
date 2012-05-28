@@ -17,7 +17,7 @@ void main() {
   
 
   HttpServer server = new HttpServer();
-  server.addRequestHandler((HttpRequest req) => (req.path == "/time"), wsHandler.onRequest);
+  server.addRequestHandler((HttpRequest req) => (req.path == "/bingo"), wsHandler.onRequest);
   server.addRequestHandler((_) => true, serveFile); 
 
 
@@ -56,29 +56,68 @@ void startTimer(){
       });
     }
     else {
-      print('not adding $time');
+      //print('not adding $time');
     }
   });
 }
 
+// serving http requests
 void serveFile(HttpRequest req, HttpResponse resp) {
-  String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
-  print("serving $path");
   
+  String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
+  print("requested $path");
+  
+  //login post
   if(path.contains("security_check")){
     
     print("matched");
     
     File file = new File("data.txt");
+    
     file.exists().then((bool exists) {
       if (exists) {
         file.readAsLines().then((List<String> lines){
-          //resp.headers.set(HttpHeaders.CONTENT_TYPE, getContentType(file));
-          resp.outputStream.writeString("login denied");
-          resp.outputStream.close();
+ 
+          bool valid = false;
+       
+          String postmessage = new String.fromCharCodes(req.inputStream.read());
+ 
+          postmessage = postmessage.replaceAll("username=", "");
+          postmessage = postmessage.replaceAll("password=", "");
+          
+          if(postmessage.split("&").length > 1){
+            String user = postmessage.split("&")[0];
+            String pass = postmessage.split("&")[1];
+            
+            print("user: $user pass: $pass");
+            
+            for(String line in lines){
+              
+              if(line.split("=")[0] == user && line.split("=")[1] == pass){
+                
+                print("found login");
+                valid = true;
+                
+              }
+            }
+          }
+          else {
+            
+            print("Error reading POST");
+          }
+          
+
+          
+          if(valid){
+
+            
+          } else {
+            resp.outputStream.writeString("login denied");
+            resp.outputStream.close();
+          }
         });      
       } else {
-        resp.statusCode = HttpStatus.NOT_FOUND;
+        //resp.statusCode = HttpStatus.NOT_FOUND;
         resp.outputStream.close();
       }
     });
@@ -95,7 +134,7 @@ void serveFile(HttpRequest req, HttpResponse resp) {
           resp.outputStream.close();
         });      
       } else {
-        resp.statusCode = HttpStatus.NOT_FOUND;
+        //resp.statusCode = HttpStatus.NOT_FOUND;
         resp.outputStream.close();
       }
     });
