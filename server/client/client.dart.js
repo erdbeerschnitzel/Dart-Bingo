@@ -42,6 +42,19 @@ Isolate.$defineClass("HashMapImplementation", "Object", ["_numberOfDeleted", "_n
  isEmpty$0: function() {
   return $.eq(this._numberOfEntries, 0);
  },
+ remove$1: function(key) {
+  var index = this._probeForLookup$1(key);
+  if ($.geB(index, 0)) {
+    this._numberOfEntries = $.sub(this._numberOfEntries, 1);
+    var value = $.index(this._values, index);
+    $.indexSet(this._values, index, (void 0));
+    $.indexSet(this._keys, index, $.CTC7);
+    this._numberOfDeleted = $.add(this._numberOfDeleted, 1);
+    return value;
+  } else {
+  }
+  return;
+ },
  operator$index$1: function(key) {
   var index = this._probeForLookup$1(key);
   if ($.ltB(index, 0)) {
@@ -319,6 +332,14 @@ Isolate.$defineClass("HashSetImplementation", "Object", ["_backingMap?"], {
  },
  addAll$1: function(collection) {
   $.forEach(collection, new $.Closure9(this));
+ },
+ remove$1: function(value) {
+  if (this._backingMap.containsKey$1(value) !== true) {
+    return false;
+  } else {
+  }
+  this._backingMap.remove$1(value);
+  return true;
  },
  contains$1: function(value) {
   return this._backingMap.containsKey$1(value);
@@ -996,9 +1017,19 @@ Isolate.$defineClass("_EventsImpl", "Object", ["_ptr"], {
 });
 
 Isolate.$defineClass("_EventListenerListImpl", "Object", ["_type", "_ptr"], {
+ _remove$2: function(listener, useCapture) {
+  this._ptr.$dom_removeEventListener$3(this._type, listener, useCapture);
+ },
  _add$2: function(listener, useCapture) {
   this._ptr.$dom_addEventListener$3(this._type, listener, useCapture);
  },
+ remove$2: function(listener, useCapture) {
+  this._remove$2(listener, useCapture);
+  return this;
+ },
+ remove$1: function(listener) {
+  return this.remove$2(listener,false)
+},
  add$2: function(listener, useCapture) {
   this._add$2(listener, useCapture);
   return this;
@@ -1282,27 +1313,30 @@ Isolate.$defineClass("Closure4", "Closure12", [], {
 });
 
 Isolate.$defineClass("Closure5", "Closure12", ["box_0"], {
- $call$1: function(event2) {
-  this.box_0.el_1.get$style().set$textDecoration('underline');
-  this.box_0.el_1.get$style().set$backgroundColor('white');
- }
-});
-
-Isolate.$defineClass("Closure6", "Closure12", ["box_0"], {
  $call$0: function() {
   return this.box_0.closure_1.$call$0();
  }
 });
 
-Isolate.$defineClass("Closure7", "Closure12", ["box_0"], {
+Isolate.$defineClass("Closure6", "Closure12", ["box_0"], {
  $call$0: function() {
   return this.box_0.closure_1.$call$1(this.box_0.arg1_2);
  }
 });
 
-Isolate.$defineClass("Closure8", "Closure12", ["box_0"], {
+Isolate.$defineClass("Closure7", "Closure12", ["box_0"], {
  $call$0: function() {
   return this.box_0.closure_1.$call$2(this.box_0.arg1_2, this.box_0.arg2_3);
+ }
+});
+
+Isolate.$defineClass("Closure8", "Closure12", ["box_0"], {
+ $call$1: function(event2) {
+  if ($.eqB($.toString($.currentNumber), $.toString(this.box_0.el_1.get$innerHTML()))) {
+    this.box_0.el_1.get$style().set$textDecoration('underline');
+    this.box_0.el_1.get$style().set$backgroundColor('white');
+  } else {
+  }
  }
 });
 
@@ -1513,9 +1547,10 @@ $.allMatches = function(receiver, str) {
   return $.allMatchesInStringUnchecked(receiver, str);
 };
 
-$.dynamicSetMetadata = function(inputTable) {
-  var t0 = $.buildDynamicMetadata(inputTable);
-  $._dynamicMetadata(t0);
+$.GameHandler = function(event3) {
+  $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
+  $.currentNumber = $.getRandomNumber();
+  $.show('the current number is ' + $.stringToString($.currentNumber));
 };
 
 $.substringUnchecked = function(receiver, startIndex, endIndex) {
@@ -1546,6 +1581,11 @@ $.toString = function(value) {
   return String(value);
 };
 
+$.dynamicSetMetadata = function(inputTable) {
+  var t0 = $.buildDynamicMetadata(inputTable);
+  $._dynamicMetadata(t0);
+};
+
 $.get$length = function(receiver) {
   var t0 = typeof receiver === 'string';
   if (!t0) {
@@ -1570,6 +1610,27 @@ $.ge$slow = function(a, b) {
 
 $.ListIterator$1 = function(list) {
   return new $.ListIterator(list, 0);
+};
+
+$.getRandomNumber = function() {
+  var a = $.toInt($.mul($.random(), 100));
+  while (true) {
+    var t0 = $.gtB(a, 99);
+    if (!t0) {
+      var t1 = $.ltB(a, 1);
+    } else {
+      t1 = t0;
+    }
+    if (!t1) {
+      var t2 = $.geB($.indexOf$1($.addNumbers, a), 0);
+    } else {
+      t2 = t1;
+    }
+    if (!t2) break;
+    var a0 = $.toInt($.mul($.random(), 100));
+    a = a0;
+  }
+  return a;
 };
 
 $.IllegalJSRegExpException$2 = function(_pattern, _errmsg) {
@@ -1981,28 +2042,63 @@ $.ExceptionImplementation$1 = function(msg) {
   return new $.ExceptionImplementation(msg);
 };
 
-$._DOMApplicationCacheEventsImpl$1 = function(_ptr) {
-  return new $._DOMApplicationCacheEventsImpl(_ptr);
-};
-
 $.invokeClosure = function(closure, isolate, numberOfArguments, arg1, arg2) {
   var t0 = ({});
   t0.arg2_3 = arg2;
   t0.arg1_2 = arg1;
   t0.closure_1 = closure;
   if ($.eqB(numberOfArguments, 0)) {
-    return new $.Closure6(t0).$call$0();
+    return new $.Closure5(t0).$call$0();
   } else {
     if ($.eqB(numberOfArguments, 1)) {
-      return new $.Closure7(t0).$call$0();
+      return new $.Closure6(t0).$call$0();
     } else {
       if ($.eqB(numberOfArguments, 2)) {
-        return new $.Closure8(t0).$call$0();
+        return new $.Closure7(t0).$call$0();
       } else {
         throw $.captureStackTrace($.ExceptionImplementation$1('Unsupported number of arguments for wrapped closure'));
       }
     }
   }
+};
+
+$.createCard = function(card) {
+  var card0 = $.Gamecard$0();
+  for (var t0 = $.iterator(card0.fields), i = 0, cardstring = '', x = 0; t0.hasNext$0() === true; i = i0, cardstring = cardstring0, x = x0) {
+    var t1 = t0.next$0();
+    var cardstring1 = cardstring + '<tr>';
+    var t2 = i < 5;
+    for (var t3 = $.iterator(t1), x1 = x, cardstring2 = cardstring1; t3.hasNext$0() === true; x1 = x2, cardstring2 = cardstring3) {
+      t3.next$0();
+      var t4 = x1 < 5;
+      if (t4) {
+        var t5 = t2;
+      } else {
+        t5 = t4;
+      }
+      if (t5) {
+        var cardstring4 = $.add($.add($.add(cardstring2 + '<td id="p', i), x1) + '"' + 'class=top>', $.index($.index(card0.fields, i), x1)) + '</td>';
+      } else {
+        cardstring4 = cardstring2;
+      }
+      if (x1 === 4) {
+        var cardstring5 = cardstring4 + '</tr>';
+        var x2 = 0;
+        var cardstring3 = cardstring5;
+      } else {
+        x2 = x1 + 1;
+        cardstring3 = cardstring4;
+      }
+    }
+    if (i === 4) {
+      var i0 = 0;
+    } else {
+      i0 = i + 1;
+    }
+    var x0 = x1;
+    var cardstring0 = cardstring2;
+  }
+  return cardstring;
 };
 
 $._EventListenerListImpl$2 = function(_ptr, _type) {
@@ -2022,6 +2118,10 @@ $.gt = function(a, b) {
     t2 = $.gt$slow(a, b);
   }
   return t2;
+};
+
+$._DOMApplicationCacheEventsImpl$1 = function(_ptr) {
+  return new $._DOMApplicationCacheEventsImpl(_ptr);
 };
 
 $.assert = function(condition) {
@@ -2112,10 +2212,6 @@ $.stringToString = function(value) {
   return res;
 };
 
-$._NotificationEventsImpl$1 = function(_ptr) {
-  return new $._NotificationEventsImpl(_ptr);
-};
-
 $.lt$slow = function(a, b) {
   if ($.checkNumbers(a, b) === true) {
     return a < b;
@@ -2142,6 +2238,10 @@ $.last = function(receiver) {
   } else {
   }
   return $.index(receiver, $.sub($.get$length(receiver), 1));
+};
+
+$._NotificationEventsImpl$1 = function(_ptr) {
+  return new $._NotificationEventsImpl(_ptr);
 };
 
 $.index$slow = function(a, index) {
@@ -2239,43 +2339,11 @@ $._PeerConnection00EventsImpl$1 = function(_ptr) {
 
 $.GamecardHandler = function(event$) {
   $.show('clicked!');
-  var playercard = $.Gamecard$0();
-  for (var t0 = $.iterator(playercard.fields), card = '', i = 0, x = 0; t0.hasNext$0() === true; card = card0, i = i0, x = x0) {
-    var t1 = t0.next$0();
-    var card1 = card + '<tr>';
-    var t2 = i < 5;
-    for (var t3 = $.iterator(t1), card2 = card1, x1 = x; t3.hasNext$0() === true; card2 = card3, x1 = x2) {
-      t3.next$0();
-      var t4 = x1 < 5;
-      if (t4) {
-        var t5 = t2;
-      } else {
-        t5 = t4;
-      }
-      if (t5) {
-        var card4 = $.add($.add($.add(card2 + '<td id="p', i), x1) + '"' + 'class=top>', $.index($.index(playercard.fields, i), x1)) + '</td>';
-      } else {
-        card4 = card2;
-      }
-      if (x1 === 4) {
-        var card5 = card4 + '</tr>';
-        var x2 = 0;
-        var card3 = card5;
-      } else {
-        x2 = x1 + 1;
-        card3 = card4;
-      }
-    }
-    if (i === 4) {
-      var i0 = 0;
-    } else {
-      i0 = i + 1;
-    }
-    var card0 = card2;
-    var x0 = x1;
-  }
-  $.document().query$1('#playertable').set$innerHTML(card);
-  $.addClickHandlers();
+  var t0 = $.createCard($.playercard);
+  $.document().query$1('#playertable').set$innerHTML(t0);
+  $.addCellClickHandlers();
+  var t1 = $.createCard($.computercard);
+  $.document().query$1('#computertable').set$innerHTML(t1);
 };
 
 $.contains$2 = function(receiver, other, startIndex) {
@@ -2350,10 +2418,6 @@ $._EventsImpl$1 = function(_ptr) {
   return new $._EventsImpl(_ptr);
 };
 
-$._IDBRequestEventsImpl$1 = function(_ptr) {
-  return new $._IDBRequestEventsImpl(_ptr);
-};
-
 $.HashSetImplementation$0 = function() {
   var t0 = new $.HashSetImplementation((void 0));
   t0.HashSetImplementation$0();
@@ -2378,6 +2442,10 @@ $.stringSplitUnchecked = function(receiver, pattern) {
       throw $.captureStackTrace('StringImplementation.split(Pattern) UNIMPLEMENTED');
     }
   }
+};
+
+$._IDBRequestEventsImpl$1 = function(_ptr) {
+  return new $._IDBRequestEventsImpl(_ptr);
 };
 
 $.checkGrowable = function(list, reason) {
@@ -2413,25 +2481,6 @@ $._SpeechRecognitionEventsImpl$1 = function(_ptr) {
   return new $._SpeechRecognitionEventsImpl(_ptr);
 };
 
-$.addClickHandlers = function() {
-  for (var i = 0; i < 5; i = i + 1) {
-    var t0 = i === 2;
-    for (var x = 0; x < 5; x = x + 1) {
-      var t1 = ({});
-      if (t0) {
-        var t2 = x === 2;
-      } else {
-        t2 = t0;
-      }
-      if (t2) {
-      } else {
-        t1.el_1 = $.document().query$1('#p' + $.stringToString(i) + $.stringToString(x));
-        $.add$1(t1.el_1.get$on().get$click(), new $.Closure5(t1));
-      }
-    }
-  }
-};
-
 $._SVGElementInstanceEventsImpl$1 = function(_ptr) {
   return new $._SVGElementInstanceEventsImpl(_ptr);
 };
@@ -2455,10 +2504,6 @@ $.filter3 = function(source, destination, f) {
     }
   }
   return destination;
-};
-
-$.MetaInfo$3 = function(tag, tags, set) {
-  return new $.MetaInfo(set, tags, tag);
 };
 
 $._MediaStreamEventsImpl$1 = function(_ptr) {
@@ -2551,6 +2596,10 @@ $.stringContainsUnchecked = function(receiver, other, startIndex) {
   }
 };
 
+$.MetaInfo$3 = function(tag, tags, set) {
+  return new $.MetaInfo(set, tags, tag);
+};
+
 $.dynamicFunction = function(name$) {
   var f = (Object.prototype[name$]);
   var t0 = !(f === (void 0));
@@ -2581,6 +2630,25 @@ $.ObjectNotClosureException$0 = function() {
 
 $.window = function() {
   return window;;
+};
+
+$.addCellClickHandlers = function() {
+  for (var i = 0; i < 5; i = i + 1) {
+    var t0 = i === 2;
+    for (var x = 0; x < 5; x = x + 1) {
+      var t1 = ({});
+      if (t0) {
+        var t2 = x === 2;
+      } else {
+        t2 = t0;
+      }
+      if (t2) {
+      } else {
+        t1.el_1 = $.document().query$1('#p' + $.stringToString(i) + $.stringToString(x));
+        $.add$1(t1.el_1.get$on().get$click(), new $.Closure8(t1));
+      }
+    }
+  }
 };
 
 $.objectToString = function(object) {
@@ -3229,7 +3297,11 @@ $.newList = function(length$) {
 };
 
 $.main = function() {
+  var t0 = $.List((void 0));
+  $.setRuntimeTypeInfo(t0, ({E: 'int'}));
+  $.addNumbers = t0;
   $.add$1($.document().query$1('#getGamecard').get$on().get$click(), $.GamecardHandler);
+  $.add$1($.document().query$1('#startGame').get$on().get$click(), $.GameHandler);
   $.show('something');
 };
 
@@ -3583,13 +3655,14 @@ $.buildDynamicMetadata$bailout = function(inputTable, state, env0, env1, env2, e
   }
 };
 
+$.typeNameInIE.$call$1 = $.typeNameInIE;
 $.dynamicBind.$call$4 = $.dynamicBind;
 $.throwNoSuchMethod.$call$3 = $.throwNoSuchMethod;
 $.invokeClosure.$call$5 = $.invokeClosure;
 $.typeNameInChrome.$call$1 = $.typeNameInChrome;
 $.toStringWrapper.$call$0 = $.toStringWrapper;
+$.GameHandler.$call$1 = $.GameHandler;
 $.GamecardHandler.$call$1 = $.GamecardHandler;
-$.typeNameInIE.$call$1 = $.typeNameInIE;
 $.typeNameInFirefox.$call$1 = $.typeNameInFirefox;
 $.constructorNameFallback.$call$1 = $.constructorNameFallback;
 Isolate.$finishClasses();
@@ -3606,8 +3679,12 @@ $.CTC7 = new Isolate.$isolateProperties._DeletedKeySentinel();
 $.CTC6 = new Isolate.$isolateProperties.JSSyntaxRegExp(false, false, 'Chrome|DumpRenderTree');
 $.CTC8 = new Isolate.$isolateProperties.Object();
 $.CTC2 = new Isolate.$isolateProperties.NoMoreElementsException();
-$._cachedBrowserPrefix = (void 0);
+$.computercard = (void 0);
 $._getTypeNameOf = (void 0);
+$.playercard = (void 0);
+$._cachedBrowserPrefix = (void 0);
+$.addNumbers = (void 0);
+$.currentNumber = 22;
 var $ = null;
 Isolate.$finishClasses();
 Isolate = Isolate.$finishIsolateConstructor(Isolate);
@@ -3642,6 +3719,9 @@ $.defineProperty(Object.prototype, 'is$Element', function() { return false; });
 $.defineProperty(Object.prototype, 'is$Collection', function() { return false; });
 $.defineProperty(Object.prototype, 'toString$0', function() { return $.toStringForNativeObject(this); });
 $.$defineNativeClass('AbstractWorker', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -3699,6 +3779,9 @@ $.$defineNativeClass('HTMLBaseFontElement', [], {
 });
 
 $.$defineNativeClass('BatteryManager', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -3785,6 +3868,9 @@ $.$defineNativeClass('HTMLDListElement', [], {
 });
 
 $.$defineNativeClass('DOMApplicationCache', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -3867,6 +3953,9 @@ $.$defineNativeClass('DOMTokenList', ["length?"], {
  toString$0: function() {
   return this.toString();
  },
+ remove$1: function(token) {
+  return this.remove(token);
+ },
  contains$1: function(token) {
   return this.contains(token);
  },
@@ -3894,6 +3983,9 @@ $.$defineNativeClass('DedicatedWorkerContext', [], {
 });
 
 $.$defineNativeClass('DeprecatedPeerConnection', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -3967,6 +4059,15 @@ $.$defineNativeClass('DocumentFragment', [], {
     return Object.prototype.set$innerHTML.call(this, value);
   }
  },
+ get$innerHTML: function() {
+  if (Object.getPrototypeOf(this).hasOwnProperty('get$innerHTML')) {
+    var e = $.Element$tag('div');
+  $.add$1(e.get$nodes(), this.clone$1(true));
+  return e.get$innerHTML();
+  } else {
+    return Object.prototype.get$innerHTML.call(this);
+  }
+ },
  get$elements: function() {
   if ($.eqNullB(this._elements)) {
     this._elements = $.FilteredElementList$1(this);
@@ -3977,7 +4078,7 @@ $.$defineNativeClass('DocumentFragment', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('Element', ["style?", "innerHTML!"], {
+$.$defineNativeClass('Element', ["style?", "innerHTML="], {
  query$1: function(selectors) {
   return this.querySelector(selectors);
  },
@@ -4024,6 +4125,17 @@ $.$defineNativeClass('HTMLEmbedElement', [], {
  is$Element: function() { return true; }
 });
 
+$.$defineNativeClass('Entry', [], {
+ remove$2: function(successCallback, errorCallback) {
+  return this.remove($.convertDartClosureToJS(successCallback),$.convertDartClosureToJS(errorCallback));
+ },
+ remove$1: function(successCallback) {
+  successCallback = $.convertDartClosureToJS(successCallback);
+  errorCallback = $.convertDartClosureToJS(errorCallback);
+  return this.remove(successCallback);
+}
+});
+
 $.$defineNativeClass('EntryArray', ["length?"], {
 });
 
@@ -4043,6 +4155,9 @@ $.$defineNativeClass('EventException', [], {
 });
 
 $.$defineNativeClass('EventSource', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4052,6 +4167,13 @@ $.$defineNativeClass('EventSource', [], {
 });
 
 $.$defineNativeClass('EventTarget', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  if (Object.getPrototypeOf(this).hasOwnProperty('$dom_removeEventListener$3')) {
+    return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  } else {
+    return Object.prototype.$dom_removeEventListener$3.call(this, type, listener, useCapture);
+  }
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   if (Object.getPrototypeOf(this).hasOwnProperty('$dom_addEventListener$3')) {
     return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
@@ -4125,6 +4247,9 @@ $.$defineNativeClass('FileList', ["length?"], {
 });
 
 $.$defineNativeClass('FileReader', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4134,6 +4259,9 @@ $.$defineNativeClass('FileReader', [], {
 });
 
 $.$defineNativeClass('FileWriter', ["length?"], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4310,6 +4438,9 @@ $.$defineNativeClass('HTMLCollection', ["length?"], {
 });
 
 $.$defineNativeClass('HTMLOptionsCollection', [], {
+ remove$1: function(index) {
+  return this.remove(index);
+ },
  set$length: function(value) {
   this.length = value;;
  },
@@ -4336,6 +4467,9 @@ $.$defineNativeClass('HTMLHtmlElement', [], {
 });
 
 $.$defineNativeClass('IDBDatabase', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4363,6 +4497,13 @@ $.$defineNativeClass('IDBObjectStore', [], {
 });
 
 $.$defineNativeClass('IDBRequest', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  if (Object.getPrototypeOf(this).hasOwnProperty('$dom_removeEventListener$3')) {
+    return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  } else {
+    return Object.prototype.$dom_removeEventListener$3.call(this, type, listener, useCapture);
+  }
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   if (Object.getPrototypeOf(this).hasOwnProperty('$dom_addEventListener$3')) {
     return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
@@ -4380,6 +4521,9 @@ $.$defineNativeClass('IDBRequest', [], {
 });
 
 $.$defineNativeClass('IDBTransaction', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4389,6 +4533,9 @@ $.$defineNativeClass('IDBTransaction', [], {
 });
 
 $.$defineNativeClass('IDBVersionChangeRequest', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4551,6 +4698,9 @@ $.$defineNativeClass('Int8Array', ["length?"], {
 });
 
 $.$defineNativeClass('JavaScriptAudioNode', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4594,6 +4744,9 @@ $.$defineNativeClass('HTMLMarqueeElement', [], {
 });
 
 $.$defineNativeClass('MediaController', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  }
@@ -4653,6 +4806,9 @@ $.$defineNativeClass('MediaList', ["length?"], {
 });
 
 $.$defineNativeClass('MediaStream', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4672,6 +4828,9 @@ $.$defineNativeClass('HTMLMenuElement', [], {
 });
 
 $.$defineNativeClass('MessagePort', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4745,11 +4904,17 @@ $.$defineNativeClass('Node', [], {
  $dom_replaceChild$2: function(newChild, oldChild) {
   return this.replaceChild(newChild,oldChild);
  },
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_removeChild$1: function(oldChild) {
   return this.removeChild(oldChild);
  },
  contains$1: function(other) {
   return this.contains(other);
+ },
+ clone$1: function(deep) {
+  return this.cloneNode(deep);
  },
  $dom_appendChild$1: function(newChild) {
   return this.appendChild(newChild);
@@ -4863,6 +5028,9 @@ $.$defineNativeClass('NodeSelector', [], {
 });
 
 $.$defineNativeClass('Notification', ["tag?"], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -4906,6 +5074,9 @@ $.$defineNativeClass('HTMLParamElement', [], {
 });
 
 $.$defineNativeClass('PeerConnection00', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5015,6 +5186,12 @@ $.$defineNativeClass('SVGElement', [], {
   var container = $.Element$tag('div');
   container.set$innerHTML('<svg version="1.1">' + $.stringToString(svg) + '</svg>');
   this.set$elements(container.get$elements().get$first().get$elements());
+ },
+ get$innerHTML: function() {
+  var container = $.Element$tag('div');
+  var cloned = this.clone$1(true);
+  $.addAll(container.get$elements(), cloned.get$elements());
+  return container.get$innerHTML();
  },
  set$elements: function(value) {
   var elements = this.get$elements();
@@ -5373,7 +5550,7 @@ $.$defineNativeClass('HTMLShadowElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('ShadowRoot', ["innerHTML!"], {
+$.$defineNativeClass('ShadowRoot', ["innerHTML="], {
  is$Element: function() { return true; }
 });
 
@@ -5398,6 +5575,9 @@ $.$defineNativeClass('SpeechInputResultList', ["length?"], {
 });
 
 $.$defineNativeClass('SpeechRecognition', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5415,6 +5595,9 @@ $.$defineNativeClass('SpeechRecognitionResultList', ["length?"], {
 $.$defineNativeClass('Storage', [], {
  $dom_setItem$2: function(key, data) {
   return this.setItem(key,data);
+ },
+ $dom_removeItem$1: function(key) {
+  return this.removeItem(key);
  },
  $dom_key$1: function(index) {
   return this.key(index);
@@ -5446,6 +5629,11 @@ $.$defineNativeClass('Storage', [], {
  },
  clear$0: function() {
   return this.$dom_clear$0();
+ },
+ remove$1: function(key) {
+  var value = this.operator$index$1(key);
+  this.$dom_removeItem$1(key);
+  return value;
  },
  operator$indexSet$2: function(key, value) {
   return this.$dom_setItem$2(key, value);
@@ -5538,6 +5726,9 @@ $.$defineNativeClass('HTMLTextAreaElement', [], {
 });
 
 $.$defineNativeClass('TextTrack', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5547,6 +5738,9 @@ $.$defineNativeClass('TextTrack', [], {
 });
 
 $.$defineNativeClass('TextTrackCue', ["text!"], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5559,6 +5753,9 @@ $.$defineNativeClass('TextTrackCueList', ["length?"], {
 });
 
 $.$defineNativeClass('TextTrackList', ["length?"], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5784,6 +5981,9 @@ $.$defineNativeClass('HTMLVideoElement', [], {
 });
 
 $.$defineNativeClass('WebSocket', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5793,6 +5993,9 @@ $.$defineNativeClass('WebSocket', [], {
 });
 
 $.$defineNativeClass('DOMWindow', ["navigator?", "length?"], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5808,6 +6011,9 @@ $.$defineNativeClass('Worker', [], {
 });
 
 $.$defineNativeClass('WorkerContext', ["navigator?"], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5830,6 +6036,9 @@ $.$defineNativeClass('WorkerNavigator', ["userAgent?"], {
 });
 
 $.$defineNativeClass('XMLHttpRequest', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5845,6 +6054,9 @@ $.$defineNativeClass('XMLHttpRequestException', [], {
 });
 
 $.$defineNativeClass('XMLHttpRequestUpload', [], {
+ $dom_removeEventListener$3: function(type, listener, useCapture) {
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+ },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
  },
@@ -5859,9 +6071,9 @@ $.$defineNativeClass('XPathException', [], {
  }
 });
 
-// 271 dynamic classes.
-// 289 classes
-// 25 !leaf
+// 272 dynamic classes.
+// 292 classes
+// 26 !leaf
 (function(){
   var v0/*class(_SVGTextPositioningElementImpl)*/ = 'SVGTextPositioningElement|SVGTextElement|SVGTSpanElement|SVGTRefElement|SVGAltGlyphElement';
   var v1/*class(_SVGTextContentElementImpl)*/ = [v0/*class(_SVGTextPositioningElementImpl)*/,'SVGTextContentElement|SVGTextPathElement'].join('|');
@@ -5898,6 +6110,7 @@ $.$defineNativeClass('XPathException', [], {
     ['SVGElement', v5/*class(_SVGElementImpl)*/],
     ['HTMLMediaElement', v6/*class(_MediaElementImpl)*/],
     ['Element', v7/*class(_ElementImpl)*/],
+    ['Entry', 'Entry|FileEntry|DirectoryEntry'],
     ['EntrySync', 'EntrySync|FileEntrySync|DirectoryEntrySync'],
     ['Node', v12/*class(_NodeImpl)*/],
     ['MediaStream', v13/*class(_MediaStreamImpl)*/],
