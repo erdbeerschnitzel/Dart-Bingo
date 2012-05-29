@@ -1555,6 +1555,11 @@ $.GameHandler = function(event3) {
       if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.currentNumber)) {
         $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$textDecoration('underline');
         $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$backgroundColor('red');
+        $.indexSet($.index($.computercard.get$fields(), i), x, 0);
+        if ($.checkBingo($.computercard) === true) {
+          $.endGame();
+        } else {
+        }
       } else {
       }
     }
@@ -2080,7 +2085,7 @@ $.invokeClosure = function(closure, isolate, numberOfArguments, arg1, arg2) {
 
 $.createCard = function(card, forComputer) {
   var t0 = forComputer === true;
-  for (var t1 = $.iterator(card.get$fields()), i = 0, x = 0, cardstring = ''; t1.hasNext$0() === true; i = i0, x = x0, cardstring = cardstring0) {
+  for (var t1 = $.iterator(card.get$fields()), cardstring = '', x = 0, i = 0; t1.hasNext$0() === true; cardstring = cardstring0, x = x0, i = i0) {
     var t2 = t1.next$0();
     var cardstring1 = cardstring + '<tr>';
     var t3 = i < 5;
@@ -2124,8 +2129,8 @@ $.createCard = function(card, forComputer) {
     } else {
       i0 = i + 1;
     }
-    var cardstring0 = cardstring2;
     var x0 = x1;
+    var cardstring0 = cardstring2;
   }
   return cardstring;
 };
@@ -2154,6 +2159,10 @@ $._DOMApplicationCacheEventsImpl$1 = function(_ptr) {
 };
 
 $.assert = function(condition) {
+};
+
+$.debug = function(message) {
+  $.document().query$1('#debug').set$innerHTML(message);
 };
 
 $._WindowEventsImpl$1 = function(_ptr) {
@@ -2537,6 +2546,11 @@ $.filter3 = function(source, destination, f) {
   return destination;
 };
 
+$.endGame = function() {
+  $.show('ENDE!');
+  $.document().query$1('#startGame').get$on().get$click().remove$1($.GameHandler);
+};
+
 $._MediaStreamEventsImpl$1 = function(_ptr) {
   return new $._MediaStreamEventsImpl(_ptr);
 };
@@ -2608,6 +2622,40 @@ $.geB = function(a, b) {
     t2 = $.ge$slow(a, b) === true;
   }
   return t2;
+};
+
+$.checkBingo = function(card) {
+  for (var deb = '', i = 0, result = true; i < 5; deb = deb0, i = i0, result = result0) {
+    var t0 = i === 2;
+    for (var x = 0, result1 = result, deb1 = deb; x < 5; x = x0, result1 = result2, deb1 = deb2) {
+      if (t0) {
+        var t1 = x === 2;
+      } else {
+        t1 = t0;
+      }
+      if (t1) {
+        var result2 = result1;
+        var deb2 = deb1;
+      } else {
+        if ($.gtB($.index($.index(card.get$fields(), i), x), 0)) {
+          result2 = false;
+        } else {
+          result2 = result1;
+        }
+        deb2 = $.add(deb1 + ('' + $.stringToString(i) + $.stringToString(x) + ': '), $.index($.index(card.get$fields(), i), x)) + ' ';
+      }
+      var x0 = x + 1;
+    }
+    if (result1) {
+      return true;
+    } else {
+    }
+    var result0 = result1;
+    var deb0 = deb1;
+    var i0 = i + 1;
+  }
+  $.debug('the current number is ' + $.stringToString($.currentNumber) + ' and the result is ' + $.stringToString(deb));
+  return false;
 };
 
 $.defineProperty = function(obj, property, value) {

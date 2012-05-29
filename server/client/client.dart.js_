@@ -93,6 +93,19 @@ function $eq$(x, y) {
 $defProp(Object.prototype, '$eq', function(other) {
   return this === other;
 });
+function $gt$complex$(x, y) {
+  if (typeof(x) == 'number') {
+    $throw(new IllegalArgumentException(y));
+  } else if (typeof(x) == 'object') {
+    return x.$gt(y);
+  } else {
+    $throw(new NoSuchMethodException(x, "operator >", [y]));
+  }
+}
+function $gt$(x, y) {
+  if (typeof(x) == 'number' && typeof(y) == 'number') return x > y;
+  return $gt$complex$(x, y);
+}
 function $gte$complex$(x, y) {
   if (typeof(x) == 'number') {
     $throw(new IllegalArgumentException(y));
@@ -3361,6 +3374,9 @@ function main() {
 function show(message) {
   get$$document().query("#status").set$innerHTML(message);
 }
+function debug(message) {
+  get$$document().query("#debug").set$innerHTML(message);
+}
 function GamecardHandler(event) {
   $globals.computercard = new Gamecard();
   $globals.playercard = new Gamecard();
@@ -3371,7 +3387,6 @@ function GamecardHandler(event) {
 }
 function createCard(card, forComputer) {
   var cardstring = "";
-  var free = false;
   var i = (0);
   var x = (0);
   var $$list = card.fields;
@@ -3433,6 +3448,8 @@ function GameHandler(event3) {
       if ($eq$($globals.computercard.fields.$index(i).$index(x), $globals.currentNumber)) {
         get$$document().query(("#c" + i + x)).style.set$textDecoration("underline");
         get$$document().query(("#c" + i + x)).style.set$backgroundColor("red");
+        $globals.computercard.fields.$index(i).$setindex(x, (0));
+        if (checkBingo($globals.computercard)) endGame();
       }
     }
   }
@@ -3442,6 +3459,29 @@ function GameHandler(event3) {
     get$$document().query("#startGame").set$value("Next Number");
     $globals.first = false;
   }
+}
+function endGame() {
+  show("ENDE!");
+  get$$document().query("#startGame").get$on().get$click().remove$1(GameHandler);
+}
+function checkBingo(card) {
+  var result = true;
+  var deb = "";
+  for (var i = (0);
+   i < (5); i++) {
+    for (var x = (0);
+     x < (5); x++) {
+      if ((i == (2)) && (x == (2))) {
+      }
+      else {
+        if ($gt$(card.fields.$index(i).$index(x), (0))) result = false;
+        deb = $add$($add$($add$(deb, ("" + i + x + ": ")), card.fields.$index(i).$index(x)), " ");
+      }
+    }
+    if (result) return true;
+  }
+  debug(("the current number is " + $globals.currentNumber + " and the result is " + deb));
+  return false;
 }
 function getRandomNumber() {
   var a = (Math.random() * (100)).toInt();

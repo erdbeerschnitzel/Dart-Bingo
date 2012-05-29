@@ -33,6 +33,12 @@ void show(String message) {
   
 }
 
+void debug(String message) {
+  
+  document.query('#debug').innerHTML = message;
+  
+}
+
 void GamecardHandler(event){
      
     computercard = new Gamecard();
@@ -53,8 +59,6 @@ void GamecardHandler(event){
 String createCard(Gamecard card, bool forComputer){
   
   String cardstring = "";
-  
-  bool free = false;
   
   int i = 0;
   int x = 0;
@@ -143,7 +147,9 @@ void GameHandler(event3){
         
         document.query('#c$i$x').style.textDecoration = 'underline';
         document.query('#c$i$x').style.backgroundColor = 'red';
+        computercard.fields[i][x] = 0;
         
+        if(checkBingo(computercard)) endGame();
       }
       
     }
@@ -157,6 +163,44 @@ void GameHandler(event3){
     first = false;
   }
 
+}
+
+void endGame(){
+  
+  show("ENDE!");
+  
+  document.query('#startGame').on.click.remove(GameHandler);
+}
+
+bool checkBingo(Gamecard card){
+  
+  bool result = true;
+  
+  String deb = "";
+  
+  for(int i = 0; i < 5; i++){
+    
+    
+    for(int x = 0; x < 5; x++){
+      
+      if((i == 2) && (x == 2)){
+      }
+      else 
+      {
+      
+        if(card.fields[i][x] > 0) result = false;
+        
+        deb = deb + "$i$x: " + card.fields[i][x] + " ";
+      }
+    }
+      
+    if(result) return true;    
+    
+  }
+  
+  debug("the current number is $currentNumber and the result is $deb");
+  
+  return false;
 }
 
 int getRandomNumber(){
