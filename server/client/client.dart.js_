@@ -3356,18 +3356,18 @@ function main() {
   get$$document().query("#getGamecard").get$on().get$click().add$1(GamecardHandler);
   get$$document().query("#startGame").get$on().get$click().add$1(GameHandler);
   get$$document().query("#Bingo").get$on().get$click().add$1(BingoHandler);
-  show("something");
+  show("Welcome to Bingo");
 }
 function show(message) {
   get$$document().query("#status").set$innerHTML(message);
 }
 function GamecardHandler(event) {
-  show("clicked!");
   $globals.computercard = new Gamecard();
   $globals.playercard = new Gamecard();
   get$$document().query("#playertable").set$innerHTML(createCard($globals.playercard, false));
   addCellClickHandlers();
   get$$document().query("#computertable").set$innerHTML(createCard($globals.computercard, true));
+  show("Gamecards created!");
 }
 function createCard(card, forComputer) {
   var cardstring = "";
@@ -3424,25 +3424,23 @@ function addCellClickHandlers() {
   }
 }
 function GameHandler(event3) {
+  $globals.currentNumber = getRandomNumber();
+  show(("the current number is " + $globals.currentNumber));
+  for (var i = (0);
+   i < (5); i++) {
+    for (var x = (0);
+     x < (5); x++) {
+      if ($eq$($globals.computercard.fields.$index(i).$index(x), $globals.currentNumber)) {
+        get$$document().query(("#c" + i + x)).style.set$textDecoration("underline");
+        get$$document().query(("#c" + i + x)).style.set$backgroundColor("red");
+      }
+    }
+  }
   if ($globals.first) {
     $globals.active = true;
     get$$document().query("#getGamecard").get$on().get$click().remove$1(GamecardHandler);
     get$$document().query("#startGame").set$value("Next Number");
     $globals.first = false;
-  }
-  else {
-    $globals.currentNumber = getRandomNumber();
-    show(("the current number is " + $globals.currentNumber));
-    for (var i = (0);
-     i < (5); i++) {
-      for (var x = (0);
-       x < (5); x++) {
-        if ($eq$($globals.computercard.fields.$index(i).$index(x), $globals.currentNumber)) {
-          get$$document().query(("#c" + i + x)).style.set$textDecoration("underline");
-          get$$document().query(("#c" + i + x)).style.set$backgroundColor("red");
-        }
-      }
-    }
   }
 }
 function getRandomNumber() {

@@ -130,6 +130,25 @@ void addCellClickHandlers(){
 }
 
 void GameHandler(event3){
+
+  currentNumber = getRandomNumber();  
+  show("the current number is $currentNumber");
+  
+  for(int i = 0; i < 5; i++){
+    
+    
+    for(int x = 0; x < 5; x++){
+      
+      if(computercard.fields[i][x] == currentNumber){
+        
+        document.query('#c$i$x').style.textDecoration = 'underline';
+        document.query('#c$i$x').style.backgroundColor = 'red';
+        
+      }
+      
+    }
+    
+  }
   
   if(first){
     active = true;
@@ -137,28 +156,6 @@ void GameHandler(event3){
     document.query('#startGame').value = "Next Number";
     first = false;
   }
-  else {
-   
-    currentNumber = getRandomNumber();  
-    show("the current number is $currentNumber");
-    
-    for(int i = 0; i < 5; i++){
-      
-      
-      for(int x = 0; x < 5; x++){
-        
-        if(computercard.fields[i][x] == currentNumber){
-          
-          document.query('#c$i$x').style.textDecoration = 'underline';
-          document.query('#c$i$x').style.backgroundColor = 'red';
-          
-        }
-        
-      }
-      
-    }
-  }
-
 
 }
 

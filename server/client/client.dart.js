@@ -1548,23 +1548,23 @@ $.allMatches = function(receiver, str) {
 };
 
 $.GameHandler = function(event3) {
+  $.currentNumber = $.getRandomNumber();
+  $.show('the current number is ' + $.stringToString($.currentNumber));
+  for (var i = 0; i < 5; i = i + 1) {
+    for (var x = 0; x < 5; x = x + 1) {
+      if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.currentNumber)) {
+        $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$textDecoration('underline');
+        $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$backgroundColor('red');
+      } else {
+      }
+    }
+  }
   if ($.first === true) {
     $.active = true;
     $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
     $.document().query$1('#startGame').set$value('Next Number');
     $.first = false;
   } else {
-    $.currentNumber = $.getRandomNumber();
-    $.show('the current number is ' + $.stringToString($.currentNumber));
-    for (var i = 0; i < 5; i = i + 1) {
-      for (var x = 0; x < 5; x = x + 1) {
-        if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.currentNumber)) {
-          $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$textDecoration('underline');
-          $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$backgroundColor('red');
-        } else {
-        }
-      }
-    }
   }
 };
 
@@ -2367,7 +2367,6 @@ $._PeerConnection00EventsImpl$1 = function(_ptr) {
 };
 
 $.GamecardHandler = function(event$) {
-  $.show('clicked!');
   $.computercard = $.Gamecard$0();
   $.playercard = $.Gamecard$0();
   var t0 = $.createCard($.playercard, false);
@@ -2375,6 +2374,7 @@ $.GamecardHandler = function(event$) {
   $.addCellClickHandlers();
   var t1 = $.createCard($.computercard, true);
   $.document().query$1('#computertable').set$innerHTML(t1);
+  $.show('Gamecards created!');
 };
 
 $.contains$2 = function(receiver, other, startIndex) {
@@ -3343,7 +3343,7 @@ $.main = function() {
   $.add$1($.document().query$1('#getGamecard').get$on().get$click(), $.GamecardHandler);
   $.add$1($.document().query$1('#startGame').get$on().get$click(), $.GameHandler);
   $.add$1($.document().query$1('#Bingo').get$on().get$click(), $.BingoHandler);
-  $.show('something');
+  $.show('Welcome to Bingo');
 };
 
 $.lt = function(a, b) {
