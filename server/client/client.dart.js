@@ -641,7 +641,24 @@ Isolate.$defineClass("IllegalJSRegExpException", "Object", ["_errmsg", "_pattern
 
 Isolate.$defineClass("Gamecard", "Object", ["addedNumbers", "fields"], {
  getRandomNumber$0: function() {
-  return $.toInt($.toInt($.mul($.random(), 100)));
+  var a = $.toInt($.mul($.random(), 100));
+  while (true) {
+    var t0 = $.gtB(a, 99);
+    if (!t0) {
+      var t1 = $.ltB(a, 1);
+    } else {
+      t1 = t0;
+    }
+    if (!t1) {
+      var t2 = $.geB($.indexOf$1(this.addedNumbers, a), 0);
+    } else {
+      t2 = t1;
+    }
+    if (!t2) break;
+    var a0 = $.toInt($.mul($.random(), 100));
+    a = a0;
+  }
+  return a;
  },
  Gamecard$0: function() {
   var t0 = $.List((void 0));
@@ -655,32 +672,15 @@ Isolate.$defineClass("Gamecard", "Object", ["addedNumbers", "fields"], {
     var t2 = i === 2;
     for (var x = 0; x < 5; x = x + 1) {
       $.add$1($.index(this.fields, i), 0);
-      var temp = 101;
-      while (true) {
-        var t3 = $.gtB(temp, 99);
-        if (!t3) {
-          var t4 = $.ltB(temp, 1);
-        } else {
-          t4 = t3;
-        }
-        if (!t4) {
-          var t5 = $.geB($.indexOf$1(this.addedNumbers, temp), 0);
-        } else {
-          t5 = t4;
-        }
-        if (!t5) break;
-        var temp0 = this.getRandomNumber$0();
-        temp = temp0;
-      }
-      $.indexSet($.index(this.fields, i), x, temp);
-      $.add$1(this.addedNumbers, temp);
-      var t6 = x === 2;
-      if (t6) {
-        var t7 = t2;
+      $.indexSet($.index(this.fields, i), x, this.getRandomNumber$0());
+      $.add$1(this.addedNumbers, $.index($.index(this.fields, i), x));
+      var t3 = x === 2;
+      if (t3) {
+        var t4 = t2;
       } else {
-        t7 = t6;
+        t4 = t3;
       }
-      if (t7) {
+      if (t4) {
         $.indexSet($.index(this.fields, i), x, 'free');
       } else {
       }

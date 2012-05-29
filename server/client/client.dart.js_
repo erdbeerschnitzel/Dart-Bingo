@@ -3151,10 +3151,8 @@ function Gamecard() {
     for (var x = (0);
      x < (5); x++) {
       this.fields.$index(i).add$1((0));
-      var temp = (101);
-      while (temp > (99) || temp < (1) || ($gte$(this.addedNumbers.indexOf$1(temp), (0)))) temp = this.getRandomNumber();
-      this.fields.$index(i).$setindex(x, temp);
-      this.addedNumbers.add(temp);
+      this.fields.$index(i).$setindex(x, this.getRandomNumber());
+      this.addedNumbers.add(this.fields.$index(i).$index(x));
       if (x == (2) && i == (2)) {
         this.fields.$index(i).$setindex(x, "free");
       }
@@ -3163,7 +3161,8 @@ function Gamecard() {
 }
 Gamecard.prototype.getRandomNumber = function() {
   var a = (Math.random() * (100)).toInt();
-  return a.toInt();
+  while (a > (99) || a < (1) || ($gte$(this.addedNumbers.indexOf$1(a), (0)))) a = (Math.random() * (100)).toInt();
+  return a;
 }
 function main() {
   var getButton = get$$document().query("#getGamecard");

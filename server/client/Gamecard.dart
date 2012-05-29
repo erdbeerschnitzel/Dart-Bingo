@@ -17,13 +17,9 @@ class Gamecard {
         
         fields[i].add(0);
         
-        int temp = 101;
-        
-        while(temp > 99 || temp < 1 || (addedNumbers.indexOf(temp) >= 0)) temp = getRandomNumber();
-        
-        fields[i][x] = temp;
+        fields[i][x] = getRandomNumber();
           
-        addedNumbers.add(temp);
+        addedNumbers.add(fields[i][x]);
 
         
 
@@ -40,9 +36,11 @@ class Gamecard {
   
   int getRandomNumber(){
     
-    var a = (Math.random()*100).toInt();
+    int a = (Math.random()*100).toInt();
+    
+    while(a > 99 || a < 1 || (addedNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
       
-    return a.toInt();
+    return a;
   }
   
 }
