@@ -2,6 +2,29 @@ function $defProp(obj, prop, value) {
   Object.defineProperty(obj, prop,
       {value: value, enumerable: false, writable: true, configurable: true});
 }
+Function.prototype.bind = Function.prototype.bind ||
+  function(thisObj) {
+    var func = this;
+    var funcLength = func.$length || func.length;
+    var argsLength = arguments.length;
+    if (argsLength > 1) {
+      var boundArgs = Array.prototype.slice.call(arguments, 1);
+      var bound = function() {
+        // Prepend the bound arguments to the current arguments.
+        var newArgs = Array.prototype.slice.call(arguments);
+        Array.prototype.unshift.apply(newArgs, boundArgs);
+        return func.apply(thisObj, newArgs);
+      };
+      bound.$length = Math.max(0, funcLength - (argsLength - 1));
+      return bound;
+    } else {
+      var bound = function() {
+        return func.apply(thisObj, arguments);
+      };
+      bound.$length = funcLength;
+      return bound;
+    }
+  };
 function $throw(e) {
   // If e is not a value, we can use V8's captureStackTrace utility method.
   // TODO(jmesserly): capture the stack trace on other JS engines.
@@ -222,29 +245,6 @@ function $dynamic(name) {
   return methods;
 }
 if (typeof $dynamicMetadata == 'undefined') $dynamicMetadata = [];
-Function.prototype.bind = Function.prototype.bind ||
-  function(thisObj) {
-    var func = this;
-    var funcLength = func.$length || func.length;
-    var argsLength = arguments.length;
-    if (argsLength > 1) {
-      var boundArgs = Array.prototype.slice.call(arguments, 1);
-      var bound = function() {
-        // Prepend the bound arguments to the current arguments.
-        var newArgs = Array.prototype.slice.call(arguments);
-        Array.prototype.unshift.apply(newArgs, boundArgs);
-        return func.apply(thisObj, newArgs);
-      };
-      bound.$length = Math.max(0, funcLength - (argsLength - 1));
-      return bound;
-    } else {
-      var bound = function() {
-        return func.apply(thisObj, arguments);
-      };
-      bound.$length = funcLength;
-      return bound;
-    }
-  };
 function $dynamicSetMetadata(inputTable) {
   // TODO: Deal with light isolates.
   var table = [];
@@ -1231,6 +1231,7 @@ $dynamic("set$innerHTML").Element = function(value) { return this.innerHTML = va
 $dynamic("get$$$dom_lastElementChild").Element = function() {
   return this.lastElementChild;
 }
+$dynamic("get$style").Element = function() { return this.style; };
 $dynamic("get$click").Element = function() {
   return this.click.bind(this);
 }
@@ -1287,6 +1288,12 @@ $dynamic("get$length").CharacterData = function() { return this.length; };
 $dynamic("get$name").WebKitCSSKeyframesRule = function() { return this.name; };
 $dynamic("get$length").CSSRuleList = function() { return this.length; };
 $dynamic("get$length").CSSStyleDeclaration = function() { return this.length; };
+$dynamic("set$backgroundColor").CSSStyleDeclaration = function(value) {
+  this.setProperty("background-color", value, "");
+}
+$dynamic("set$textDecoration").CSSStyleDeclaration = function(value) {
+  this.setProperty("text-decoration", value, "");
+}
 $dynamic("get$length").CSSValueList = function() { return this.length; };
 $dynamic("get$length").ClientRectList = function() { return this.length; };
 var _ConsoleImpl = (typeof console == 'undefined' ? {} : console);
@@ -1489,6 +1496,9 @@ $dynamic("set$innerHTML").DocumentFragment = function(value) {
 }
 $dynamic("get$parent").DocumentFragment = function() {
   return null;
+}
+$dynamic("get$style").DocumentFragment = function() {
+  return _ElementFactoryProvider.Element$tag$factory("div").get$style();
 }
 $dynamic("click").DocumentFragment = function() {
 
@@ -3151,10 +3161,12 @@ function Gamecard() {
     for (var x = (0);
      x < (5); x++) {
       this.fields.$index(i).add$1((0));
-      this.fields.$index(i).$setindex(x, this.getRandomNumber());
-      this.addedNumbers.add(this.fields.$index(i).$index(x));
       if (x == (2) && i == (2)) {
         this.fields.$index(i).$setindex(x, "free");
+      }
+      else {
+        this.fields.$index(i).$setindex(x, this.getRandomNumber());
+        this.addedNumbers.add(this.fields.$index(i).$index(x));
       }
     }
   }
@@ -3185,7 +3197,7 @@ function GamecardHandler(event) {
     card = $add$(card, "<tr>");
     for (var $i0 = liste.iterator(); $i0.hasNext(); ) {
       var value = $i0.next();
-      if (x < (5) && i < (5)) card = $add$($add$($add$($add$($add$($add$(card, "<td id=\"p") + i, ".") + x, "\""), "class=top>"), playercard.fields.$index(i).$index(x)), "</td>");
+      if (x < (5) && i < (5)) card = $add$($add$($add$($add$($add$(card, "<td id=\"p") + i + x, "\""), "class=top>"), playercard.fields.$index(i).$index(x)), "</td>");
       if (x == (4)) {
         card = $add$(card, "</tr>");
         x = (0);
@@ -3202,6 +3214,22 @@ function GamecardHandler(event) {
     }
   }
   get$$document().query("#playertable").set$innerHTML(card);
+  for (i = (0);
+   i < (5); i++) {
+    for (x = (0);
+     x < (5); x++) {
+      if (i == (2) && x == (2)) {
+      }
+      else {
+        var el = get$$document().query(("#p" + i + x));
+        el.get$on().get$click().add$1((function (el, event2) {
+          el.get$style().set$textDecoration("underline");
+          el.get$style().set$backgroundColor("white");
+        }).bind(null, el)
+        );
+      }
+    }
+  }
 }
 (function(){
   var v0/*HTMLMediaElement*/ = 'HTMLMediaElement|HTMLAudioElement|HTMLVideoElement';

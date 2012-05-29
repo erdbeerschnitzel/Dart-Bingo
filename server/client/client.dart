@@ -37,7 +37,7 @@ void GamecardHandler(event){
       for(var value in liste){
         
           
-          if(x < 5 && i < 5)  card = card + '<td id="p' + i + '.' + x + '"' + 'class=top>' + playercard.fields[i][x] + '</td>';
+          if(x < 5 && i < 5)  card = card + '<td id="p' + i + x + '"' + 'class=top>' + playercard.fields[i][x] + '</td>';
           
           if(x == 4){ 
             
@@ -59,4 +59,28 @@ void GamecardHandler(event){
     }
     
     document.query('#playertable').innerHTML = card;
+    
+
+    
+    for(i = 0; i < 5; i++){
+      
+            
+      for(x = 0; x < 5; x++){
+        
+        if(i == 2 && x == 2){
+          
+        }
+        else {
+          
+          TableCellElement el = document.query('#p$i$x');
+          
+          el.on.click.add((event2) {
+            el.style.textDecoration = 'underline';
+            el.style.backgroundColor = 'white';
+          });         
+        }
+      }    
+    }
 }
+
+

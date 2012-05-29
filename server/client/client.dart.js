@@ -309,16 +309,16 @@ Isolate.$defineClass("HashSetImplementation", "Object", ["_backingMap?"], {
   var result = $.HashSetImplementation$0();
   $.setRuntimeTypeInfo(result, ({E: 'E'}));
   t0.result_2 = result;
-  $.forEach(this._backingMap, new $.Closure10(t0));
+  $.forEach(this._backingMap, new $.Closure11(t0));
   return t0.result_2;
  },
  forEach$1: function(f) {
   var t0 = ({});
   t0.f_1 = f;
-  $.forEach(this._backingMap, new $.Closure9(t0));
+  $.forEach(this._backingMap, new $.Closure10(t0));
  },
  addAll$1: function(collection) {
-  $.forEach(collection, new $.Closure8(this));
+  $.forEach(collection, new $.Closure9(this));
  },
  contains$1: function(value) {
   return this._backingMap.containsKey$1(value);
@@ -522,7 +522,7 @@ Isolate.$defineClass("ListIterator", "Object", ["list", "i"], {
  }
 });
 
-Isolate.$defineClass("Closure11", "Object", [], {
+Isolate.$defineClass("Closure12", "Object", [], {
  toString$0: function() {
   return 'Closure';
  }
@@ -672,8 +672,6 @@ Isolate.$defineClass("Gamecard", "Object", ["addedNumbers", "fields"], {
     var t2 = i === 2;
     for (var x = 0; x < 5; x = x + 1) {
       $.add$1($.index(this.fields, i), 0);
-      $.indexSet($.index(this.fields, i), x, this.getRandomNumber$0());
-      $.add$1(this.addedNumbers, $.index($.index(this.fields, i), x));
       var t3 = x === 2;
       if (t3) {
         var t4 = t2;
@@ -683,6 +681,8 @@ Isolate.$defineClass("Gamecard", "Object", ["addedNumbers", "fields"], {
       if (t4) {
         $.indexSet($.index(this.fields, i), x, 'free');
       } else {
+        $.indexSet($.index(this.fields, i), x, this.getRandomNumber$0());
+        $.add$1(this.addedNumbers, $.index($.index(this.fields, i), x));
       }
     }
   }
@@ -764,7 +764,7 @@ Isolate.$defineClass("FilteredElementList", "Object", ["_childNodes", "_node"], 
  add$1: function(value) {
   $.add$1(this._childNodes, value);
  },
- get$add: function() { return new $.Closure12(this); },
+ get$add: function() { return new $.Closure13(this); },
  set$length: function(newLength) {
   var len = $.get$length(this);
   if ($.geB(newLength, len)) {
@@ -1247,7 +1247,7 @@ Isolate.$defineClass("_VariableSizeListIterator", "Object", [], {
  }
 });
 
-Isolate.$defineClass("Closure", "Closure11", ["box_0"], {
+Isolate.$defineClass("Closure", "Closure12", ["box_0"], {
  $call$2: function(k, v) {
   if (this.box_0.first_3 !== true) {
     $.add$1(this.box_0.result_1, ', ');
@@ -1260,13 +1260,13 @@ Isolate.$defineClass("Closure", "Closure11", ["box_0"], {
  }
 });
 
-Isolate.$defineClass("Closure2", "Closure11", [], {
+Isolate.$defineClass("Closure2", "Closure12", [], {
  $call$1: function(n) {
   return typeof n === 'object' && n.is$Element();
  }
 });
 
-Isolate.$defineClass("Closure3", "Closure11", ["box_0", "output_2"], {
+Isolate.$defineClass("Closure3", "Closure12", ["box_0", "output_2"], {
  $call$1: function(element) {
   if (this.box_0.f_1.$call$1(element) === true) {
     $.add$1(this.output_2, element);
@@ -1275,43 +1275,50 @@ Isolate.$defineClass("Closure3", "Closure11", ["box_0", "output_2"], {
  }
 });
 
-Isolate.$defineClass("Closure4", "Closure11", [], {
+Isolate.$defineClass("Closure4", "Closure12", [], {
  $call$1: function(el) {
   return el.remove$0();
  }
 });
 
-Isolate.$defineClass("Closure5", "Closure11", ["box_0"], {
+Isolate.$defineClass("Closure5", "Closure12", ["box_0"], {
+ $call$1: function(event2) {
+  this.box_0.el_1.get$style().set$textDecoration('underline');
+  this.box_0.el_1.get$style().set$backgroundColor('white');
+ }
+});
+
+Isolate.$defineClass("Closure6", "Closure12", ["box_0"], {
  $call$0: function() {
   return this.box_0.closure_1.$call$0();
  }
 });
 
-Isolate.$defineClass("Closure6", "Closure11", ["box_0"], {
+Isolate.$defineClass("Closure7", "Closure12", ["box_0"], {
  $call$0: function() {
   return this.box_0.closure_1.$call$1(this.box_0.arg1_2);
  }
 });
 
-Isolate.$defineClass("Closure7", "Closure11", ["box_0"], {
+Isolate.$defineClass("Closure8", "Closure12", ["box_0"], {
  $call$0: function() {
   return this.box_0.closure_1.$call$2(this.box_0.arg1_2, this.box_0.arg2_3);
  }
 });
 
-Isolate.$defineClass("Closure8", "Closure11", ["this_0"], {
+Isolate.$defineClass("Closure9", "Closure12", ["this_0"], {
  $call$1: function(value) {
   this.this_0.add$1(value);
  }
 });
 
-Isolate.$defineClass("Closure9", "Closure11", ["box_0"], {
+Isolate.$defineClass("Closure10", "Closure12", ["box_0"], {
  $call$2: function(key, value) {
   this.box_0.f_1.$call$1(key);
  }
 });
 
-Isolate.$defineClass("Closure10", "Closure11", ["box_0"], {
+Isolate.$defineClass("Closure11", "Closure12", ["box_0"], {
  $call$2: function(key, value) {
   if (this.box_0.f_1.$call$1(key) === true) {
     $.add$1(this.box_0.result_2, key);
@@ -1320,19 +1327,19 @@ Isolate.$defineClass("Closure10", "Closure11", ["box_0"], {
  }
 });
 
-Isolate.$defineClass("Closure11", "Object", [], {
+Isolate.$defineClass("Closure12", "Object", [], {
  toString$0: function() {
   return 'Closure';
  }
 });
 
-Isolate.$defineClass('Closure12', 'Closure11', function BoundClosure(self) { this.self = self; }, {
+Isolate.$defineClass('Closure13', 'Closure12', function BoundClosure(self) { this.self = self; }, {
  $call$1: function(arg0) { return this.self.add$1(arg0); }
 });
-Isolate.$defineClass('Closure13', 'Closure11', function BoundClosure(self) { this.self = self; }, {
+Isolate.$defineClass('Closure14', 'Closure12', function BoundClosure(self) { this.self = self; }, {
  $call$0: function() { return this.self.click$0(); }
 });
-Isolate.$defineClass('Closure14', 'Closure11', function BoundClosure(self) { this.self = self; }, {
+Isolate.$defineClass('Closure15', 'Closure12', function BoundClosure(self) { this.self = self; }, {
  $call$0: function() { return this.self.click$0(); }
 });
 $.mul$slow = function(a, b) {
@@ -1984,13 +1991,13 @@ $.invokeClosure = function(closure, isolate, numberOfArguments, arg1, arg2) {
   t0.arg1_2 = arg1;
   t0.closure_1 = closure;
   if ($.eqB(numberOfArguments, 0)) {
-    return new $.Closure5(t0).$call$0();
+    return new $.Closure6(t0).$call$0();
   } else {
     if ($.eqB(numberOfArguments, 1)) {
-      return new $.Closure6(t0).$call$0();
+      return new $.Closure7(t0).$call$0();
     } else {
       if ($.eqB(numberOfArguments, 2)) {
-        return new $.Closure7(t0).$call$0();
+        return new $.Closure8(t0).$call$0();
       } else {
         throw $.captureStackTrace($.ExceptionImplementation$1('Unsupported number of arguments for wrapped closure'));
       }
@@ -2061,16 +2068,16 @@ $.checkNumbers = function(a, b) {
   return false;
 };
 
+$.random = function() {
+  return $.random2();
+};
+
 $.contains$1 = function(receiver, other) {
   if (!(typeof receiver === 'string')) {
     return receiver.contains$1(other);
   } else {
   }
   return $.contains$2(receiver, other, 0);
-};
-
-$._EventSourceEventsImpl$1 = function(_ptr) {
-  return new $._EventSourceEventsImpl(_ptr);
 };
 
 $.mul = function(a, b) {
@@ -2088,8 +2095,8 @@ $.mul = function(a, b) {
   return t2;
 };
 
-$.random = function() {
-  return $.random2();
+$._EventSourceEventsImpl$1 = function(_ptr) {
+  return new $._EventSourceEventsImpl(_ptr);
 };
 
 $.random2 = function() {
@@ -2246,7 +2253,7 @@ $.GamecardHandler = function(event$) {
         t5 = t4;
       }
       if (t5) {
-        var card4 = $.add($.add($.add(card2 + '<td id="p', i) + '.', x1) + '"' + 'class=top>', $.index($.index(playercard.fields, i), x1)) + '</td>';
+        var card4 = $.add($.add($.add(card2 + '<td id="p', i), x1) + '"' + 'class=top>', $.index($.index(playercard.fields, i), x1)) + '</td>';
       } else {
         card4 = card2;
       }
@@ -2264,10 +2271,28 @@ $.GamecardHandler = function(event$) {
     } else {
       i0 = i + 1;
     }
-    var x0 = x1;
     var card0 = card2;
+    var x0 = x1;
   }
   $.document().query$1('#playertable').set$innerHTML(card);
+  for (var i1 = 0, x3 = x; i1 < 5; i1 = i2) {
+    var t6 = i1 === 2;
+    for (var x4 = 0; x4 < 5; x4 = x4 + 1) {
+      var t7 = ({});
+      if (t6) {
+        var t8 = x4 === 2;
+      } else {
+        t8 = t6;
+      }
+      if (t8) {
+      } else {
+        t7.el_1 = $.document().query$1('#p' + $.stringToString(i1) + $.stringToString(x4));
+        $.add$1(t7.el_1.get$on().get$click(), new $.Closure5(t7));
+      }
+    }
+    x3 = x4;
+    var i2 = i1 + 1;
+  }
 };
 
 $.contains$2 = function(receiver, other, startIndex) {
@@ -3691,16 +3716,28 @@ $.$defineNativeClass('HTMLButtonElement', [], {
  is$Element: function() { return true; }
 });
 
+$.$defineNativeClass('CSSFontFaceRule', ["style?"], {
+});
+
+$.$defineNativeClass('WebKitCSSKeyframeRule', ["style?"], {
+});
+
 $.$defineNativeClass('WebKitCSSMatrix', [], {
  toString$0: function() {
   return this.toString();
  }
 });
 
+$.$defineNativeClass('CSSPageRule', ["style?"], {
+});
+
 $.$defineNativeClass('CSSRuleList', ["length?"], {
 });
 
 $.$defineNativeClass('CSSStyleDeclaration', ["length?"], {
+ set$textDecoration: function(value) {
+  this.setProperty$3('text-decoration', value, '');
+ },
  get$filter: function() {
   return this.getPropertyValue$1('' + $.stringToString($._browserPrefix()) + 'filter');
  },
@@ -3709,9 +3746,18 @@ $.$defineNativeClass('CSSStyleDeclaration', ["length?"], {
   return this.getPropertyValue$1('clear');
  },
  clear$0: function() { return this.get$clear().$call$0(); },
+ set$backgroundColor: function(value) {
+  this.setProperty$3('background-color', value, '');
+ },
+ setProperty$3: function(propertyName, value, priority) {
+  return this.setProperty(propertyName,value,priority);
+ },
  getPropertyValue$1: function(propertyName) {
   return this.getPropertyValue(propertyName);
  }
+});
+
+$.$defineNativeClass('CSSStyleRule', ["style?"], {
 });
 
 $.$defineNativeClass('CSSValueList', ["length?"], {
@@ -3895,7 +3941,10 @@ $.$defineNativeClass('DocumentFragment', [], {
  },
  click$0: function() {
  },
- get$click: function() { return new $.Closure13(this); },
+ get$click: function() { return new $.Closure14(this); },
+ get$style: function() {
+  return $.Element$tag('div').get$style();
+ },
  get$parent: function() {
   return;
  },
@@ -3926,14 +3975,14 @@ $.$defineNativeClass('DocumentFragment', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('Element', ["innerHTML!"], {
+$.$defineNativeClass('Element', ["style?", "innerHTML!"], {
  query$1: function(selectors) {
   return this.querySelector(selectors);
  },
  click$0: function() {
   return this.click();
  },
- get$click: function() { return new $.Closure14(this); },
+ get$click: function() { return new $.Closure15(this); },
  get$$$dom_lastElementChild: function() {
   return this.lastElementChild;;
  },
@@ -5249,6 +5298,9 @@ $.$defineNativeClass('SVGStringList', [], {
  }
 });
 
+$.$defineNativeClass('SVGStylable', ["style?"], {
+});
+
 $.$defineNativeClass('SVGStyleElement', [], {
  is$Element: function() { return true; }
 });
@@ -5805,9 +5857,9 @@ $.$defineNativeClass('XPathException', [], {
  }
 });
 
-// 266 dynamic classes.
-// 283 classes
-// 24 !leaf
+// 271 dynamic classes.
+// 289 classes
+// 25 !leaf
 (function(){
   var v0/*class(_SVGTextPositioningElementImpl)*/ = 'SVGTextPositioningElement|SVGTextElement|SVGTSpanElement|SVGTRefElement|SVGAltGlyphElement';
   var v1/*class(_SVGTextContentElementImpl)*/ = [v0/*class(_SVGTextPositioningElementImpl)*/,'SVGTextContentElement|SVGTextPathElement'].join('|');
@@ -5827,6 +5879,7 @@ $.$defineNativeClass('XPathException', [], {
   var v15/*class(_AbstractWorkerImpl)*/ = 'AbstractWorker|Worker|SharedWorker';
   var table = [
     // [dynamic-dispatch-tag, tags of classes implementing dynamic-dispatch-tag]
+    ['SVGStylable', 'SVGStylable|SVGFilterPrimitiveStandardAttributes'],
     ['SVGTextPositioningElement', v0/*class(_SVGTextPositioningElementImpl)*/],
     ['SVGTextContentElement', v1/*class(_SVGTextContentElementImpl)*/],
     ['AbstractWorker', v15/*class(_AbstractWorkerImpl)*/],

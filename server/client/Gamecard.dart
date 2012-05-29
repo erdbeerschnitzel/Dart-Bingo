@@ -15,18 +15,19 @@ class Gamecard {
             
       for(int x = 0; x < 5; x++){
         
+        //create field in list
         fields[i].add(0);
         
-        fields[i][x] = getRandomNumber();
-          
-        addedNumbers.add(fields[i][x]);
-
-        
-
-        
+        // middle of gamecard
         if(x == 2 && i == 2){
           
           fields[i][x] = "free";
+        }
+        else {
+          
+          fields[i][x] = getRandomNumber();
+          
+          addedNumbers.add(fields[i][x]);
         }
       }
     }
