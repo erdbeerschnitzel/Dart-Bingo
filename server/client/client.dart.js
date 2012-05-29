@@ -660,7 +660,7 @@ Isolate.$defineClass("IllegalJSRegExpException", "Object", ["_errmsg", "_pattern
  }
 });
 
-Isolate.$defineClass("Gamecard", "Object", ["addedNumbers", "fields"], {
+Isolate.$defineClass("Gamecard", "Object", ["addedNumbers", "fields?"], {
  getRandomNumber$0: function() {
   var a = $.toInt($.mul($.random(), 100));
   while (true) {
@@ -1548,9 +1548,24 @@ $.allMatches = function(receiver, str) {
 };
 
 $.GameHandler = function(event3) {
-  $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
-  $.currentNumber = $.getRandomNumber();
-  $.show('the current number is ' + $.stringToString($.currentNumber));
+  if ($.first === true) {
+    $.active = true;
+    $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
+    $.document().query$1('#startGame').set$value('Next Number');
+    $.first = false;
+  } else {
+    $.currentNumber = $.getRandomNumber();
+    $.show('the current number is ' + $.stringToString($.currentNumber));
+    for (var i = 0; i < 5; i = i + 1) {
+      for (var x = 0; x < 5; x = x + 1) {
+        if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.currentNumber)) {
+          $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$textDecoration('underline');
+          $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$backgroundColor('white');
+        } else {
+        }
+      }
+    }
+  }
 };
 
 $.substringUnchecked = function(receiver, startIndex, endIndex) {
@@ -1630,6 +1645,7 @@ $.getRandomNumber = function() {
     var a0 = $.toInt($.mul($.random(), 100));
     a = a0;
   }
+  $.add$1($.addNumbers, a);
   return a;
 };
 
@@ -2062,24 +2078,37 @@ $.invokeClosure = function(closure, isolate, numberOfArguments, arg1, arg2) {
   }
 };
 
-$.createCard = function(card) {
-  var card0 = $.Gamecard$0();
-  for (var t0 = $.iterator(card0.fields), i = 0, cardstring = '', x = 0; t0.hasNext$0() === true; i = i0, cardstring = cardstring0, x = x0) {
-    var t1 = t0.next$0();
+$.createCard = function(card, forComputer) {
+  var t0 = forComputer === true;
+  for (var t1 = $.iterator(card.get$fields()), i = 0, x = 0, cardstring = ''; t1.hasNext$0() === true; i = i0, x = x0, cardstring = cardstring0) {
+    var t2 = t1.next$0();
     var cardstring1 = cardstring + '<tr>';
-    var t2 = i < 5;
-    for (var t3 = $.iterator(t1), x1 = x, cardstring2 = cardstring1; t3.hasNext$0() === true; x1 = x2, cardstring2 = cardstring3) {
-      t3.next$0();
-      var t4 = x1 < 5;
-      if (t4) {
-        var t5 = t2;
+    var t3 = i < 5;
+    for (var t4 = $.iterator(t2), x1 = x, cardstring2 = cardstring1; t4.hasNext$0() === true; x1 = x2, cardstring2 = cardstring3) {
+      t4.next$0();
+      var t5 = x1 < 5;
+      if (t0) {
+        if (t5) {
+          var t6 = t3;
+        } else {
+          t6 = t5;
+        }
+        if (t6) {
+          var cardstring4 = $.add($.add($.add(cardstring2 + '<td id="c', i), x1) + '"' + 'class=top>', $.index($.index(card.get$fields(), i), x1)) + '</td>';
+        } else {
+          cardstring4 = cardstring2;
+        }
       } else {
-        t5 = t4;
-      }
-      if (t5) {
-        var cardstring4 = $.add($.add($.add(cardstring2 + '<td id="p', i), x1) + '"' + 'class=top>', $.index($.index(card0.fields, i), x1)) + '</td>';
-      } else {
-        cardstring4 = cardstring2;
+        if (t5) {
+          var t7 = t3;
+        } else {
+          t7 = t5;
+        }
+        if (t7) {
+          cardstring4 = $.add($.add($.add(cardstring2 + '<td id="p', i), x1) + '"' + 'class=top>', $.index($.index(card.get$fields(), i), x1)) + '</td>';
+        } else {
+          cardstring4 = cardstring2;
+        }
       }
       if (x1 === 4) {
         var cardstring5 = cardstring4 + '</tr>';
@@ -2095,8 +2124,8 @@ $.createCard = function(card) {
     } else {
       i0 = i + 1;
     }
-    var x0 = x1;
     var cardstring0 = cardstring2;
+    var x0 = x1;
   }
   return cardstring;
 };
@@ -2339,10 +2368,12 @@ $._PeerConnection00EventsImpl$1 = function(_ptr) {
 
 $.GamecardHandler = function(event$) {
   $.show('clicked!');
-  var t0 = $.createCard($.playercard);
+  $.computercard = $.Gamecard$0();
+  $.playercard = $.Gamecard$0();
+  var t0 = $.createCard($.playercard, false);
   $.document().query$1('#playertable').set$innerHTML(t0);
   $.addCellClickHandlers();
-  var t1 = $.createCard($.computercard);
+  var t1 = $.createCard($.computercard, true);
   $.document().query$1('#computertable').set$innerHTML(t1);
 };
 
@@ -2624,14 +2655,6 @@ $.dynamicFunction = function(name$) {
   return methods;
 };
 
-$.ObjectNotClosureException$0 = function() {
-  return new $.ObjectNotClosureException();
-};
-
-$.window = function() {
-  return window;;
-};
-
 $.addCellClickHandlers = function() {
   for (var i = 0; i < 5; i = i + 1) {
     var t0 = i === 2;
@@ -2649,6 +2672,14 @@ $.addCellClickHandlers = function() {
       }
     }
   }
+};
+
+$.window = function() {
+  return window;;
+};
+
+$.ObjectNotClosureException$0 = function() {
+  return new $.ObjectNotClosureException();
 };
 
 $.objectToString = function(object) {
@@ -2700,6 +2731,13 @@ $.gt$slow = function(a, b) {
   } else {
   }
   return a.operator$gt$1(b);
+};
+
+$.BingoHandler = function(event4) {
+  if ($.active !== true) {
+    $.show('You need to start the Game!');
+  } else {
+  }
 };
 
 $.regExpAttachGlobalNative = function(regExp) {
@@ -2862,10 +2900,6 @@ $._emitMap = function(m, result, visiting) {
   $.removeLast(t0.visiting_2);
 };
 
-$._JavaScriptAudioNodeEventsImpl$1 = function(_ptr) {
-  return new $._JavaScriptAudioNodeEventsImpl(_ptr);
-};
-
 $._IDBDatabaseEventsImpl$1 = function(_ptr) {
   return new $._IDBDatabaseEventsImpl(_ptr);
 };
@@ -2876,6 +2910,10 @@ $.isFirefox = function() {
 
 $.toStringForNativeObject = function(obj) {
   return 'Instance of ' + $.stringToString($.getTypeNameOf(obj));
+};
+
+$._JavaScriptAudioNodeEventsImpl$1 = function(_ptr) {
+  return new $._JavaScriptAudioNodeEventsImpl(_ptr);
 };
 
 $.typeNameInFirefox = function(obj) {
@@ -3300,8 +3338,11 @@ $.main = function() {
   var t0 = $.List((void 0));
   $.setRuntimeTypeInfo(t0, ({E: 'int'}));
   $.addNumbers = t0;
+  $.computercard = $.Gamecard$0();
+  $.playercard = $.Gamecard$0();
   $.add$1($.document().query$1('#getGamecard').get$on().get$click(), $.GamecardHandler);
   $.add$1($.document().query$1('#startGame').get$on().get$click(), $.GameHandler);
+  $.add$1($.document().query$1('#Bingo').get$on().get$click(), $.BingoHandler);
   $.show('something');
 };
 
@@ -3655,14 +3696,15 @@ $.buildDynamicMetadata$bailout = function(inputTable, state, env0, env1, env2, e
   }
 };
 
-$.typeNameInIE.$call$1 = $.typeNameInIE;
 $.dynamicBind.$call$4 = $.dynamicBind;
-$.throwNoSuchMethod.$call$3 = $.throwNoSuchMethod;
+$.BingoHandler.$call$1 = $.BingoHandler;
 $.invokeClosure.$call$5 = $.invokeClosure;
-$.typeNameInChrome.$call$1 = $.typeNameInChrome;
+$.GamecardHandler.$call$1 = $.GamecardHandler;
 $.toStringWrapper.$call$0 = $.toStringWrapper;
 $.GameHandler.$call$1 = $.GameHandler;
-$.GamecardHandler.$call$1 = $.GamecardHandler;
+$.typeNameInChrome.$call$1 = $.typeNameInChrome;
+$.throwNoSuchMethod.$call$3 = $.throwNoSuchMethod;
+$.typeNameInIE.$call$1 = $.typeNameInIE;
 $.typeNameInFirefox.$call$1 = $.typeNameInFirefox;
 $.constructorNameFallback.$call$1 = $.constructorNameFallback;
 Isolate.$finishClasses();
@@ -3680,6 +3722,8 @@ $.CTC6 = new Isolate.$isolateProperties.JSSyntaxRegExp(false, false, 'Chrome|Dum
 $.CTC8 = new Isolate.$isolateProperties.Object();
 $.CTC2 = new Isolate.$isolateProperties.NoMoreElementsException();
 $.computercard = (void 0);
+$.first = true;
+$.active = false;
 $._getTypeNameOf = (void 0);
 $.playercard = (void 0);
 $._cachedBrowserPrefix = (void 0);
@@ -3752,6 +3796,9 @@ $.$defineNativeClass('HTMLAreaElement', [], {
  is$Element: function() { return true; }
 });
 
+$.$defineNativeClass('Attr', ["value!"], {
+});
+
 $.$defineNativeClass('AudioBuffer', ["length?"], {
 });
 
@@ -3763,6 +3810,9 @@ $.$defineNativeClass('AudioContext', [], {
 
 $.$defineNativeClass('HTMLAudioElement', [], {
  is$Element: function() { return true; }
+});
+
+$.$defineNativeClass('AudioParam', ["value!"], {
 });
 
 $.$defineNativeClass('HTMLBRElement', [], {
@@ -3797,7 +3847,7 @@ $.$defineNativeClass('HTMLBodyElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLButtonElement', [], {
+$.$defineNativeClass('HTMLButtonElement', ["value!"], {
  is$Element: function() { return true; }
 });
 
@@ -3898,6 +3948,9 @@ $.$defineNativeClass('DOMSelection', [], {
  toString$0: function() {
   return this.toString();
  }
+});
+
+$.$defineNativeClass('DOMSettableTokenList', ["value!"], {
 });
 
 $.$defineNativeClass('DOMStringList', ["length?"], {
@@ -4552,7 +4605,7 @@ $.$defineNativeClass('HTMLImageElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLInputElement', ["pattern?"], {
+$.$defineNativeClass('HTMLInputElement', ["value!", "pattern?"], {
  get$on: function() {
   return $._InputElementEventsImpl$1(this);
  },
@@ -4713,7 +4766,7 @@ $.$defineNativeClass('HTMLKeygenElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLLIElement', [], {
+$.$defineNativeClass('HTMLLIElement', ["value!"], {
  is$Element: function() { return true; }
 });
 
@@ -4843,7 +4896,7 @@ $.$defineNativeClass('HTMLMetaElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLMeterElement', [], {
+$.$defineNativeClass('HTMLMeterElement', ["value!"], {
  is$Element: function() { return true; }
 });
 
@@ -5057,11 +5110,11 @@ $.$defineNativeClass('HTMLOptGroupElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLOptionElement', [], {
+$.$defineNativeClass('HTMLOptionElement', ["value!"], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLOutputElement', [], {
+$.$defineNativeClass('HTMLOutputElement', ["value!"], {
  is$Element: function() { return true; }
 });
 
@@ -5069,7 +5122,7 @@ $.$defineNativeClass('HTMLParagraphElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLParamElement', [], {
+$.$defineNativeClass('HTMLParamElement', ["value!"], {
  is$Element: function() { return true; }
 });
 
@@ -5089,7 +5142,7 @@ $.$defineNativeClass('HTMLPreElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLProgressElement', [], {
+$.$defineNativeClass('HTMLProgressElement', ["value!"], {
  is$Element: function() { return true; }
 });
 
@@ -5097,7 +5150,7 @@ $.$defineNativeClass('HTMLQuoteElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('RadioNodeList', [], {
+$.$defineNativeClass('RadioNodeList', ["value!"], {
  is$List2: function() { return true; },
  is$Collection: function() { return true; }
 });
@@ -5131,6 +5184,9 @@ $.$defineNativeClass('SVGAltGlyphElement', [], {
 
 $.$defineNativeClass('SVGAltGlyphItemElement', [], {
  is$Element: function() { return true; }
+});
+
+$.$defineNativeClass('SVGAngle', ["value!"], {
 });
 
 $.$defineNativeClass('SVGAnimateColorElement', [], {
@@ -5379,6 +5435,9 @@ $.$defineNativeClass('SVGImageElement', [], {
  is$Element: function() { return true; }
 });
 
+$.$defineNativeClass('SVGLength', ["value!"], {
+});
+
 $.$defineNativeClass('SVGLengthList', [], {
  clear$0: function() {
   return this.clear();
@@ -5411,6 +5470,9 @@ $.$defineNativeClass('SVGMetadataElement', [], {
 
 $.$defineNativeClass('SVGMissingGlyphElement', [], {
  is$Element: function() { return true; }
+});
+
+$.$defineNativeClass('SVGNumber', ["value!"], {
 });
 
 $.$defineNativeClass('SVGNumberList', [], {
@@ -5542,7 +5604,7 @@ $.$defineNativeClass('HTMLScriptElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLSelectElement', ["length="], {
+$.$defineNativeClass('HTMLSelectElement', ["value!", "length="], {
  is$Element: function() { return true; }
 });
 
@@ -5721,7 +5783,7 @@ $.$defineNativeClass('HTMLTableSectionElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLTextAreaElement', [], {
+$.$defineNativeClass('HTMLTextAreaElement', ["value!"], {
  is$Element: function() { return true; }
 });
 
@@ -6071,9 +6133,9 @@ $.$defineNativeClass('XPathException', [], {
  }
 });
 
-// 272 dynamic classes.
-// 292 classes
-// 26 !leaf
+// 278 dynamic classes.
+// 297 classes
+// 27 !leaf
 (function(){
   var v0/*class(_SVGTextPositioningElementImpl)*/ = 'SVGTextPositioningElement|SVGTextElement|SVGTSpanElement|SVGTRefElement|SVGAltGlyphElement';
   var v1/*class(_SVGTextContentElementImpl)*/ = [v0/*class(_SVGTextPositioningElementImpl)*/,'SVGTextContentElement|SVGTextPathElement'].join('|');
@@ -6098,6 +6160,7 @@ $.$defineNativeClass('XPathException', [], {
     ['SVGTextContentElement', v1/*class(_SVGTextContentElementImpl)*/],
     ['AbstractWorker', v15/*class(_AbstractWorkerImpl)*/],
     ['Uint8Array', 'Uint8Array|Uint8ClampedArray'],
+    ['AudioParam', 'AudioParam|AudioGain'],
     ['WorkerContext', v11/*class(_WorkerContextImpl)*/],
     ['CSSValueList', 'CSSValueList|WebKitCSSFilterValue|WebKitCSSTransformValue'],
     ['CharacterData', v10/*class(_CharacterDataImpl)*/],

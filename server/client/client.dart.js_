@@ -1286,6 +1286,7 @@ $dynamic("get$length").WebKitAnimationList = function() { return this.length; };
 $dynamic("get$name").HTMLAppletElement = function() { return this.name; };
 $dynamic("get$name").Attr = function() { return this.name; };
 $dynamic("get$value").Attr = function() { return this.value; };
+$dynamic("set$value").Attr = function(value) { return this.value = value; };
 $dynamic("get$length").AudioBuffer = function() { return this.length; };
 $inherits(_AudioContextEventsImpl, _EventsImpl);
 function _AudioContextEventsImpl() {}
@@ -1294,6 +1295,7 @@ $dynamic("get$on").HTMLMediaElement = function() {
 }
 $dynamic("get$name").AudioParam = function() { return this.name; };
 $dynamic("get$value").AudioParam = function() { return this.value; };
+$dynamic("set$value").AudioParam = function(value) { return this.value = value; };
 $dynamic("$dom_addEventListener$3").BatteryManager = function($0, $1, $2) {
   return this.addEventListener($0, $wrap_call$1(to$call$1($1)), $2);
 };
@@ -1318,6 +1320,7 @@ function _BodyElementEventsImpl(_ptr) {
 }
 $dynamic("get$name").HTMLButtonElement = function() { return this.name; };
 $dynamic("get$value").HTMLButtonElement = function() { return this.value; };
+$dynamic("set$value").HTMLButtonElement = function(value) { return this.value = value; };
 $dynamic("get$length").CharacterData = function() { return this.length; };
 $dynamic("get$name").WebKitCSSKeyframesRule = function() { return this.name; };
 $dynamic("get$length").CSSRuleList = function() { return this.length; };
@@ -1354,6 +1357,7 @@ $dynamic("remove$1").DOMTokenList = function($0) {
   return this.remove($0);
 };
 $dynamic("get$value").DOMSettableTokenList = function() { return this.value; };
+$dynamic("set$value").DOMSettableTokenList = function(value) { return this.value = value; };
 $dynamic("is$List").DOMStringList = function(){return true};
 $dynamic("is$Collection").DOMStringList = function(){return true};
 $dynamic("get$length").DOMStringList = function() { return this.length; };
@@ -2292,6 +2296,7 @@ $dynamic("get$on").HTMLInputElement = function() {
 }
 $dynamic("get$name").HTMLInputElement = function() { return this.name; };
 $dynamic("get$value").HTMLInputElement = function() { return this.value; };
+$dynamic("set$value").HTMLInputElement = function(value) { return this.value = value; };
 $inherits(_InputElementEventsImpl, _ElementEventsImpl);
 function _InputElementEventsImpl(_ptr) {
   _ElementEventsImpl.call(this, _ptr);
@@ -2441,6 +2446,7 @@ $inherits(_JavaScriptAudioNodeEventsImpl, _EventsImpl);
 function _JavaScriptAudioNodeEventsImpl() {}
 $dynamic("get$name").HTMLKeygenElement = function() { return this.name; };
 $dynamic("get$value").HTMLLIElement = function() { return this.value; };
+$dynamic("set$value").HTMLLIElement = function(value) { return this.value = value; };
 $dynamic("$dom_addEventListener$3").MediaStream = function($0, $1, $2) {
   return this.addEventListener($0, $wrap_call$1(to$call$1($1)), $2);
 };
@@ -2517,6 +2523,7 @@ $inherits(_MessagePortEventsImpl, _EventsImpl);
 function _MessagePortEventsImpl() {}
 $dynamic("get$name").HTMLMetaElement = function() { return this.name; };
 $dynamic("get$value").HTMLMeterElement = function() { return this.value; };
+$dynamic("set$value").HTMLMeterElement = function(value) { return this.value = value; };
 $dynamic("is$List").NamedNodeMap = function(){return true};
 $dynamic("is$Collection").NamedNodeMap = function(){return true};
 $dynamic("get$length").NamedNodeMap = function() { return this.length; };
@@ -2712,10 +2719,13 @@ _NotificationEventsImpl.prototype.get$click = function() {
 $dynamic("get$name").HTMLObjectElement = function() { return this.name; };
 $dynamic("get$name").OperationNotAllowedException = function() { return this.name; };
 $dynamic("get$value").HTMLOptionElement = function() { return this.value; };
+$dynamic("set$value").HTMLOptionElement = function(value) { return this.value = value; };
 $dynamic("get$name").HTMLOutputElement = function() { return this.name; };
 $dynamic("get$value").HTMLOutputElement = function() { return this.value; };
+$dynamic("set$value").HTMLOutputElement = function(value) { return this.value = value; };
 $dynamic("get$name").HTMLParamElement = function() { return this.name; };
 $dynamic("get$value").HTMLParamElement = function() { return this.value; };
+$dynamic("set$value").HTMLParamElement = function(value) { return this.value = value; };
 $dynamic("$dom_addEventListener$3").PeerConnection00 = function($0, $1, $2) {
   return this.addEventListener($0, $wrap_call$1(to$call$1($1)), $2);
 };
@@ -2725,7 +2735,9 @@ $dynamic("$dom_removeEventListener$3").PeerConnection00 = function($0, $1, $2) {
 $inherits(_PeerConnection00EventsImpl, _EventsImpl);
 function _PeerConnection00EventsImpl() {}
 $dynamic("get$value").HTMLProgressElement = function() { return this.value; };
+$dynamic("set$value").HTMLProgressElement = function(value) { return this.value = value; };
 $dynamic("get$value").RadioNodeList = function() { return this.value; };
+$dynamic("set$value").RadioNodeList = function(value) { return this.value = value; };
 $dynamic("get$name").RangeException = function() { return this.name; };
 $dynamic("get$length").SQLResultSetRowList = function() { return this.length; };
 $dynamic("get$elements").SVGElement = function() {
@@ -2748,6 +2760,7 @@ $dynamic("set$innerHTML").SVGElement = function(svg) {
   this.set$elements(container.get$elements().get$first().get$elements());
 }
 $dynamic("get$value").SVGAngle = function() { return this.value; };
+$dynamic("set$value").SVGAngle = function(value) { return this.value = value; };
 $inherits(_AttributeClassSet, _CssClassSet);
 function _AttributeClassSet() {}
 _AttributeClassSet.prototype._write = function(s) {
@@ -2761,10 +2774,12 @@ _SVGElementInstanceEventsImpl.prototype.get$click = function() {
 $dynamic("get$length").SVGElementInstanceList = function() { return this.length; };
 $dynamic("get$name").SVGException = function() { return this.name; };
 $dynamic("get$value").SVGLength = function() { return this.value; };
+$dynamic("set$value").SVGLength = function(value) { return this.value = value; };
 $dynamic("clear$0").SVGLengthList = function() {
   return this.clear();
 };
 $dynamic("get$value").SVGNumber = function() { return this.value; };
+$dynamic("set$value").SVGNumber = function(value) { return this.value = value; };
 $dynamic("clear$0").SVGNumberList = function() {
   return this.clear();
 };
@@ -2783,6 +2798,7 @@ $dynamic("clear$0").SVGTransformList = function() {
 $dynamic("get$length").HTMLSelectElement = function() { return this.length; };
 $dynamic("get$name").HTMLSelectElement = function() { return this.name; };
 $dynamic("get$value").HTMLSelectElement = function() { return this.value; };
+$dynamic("set$value").HTMLSelectElement = function(value) { return this.value = value; };
 $dynamic("get$innerHTML").ShadowRoot = function() { return this.innerHTML; };
 $dynamic("set$innerHTML").ShadowRoot = function(value) { return this.innerHTML = value; };
 $dynamic("get$name").SharedWorkerContext = function() { return this.name; };
@@ -2885,6 +2901,7 @@ $dynamic("indexOf$1").StyleSheetList = function($0) {
 };
 $dynamic("get$name").HTMLTextAreaElement = function() { return this.name; };
 $dynamic("get$value").HTMLTextAreaElement = function() { return this.value; };
+$dynamic("set$value").HTMLTextAreaElement = function(value) { return this.value = value; };
 $dynamic("$dom_addEventListener$3").TextTrack = function($0, $1, $2) {
   return this.addEventListener($0, $wrap_call$1(to$call$1($1)), $2);
 };
@@ -3179,6 +3196,7 @@ _Collections.filter = function(source, destination, f) {
 function _XMLHttpRequestUtils() {}
 function _MeasurementRequest() {}
 _MeasurementRequest.prototype.get$value = function() { return this.value; };
+_MeasurementRequest.prototype.set$value = function(value) { return this.value = value; };
 function _EventFactoryProvider() {}
 function _MouseEventFactoryProvider() {}
 function _CSSStyleDeclarationFactoryProvider() {}
@@ -3333,8 +3351,11 @@ var computercard;
 var addNumbers;
 function main() {
   $globals.addNumbers = new Array();
+  $globals.computercard = new Gamecard();
+  $globals.playercard = new Gamecard();
   get$$document().query("#getGamecard").get$on().get$click().add$1(GamecardHandler);
   get$$document().query("#startGame").get$on().get$click().add$1(GameHandler);
+  get$$document().query("#Bingo").get$on().get$click().add$1(BingoHandler);
   show("something");
 }
 function show(message) {
@@ -3342,12 +3363,13 @@ function show(message) {
 }
 function GamecardHandler(event) {
   show("clicked!");
-  get$$document().query("#playertable").set$innerHTML(createCard($globals.playercard));
+  $globals.computercard = new Gamecard();
+  $globals.playercard = new Gamecard();
+  get$$document().query("#playertable").set$innerHTML(createCard($globals.playercard, false));
   addCellClickHandlers();
-  get$$document().query("#computertable").set$innerHTML(createCard($globals.computercard));
+  get$$document().query("#computertable").set$innerHTML(createCard($globals.computercard, true));
 }
-function createCard(card) {
-  card = new Gamecard();
+function createCard(card, forComputer) {
   var cardstring = "";
   var free = false;
   var i = (0);
@@ -3358,7 +3380,12 @@ function createCard(card) {
     cardstring = $add$(cardstring, "<tr>");
     for (var $i0 = liste.iterator(); $i0.hasNext(); ) {
       var value = $i0.next();
-      if (x < (5) && i < (5)) cardstring = $add$($add$($add$($add$($add$(cardstring, "<td id=\"p") + i + x, "\""), "class=top>"), card.fields.$index(i).$index(x)), "</td>");
+      if (forComputer) {
+        if (x < (5) && i < (5)) cardstring = $add$($add$($add$($add$($add$(cardstring, "<td id=\"c") + i + x, "\""), "class=top>"), card.fields.$index(i).$index(x)), "</td>");
+      }
+      else {
+        if (x < (5) && i < (5)) cardstring = $add$($add$($add$($add$($add$(cardstring, "<td id=\"p") + i + x, "\""), "class=top>"), card.fields.$index(i).$index(x)), "</td>");
+      }
       if (x == (4)) {
         cardstring = $add$(cardstring, "</tr>");
         x = (0);
@@ -3397,14 +3424,39 @@ function addCellClickHandlers() {
   }
 }
 function GameHandler(event3) {
-  get$$document().query("#getGamecard").get$on().get$click().remove$1(GamecardHandler);
-  $globals.currentNumber = getRandomNumber();
-  show(("the current number is " + $globals.currentNumber));
+  if ($globals.first) {
+    $globals.active = true;
+    get$$document().query("#getGamecard").get$on().get$click().remove$1(GamecardHandler);
+    get$$document().query("#startGame").set$value("Next Number");
+    $globals.first = false;
+  }
+  else {
+    $globals.currentNumber = getRandomNumber();
+    show(("the current number is " + $globals.currentNumber));
+    for (var i = (0);
+     i < (5); i++) {
+      for (var x = (0);
+       x < (5); x++) {
+        if ($eq$($globals.computercard.fields.$index(i).$index(x), $globals.currentNumber)) {
+          get$$document().query(("#c" + i + x)).style.set$textDecoration("underline");
+          get$$document().query(("#c" + i + x)).style.set$backgroundColor("white");
+        }
+      }
+    }
+  }
 }
 function getRandomNumber() {
   var a = (Math.random() * (100)).toInt();
   while (a > (99) || a < (1) || ($gte$($globals.addNumbers.indexOf$1(a), (0)))) a = (Math.random() * (100)).toInt();
+  $globals.addNumbers.add(a);
   return a;
+}
+function BingoHandler(event4) {
+  if (!$globals.active) {
+    show("You need to start the Game!");
+  }
+  else {
+  }
 }
 (function(){
   var v0/*HTMLMediaElement*/ = 'HTMLMediaElement|HTMLAudioElement|HTMLVideoElement';
@@ -3443,7 +3495,9 @@ function getRandomNumber() {
   $dynamicSetMetadata(table);
 })();
 function $static_init(){
+  $globals.active = false;
   $globals.currentNumber = (22);
+  $globals.first = true;
 }
 var const$0000 = Object.create(_DeletedKeySentinel.prototype, {});
 var const$0001 = Object.create(NoMoreElementsException.prototype, {});
