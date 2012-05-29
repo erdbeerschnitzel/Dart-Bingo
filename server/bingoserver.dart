@@ -61,8 +61,10 @@ void serveFile(HttpRequest req, HttpResponse resp) {
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
   print("requested $path");
   
+  String heads = req.headers.toString();
+  
   //login post
-  if(path.contains("client.html") && req.method == "POST"){
+  if((path.contains("client.html") && req.method == "POST") || (path.contains("client.html") && heads.contains("multiplayer.html"))){
     
     print("matched");
     
@@ -74,34 +76,40 @@ void serveFile(HttpRequest req, HttpResponse resp) {
  
           bool valid = false;
        
-          String postmessage = new String.fromCharCodes(req.inputStream.read());
- 
-          postmessage = postmessage.replaceAll("username=", "");
-          postmessage = postmessage.replaceAll("password=", "");
-          
-          if(postmessage.split("&").length > 1){
-            String user = postmessage.split("&")[0];
-            String pass = postmessage.split("&")[1];
+          if(!heads.contains("multiplayer.html")){
             
-            print("user: $user pass: $pass");
+            String postmessage = new String.fromCharCodes(req.inputStream.read());
             
-            for(String line in lines){
+            postmessage = postmessage.replaceAll("username=", "");
+            postmessage = postmessage.replaceAll("password=", "");
+            
+            if(postmessage.split("&").length > 1){
+              String user = postmessage.split("&")[0];
+              String pass = postmessage.split("&")[1];
               
-              if(line.split("=")[0] == user && line.split("=")[1] == pass){
+              print("user: $user pass: $pass");
+              
+              for(String line in lines){
                 
-                print("found login");
-                valid = true;
-                
+                if(line.split("=")[0] == user && line.split("=")[1] == pass){
+                  
+                  print("found login");
+                  valid = true;
+                  
+                }
               }
             }
+            else {
+              
+              print("Error reading POST");
+            }
+    
           }
           else {
-            
-            print("Error reading POST");
+            valid = true;
           }
           
-
-          
+      
           if(valid){
             
             File client = new File("./client/client.html");
