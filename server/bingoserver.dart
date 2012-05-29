@@ -15,7 +15,7 @@ void main() {
   server.addRequestHandler((_) => true, serveFile); 
 
 
-  startTimer();
+  //startTimer();
   
   server.listen("127.0.0.1", 8080);  
   
