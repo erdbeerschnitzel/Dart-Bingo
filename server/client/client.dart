@@ -39,6 +39,7 @@ void debug(String message) {
   
 }
 
+// handles gamecard creating
 void GamecardHandler(event){
      
     computercard = new Gamecard();
@@ -133,6 +134,7 @@ void addCellClickHandlers(){
   }
 }
 
+// handle next number and computer logic
 void GameHandler(event3){
 
   currentNumber = getRandomNumber();  
@@ -172,6 +174,7 @@ void endGame(){
   document.query('#startGame').on.click.remove(GameHandler);
 }
 
+//
 bool checkBingo(Gamecard card){
   
   bool result = true;
@@ -183,7 +186,7 @@ bool checkBingo(Gamecard card){
     
     for(int x = 0; x < 5; x++){
       
-      if((i == 2) && (x == 2)){
+      if(i == 2 && x == 2){
       }
       else 
       {
@@ -203,6 +206,7 @@ bool checkBingo(Gamecard card){
   return false;
 }
 
+// get a random number between 1 and 99
 int getRandomNumber(){
   
   int a = (Math.random()*100).toInt();
@@ -214,6 +218,7 @@ int getRandomNumber(){
   return a;
 }
 
+// handle bingo button
 void BingoHandler(event4){
   
   if(!active){
