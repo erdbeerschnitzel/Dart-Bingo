@@ -1746,7 +1746,7 @@ $.JSSyntaxRegExp$_globalVersionOf$1 = function(other) {
   return t2;
 };
 
-$.convertDartClosureToJS = function(closure) {
+$.convertDartClosureToJS = function(closure, arity) {
   if (closure === (void 0)) {
     return;
   } else {
@@ -1757,7 +1757,7 @@ $.convertDartClosureToJS = function(closure) {
   } else {
   }
   var function0 = (function() {
-    return $.invokeClosure.$call$5(closure, $, arguments.length, arguments[0], arguments[1]);
+    return $.invokeClosure.$call$5(closure, $, arity, arguments[0], arguments[1]);
   });
   closure.$identity = function0;
   return function0;
@@ -3764,10 +3764,10 @@ $.defineProperty(Object.prototype, 'is$Collection', function() { return false; }
 $.defineProperty(Object.prototype, 'toString$0', function() { return $.toStringForNativeObject(this); });
 $.$defineNativeClass('AbstractWorker', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   if (Object.getPrototypeOf(this).hasOwnProperty('get$on')) {
@@ -3830,10 +3830,10 @@ $.$defineNativeClass('HTMLBaseFontElement', [], {
 
 $.$defineNativeClass('BatteryManager', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._BatteryManagerEventsImpl$1(this);
@@ -3919,10 +3919,10 @@ $.$defineNativeClass('HTMLDListElement', [], {
 
 $.$defineNativeClass('DOMApplicationCache', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._DOMApplicationCacheEventsImpl$1(this);
@@ -4037,10 +4037,10 @@ $.$defineNativeClass('DedicatedWorkerContext', [], {
 
 $.$defineNativeClass('DeprecatedPeerConnection', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._DeprecatedPeerConnectionEventsImpl$1(this);
@@ -4180,11 +4180,11 @@ $.$defineNativeClass('HTMLEmbedElement', [], {
 
 $.$defineNativeClass('Entry', [], {
  remove$2: function(successCallback, errorCallback) {
-  return this.remove($.convertDartClosureToJS(successCallback),$.convertDartClosureToJS(errorCallback));
+  return this.remove($.convertDartClosureToJS(successCallback, 0),$.convertDartClosureToJS(errorCallback, 1));
  },
  remove$1: function(successCallback) {
-  successCallback = $.convertDartClosureToJS(successCallback);
-  errorCallback = $.convertDartClosureToJS(errorCallback);
+  successCallback = $.convertDartClosureToJS(successCallback, 0);
+  errorCallback = $.convertDartClosureToJS(errorCallback, 1);
   return this.remove(successCallback);
 }
 });
@@ -4209,10 +4209,10 @@ $.$defineNativeClass('EventException', [], {
 
 $.$defineNativeClass('EventSource', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._EventSourceEventsImpl$1(this);
@@ -4222,14 +4222,14 @@ $.$defineNativeClass('EventSource', [], {
 $.$defineNativeClass('EventTarget', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   if (Object.getPrototypeOf(this).hasOwnProperty('$dom_removeEventListener$3')) {
-    return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+    return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
   } else {
     return Object.prototype.$dom_removeEventListener$3.call(this, type, listener, useCapture);
   }
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   if (Object.getPrototypeOf(this).hasOwnProperty('$dom_addEventListener$3')) {
-    return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+    return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
   } else {
     return Object.prototype.$dom_addEventListener$3.call(this, type, listener, useCapture);
   }
@@ -4301,10 +4301,10 @@ $.$defineNativeClass('FileList', ["length?"], {
 
 $.$defineNativeClass('FileReader', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._FileReaderEventsImpl$1(this);
@@ -4313,10 +4313,10 @@ $.$defineNativeClass('FileReader', [], {
 
 $.$defineNativeClass('FileWriter', ["length?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._FileWriterEventsImpl$1(this);
@@ -4521,10 +4521,10 @@ $.$defineNativeClass('HTMLHtmlElement', [], {
 
 $.$defineNativeClass('IDBDatabase', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._IDBDatabaseEventsImpl$1(this);
@@ -4552,14 +4552,14 @@ $.$defineNativeClass('IDBObjectStore', [], {
 $.$defineNativeClass('IDBRequest', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   if (Object.getPrototypeOf(this).hasOwnProperty('$dom_removeEventListener$3')) {
-    return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+    return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
   } else {
     return Object.prototype.$dom_removeEventListener$3.call(this, type, listener, useCapture);
   }
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
   if (Object.getPrototypeOf(this).hasOwnProperty('$dom_addEventListener$3')) {
-    return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+    return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
   } else {
     return Object.prototype.$dom_addEventListener$3.call(this, type, listener, useCapture);
   }
@@ -4575,10 +4575,10 @@ $.$defineNativeClass('IDBRequest', [], {
 
 $.$defineNativeClass('IDBTransaction', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._IDBTransactionEventsImpl$1(this);
@@ -4587,10 +4587,10 @@ $.$defineNativeClass('IDBTransaction', [], {
 
 $.$defineNativeClass('IDBVersionChangeRequest', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._IDBVersionChangeRequestEventsImpl$1(this);
@@ -4752,10 +4752,10 @@ $.$defineNativeClass('Int8Array', ["length?"], {
 
 $.$defineNativeClass('JavaScriptAudioNode', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._JavaScriptAudioNodeEventsImpl$1(this);
@@ -4798,10 +4798,10 @@ $.$defineNativeClass('HTMLMarqueeElement', [], {
 
 $.$defineNativeClass('MediaController', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  }
 });
 
@@ -4860,10 +4860,10 @@ $.$defineNativeClass('MediaList', ["length?"], {
 
 $.$defineNativeClass('MediaStream', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._MediaStreamEventsImpl$1(this);
@@ -4882,10 +4882,10 @@ $.$defineNativeClass('HTMLMenuElement', [], {
 
 $.$defineNativeClass('MessagePort', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._MessagePortEventsImpl$1(this);
@@ -4958,7 +4958,7 @@ $.$defineNativeClass('Node', [], {
   return this.replaceChild(newChild,oldChild);
  },
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_removeChild$1: function(oldChild) {
   return this.removeChild(oldChild);
@@ -4973,7 +4973,7 @@ $.$defineNativeClass('Node', [], {
   return this.appendChild(newChild);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  set$text: function(value) {
   this.textContent = value;;
@@ -5082,10 +5082,10 @@ $.$defineNativeClass('NodeSelector', [], {
 
 $.$defineNativeClass('Notification', ["tag?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._NotificationEventsImpl$1(this);
@@ -5128,10 +5128,10 @@ $.$defineNativeClass('HTMLParamElement', ["value!"], {
 
 $.$defineNativeClass('PeerConnection00', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._PeerConnection00EventsImpl$1(this);
@@ -5638,10 +5638,10 @@ $.$defineNativeClass('SpeechInputResultList', ["length?"], {
 
 $.$defineNativeClass('SpeechRecognition', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._SpeechRecognitionEventsImpl$1(this);
@@ -5789,10 +5789,10 @@ $.$defineNativeClass('HTMLTextAreaElement', ["value!"], {
 
 $.$defineNativeClass('TextTrack', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._TextTrackEventsImpl$1(this);
@@ -5801,10 +5801,10 @@ $.$defineNativeClass('TextTrack', [], {
 
 $.$defineNativeClass('TextTrackCue', ["text!"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._TextTrackCueEventsImpl$1(this);
@@ -5816,10 +5816,10 @@ $.$defineNativeClass('TextTrackCueList', ["length?"], {
 
 $.$defineNativeClass('TextTrackList', ["length?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._TextTrackListEventsImpl$1(this);
@@ -6044,10 +6044,10 @@ $.$defineNativeClass('HTMLVideoElement', [], {
 
 $.$defineNativeClass('WebSocket', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._WebSocketEventsImpl$1(this);
@@ -6056,10 +6056,10 @@ $.$defineNativeClass('WebSocket', [], {
 
 $.$defineNativeClass('DOMWindow', ["navigator?", "length?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._WindowEventsImpl$1(this);
@@ -6074,10 +6074,10 @@ $.$defineNativeClass('Worker', [], {
 
 $.$defineNativeClass('WorkerContext', ["navigator?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   if (Object.getPrototypeOf(this).hasOwnProperty('get$on')) {
@@ -6099,10 +6099,10 @@ $.$defineNativeClass('WorkerNavigator', ["userAgent?"], {
 
 $.$defineNativeClass('XMLHttpRequest', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._XMLHttpRequestEventsImpl$1(this);
@@ -6117,10 +6117,10 @@ $.$defineNativeClass('XMLHttpRequestException', [], {
 
 $.$defineNativeClass('XMLHttpRequestUpload', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
-  return this.removeEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  $dom_addEventListener$3: function(type, listener, useCapture) {
-  return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
+  return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
  get$on: function() {
   return $._XMLHttpRequestUploadEventsImpl$1(this);
