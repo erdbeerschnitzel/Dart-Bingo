@@ -713,27 +713,48 @@ Isolate.$defineClass("IllegalJSRegExpException", "Object", ["_errmsg", "_pattern
  }
 });
 
-Isolate.$defineClass("Gamecard", "Object", ["fields"], {
+Isolate.$defineClass("Gamecard", "Object", ["addedNumbers", "fields"], {
  getRandomNumber$0: function() {
-  return $.toInt($.div($.DateImplementation$now$0().get$milliseconds(), 100));
+  return $.toInt($.add($.div($.DateImplementation$now$0().get$milliseconds(), 10), $.toInt($.mul($.random(), 10))));
  },
  Gamecard$0: function() {
   var t0 = $.List((void 0));
   $.setRuntimeTypeInfo(t0, ({E: 'List'}));
   this.fields = t0;
+  var t1 = $.List((void 0));
+  $.setRuntimeTypeInfo(t1, ({E: 'int'}));
+  this.addedNumbers = t1;
   for (var i = 0; i < 5; i = i + 1) {
     $.add$1(this.fields, $.List((void 0)));
-    var t1 = i === 2;
+    var t2 = i === 2;
     for (var x = 0; x < 5; x = x + 1) {
       $.add$1($.index(this.fields, i), 0);
-      $.indexSet($.index(this.fields, i), x, this.getRandomNumber$0());
-      var t2 = x === 2;
-      if (t2) {
-        var t3 = t1;
-      } else {
-        t3 = t2;
+      var temp = 101;
+      while (true) {
+        var t3 = $.gtB(temp, 99);
+        if (!t3) {
+          var t4 = $.ltB(temp, 1);
+        } else {
+          t4 = t3;
+        }
+        if (!t4) {
+          var t5 = $.geB($.indexOf$1(this.addedNumbers, temp), 0);
+        } else {
+          t5 = t4;
+        }
+        if (!t5) break;
+        var temp0 = this.getRandomNumber$0();
+        temp = temp0;
       }
-      if (t3) {
+      $.indexSet($.index(this.fields, i), x, temp);
+      $.add$1(this.addedNumbers, temp);
+      var t6 = x === 2;
+      if (t6) {
+        var t7 = t2;
+      } else {
+        t7 = t6;
+      }
+      if (t7) {
         $.indexSet($.index(this.fields, i), x, 'free');
       } else {
       }
@@ -776,6 +797,9 @@ Isolate.$defineClass("FilteredElementList", "Object", ["_childNodes", "_node"], 
  indexOf$2: function(element, start) {
   return $.indexOf$2(this.get$_filtered(), element, start);
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  getRange$2: function(start, rangeLength) {
   return $.getRange(this.get$_filtered(), start, rangeLength);
  },
@@ -869,6 +893,9 @@ Isolate.$defineClass("_ChildrenElementList", "Object", ["_childElements", "_elem
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  getRange$2: function(start, rangeLength) {
   return $._FrozenElementList$_wrap$1($.getRange2(this, start, rangeLength, []));
  },
@@ -943,6 +970,9 @@ Isolate.$defineClass("_FrozenElementList", "Object", ["_nodeList"], {
  indexOf$2: function(element, start) {
   return $.indexOf$2(this._nodeList, element, start);
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  getRange$2: function(start, rangeLength) {
   return $._FrozenElementList$_wrap$1($.getRange(this._nodeList, start, rangeLength));
  },
@@ -1101,6 +1131,9 @@ Isolate.$defineClass("_ChildNodeListLazy", "Object", ["_this"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -1167,6 +1200,9 @@ Isolate.$defineClass("_ListWrapper", "Object", [], {
  indexOf$2: function(element, start) {
   return $.indexOf$2(this._list, element, start);
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  addAll$1: function(collection) {
   return $.addAll(this._list, collection);
  },
@@ -2187,15 +2223,6 @@ $._EventSourceEventsImpl$1 = function(_ptr) {
   return new $._EventSourceEventsImpl(_ptr);
 };
 
-$.getHours = function(receiver) {
-  if (receiver.isUtc$0() === true) {
-    var t0 = ($.lazyAsJsDate(receiver).getUTCHours());
-  } else {
-    t0 = ($.lazyAsJsDate(receiver).getHours());
-  }
-  return t0;
-};
-
 $.mul = function(a, b) {
   var t0 = typeof a === 'number';
   if (t0) {
@@ -2209,6 +2236,23 @@ $.mul = function(a, b) {
     t2 = $.mul$slow(a, b);
   }
   return t2;
+};
+
+$.getHours = function(receiver) {
+  if (receiver.isUtc$0() === true) {
+    var t0 = ($.lazyAsJsDate(receiver).getUTCHours());
+  } else {
+    t0 = ($.lazyAsJsDate(receiver).getHours());
+  }
+  return t0;
+};
+
+$.random = function() {
+  return $.random2();
+};
+
+$.random2 = function() {
+  return Math.random();
 };
 
 $.stringToString = function(value) {
@@ -2763,7 +2807,7 @@ $.ioore = function(index) {
 };
 
 $.Gamecard$0 = function() {
-  var t0 = new $.Gamecard((void 0));
+  var t0 = new $.Gamecard((void 0), (void 0));
   t0.Gamecard$0();
   return t0;
 };
@@ -3183,6 +3227,20 @@ $.captureStackTrace = function(ex) {
   jsError.dartException = ex;
   jsError.toString = $.toStringWrapper.$call$0;
   return jsError;
+};
+
+$.indexOf$1 = function(receiver, element) {
+  var t0 = $.isJsArray(receiver) === true;
+  if (!t0) {
+    var t1 = typeof receiver === 'string';
+  } else {
+    t1 = t0;
+  }
+  if (t1) {
+    return $.indexOf$2(receiver, element, 0);
+  } else {
+  }
+  return receiver.indexOf$1(element);
 };
 
 $.indexOf$2 = function(receiver, element, start) {
@@ -3990,6 +4048,9 @@ $.$defineNativeClass('DOMStringList', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4245,6 +4306,9 @@ $.$defineNativeClass('FileList', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4309,6 +4373,9 @@ $.$defineNativeClass('Float32Array', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4352,6 +4419,9 @@ $.$defineNativeClass('Float64Array', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4421,6 +4491,9 @@ $.$defineNativeClass('HTMLCollection', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4570,6 +4643,9 @@ $.$defineNativeClass('Int16Array', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4613,6 +4689,9 @@ $.$defineNativeClass('Int32Array', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4656,6 +4735,9 @@ $.$defineNativeClass('Int8Array', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4755,6 +4837,9 @@ $.$defineNativeClass('MediaList', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4838,6 +4923,9 @@ $.$defineNativeClass('NamedNodeMap', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -4942,6 +5030,9 @@ $.$defineNativeClass('NodeList', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -5609,6 +5700,9 @@ $.$defineNativeClass('StyleSheetList', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -5717,6 +5811,9 @@ $.$defineNativeClass('TouchList', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -5772,6 +5869,9 @@ $.$defineNativeClass('Uint16Array', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -5815,6 +5915,9 @@ $.$defineNativeClass('Uint32Array', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },
@@ -5858,6 +5961,9 @@ $.$defineNativeClass('Uint8Array', ["length?"], {
  indexOf$2: function(element, start) {
   return $.indexOf2(this, element, start, $.get$length(this));
  },
+ indexOf$1: function(element) {
+  return this.indexOf$2(element,0)
+},
  isEmpty$0: function() {
   return $.eq($.get$length(this), 0);
  },

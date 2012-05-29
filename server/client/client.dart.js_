@@ -70,6 +70,19 @@ function $eq$(x, y) {
 $defProp(Object.prototype, '$eq', function(other) {
   return this === other;
 });
+function $gte$complex$(x, y) {
+  if (typeof(x) == 'number') {
+    $throw(new IllegalArgumentException(y));
+  } else if (typeof(x) == 'object') {
+    return x.$gte(y);
+  } else {
+    $throw(new NoSuchMethodException(x, "operator >=", [y]));
+  }
+}
+function $gte$(x, y) {
+  if (typeof(x) == 'number' && typeof(y) == 'number') return x >= y;
+  return $gte$complex$(x, y);
+}
 function $ne$(x, y) {
   if (x == null) return y != null;
   return (typeof(x) != 'object') ? x !== y : !x.$eq(y);
@@ -264,6 +277,9 @@ $defProp(Object.prototype, "filter$1", function($0) {
 });
 $defProp(Object.prototype, "forEach$1", function($0) {
   return this.noSuchMethod("forEach", [$0]);
+});
+$defProp(Object.prototype, "indexOf$1", function($0) {
+  return this.noSuchMethod("indexOf", [$0]);
 });
 $defProp(Object.prototype, "is$Collection", function() {
   return false;
@@ -522,6 +538,7 @@ $defProp(ListFactory.prototype, "filter$1", function($0) {
 $defProp(ListFactory.prototype, "forEach$1", function($0) {
   return this.forEach(to$call$1($0));
 });
+$defProp(ListFactory.prototype, "indexOf$1", ListFactory.prototype.indexOf);
 function ListIterator(array) {
   this._array = array;
   this._pos = (0);
@@ -1072,6 +1089,7 @@ StringImplementation.prototype.hashCode = function() {
       hash ^= hash >> 11;
       return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
 }
+StringImplementation.prototype.indexOf$1 = StringImplementation.prototype.indexOf;
 DateImplementation.now$ctor = function() {
   this.timeZone = new TimeZoneImplementation.local$ctor();
   this.value = DateImplementation._now();
@@ -1088,6 +1106,9 @@ DateImplementation.prototype.get$value = function() { return this.value; };
 DateImplementation.prototype.$eq = function(other) {
   if (!(other instanceof DateImplementation)) return false;
   return (this.value == other.get$value());
+}
+DateImplementation.prototype.$gte = function(other) {
+  return this.value >= other.value;
 }
 DateImplementation.prototype.hashCode = function() {
   return this.value;
@@ -1433,6 +1454,9 @@ $dynamic("forEach").DOMStringList = function(f) {
 $dynamic("filter").DOMStringList = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").DOMStringList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").DOMStringList = function() {
   return this.$index(this.length - (1));
 }
@@ -1447,6 +1471,9 @@ $dynamic("filter$1").DOMStringList = function($0) {
 };
 $dynamic("forEach$1").DOMStringList = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").DOMStringList = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("get$length").DataTransferItemList = function() { return this.length; };
 $dynamic("add$1").DataTransferItemList = function($0) {
@@ -1551,6 +1578,9 @@ FilteredElementList.prototype.$index = function(index) {
 FilteredElementList.prototype.iterator = function() {
   return this.get$_filtered().iterator();
 }
+FilteredElementList.prototype.indexOf = function(element, start) {
+  return this.get$_filtered().indexOf(element, start);
+}
 FilteredElementList.prototype.last = function() {
   return this.get$_filtered().last();
 }
@@ -1561,6 +1591,9 @@ FilteredElementList.prototype.filter$1 = function($0) {
 };
 FilteredElementList.prototype.forEach$1 = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+FilteredElementList.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
 };
 function EmptyElementRect() {}
 $dynamic("is$html_Element").DocumentFragment = function(){return true};
@@ -1648,6 +1681,9 @@ _ChildrenElementList.prototype.addAll = function(collection) {
     this._html_element.appendChild(element);
   }
 }
+_ChildrenElementList.prototype.indexOf = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.get$length());
+}
 _ChildrenElementList.prototype.clear$_ = function() {
   this._html_element.set$text("");
 }
@@ -1668,6 +1704,9 @@ _ChildrenElementList.prototype.filter$1 = function($0) {
 };
 _ChildrenElementList.prototype.forEach$1 = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+_ChildrenElementList.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
 };
 _FrozenElementList._wrap$ctor = function(_nodeList) {
   this._nodeList = _nodeList;
@@ -1711,6 +1750,9 @@ _FrozenElementList.prototype.iterator = function() {
 _FrozenElementList.prototype.addAll = function(collection) {
   $throw(const$0003);
 }
+_FrozenElementList.prototype.indexOf = function(element, start) {
+  return this._nodeList.indexOf(element, start);
+}
 _FrozenElementList.prototype.clear$_ = function() {
   $throw(const$0003);
 }
@@ -1727,6 +1769,9 @@ _FrozenElementList.prototype.filter$1 = function($0) {
 };
 _FrozenElementList.prototype.forEach$1 = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+_FrozenElementList.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
 };
 function _FrozenElementListIterator(_list) {
   this._html_index = (0);
@@ -1768,6 +1813,9 @@ _ListWrapper.prototype.add = function(value) {
 _ListWrapper.prototype.addAll = function(collection) {
   return this._html_list.addAll(collection);
 }
+_ListWrapper.prototype.indexOf = function(element, start) {
+  return this._html_list.indexOf(element, start);
+}
 _ListWrapper.prototype.clear$_ = function() {
   return this._html_list.clear$_();
 }
@@ -1788,12 +1836,18 @@ _ListWrapper.prototype.filter$1 = function($0) {
 _ListWrapper.prototype.forEach$1 = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
 };
+_ListWrapper.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 $inherits(_ListWrapper_Element, _ListWrapper);
 function _ListWrapper_Element(_list) {
   this._html_list = _list;
 }
 _ListWrapper_Element.prototype.add$1 = _ListWrapper_Element.prototype.add;
 _ListWrapper_Element.prototype.clear$0 = _ListWrapper_Element.prototype.clear$_;
+_ListWrapper_Element.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 $inherits(_ElementList, _ListWrapper_Element);
 function _ElementList(list) {
   _ListWrapper_Element.call(this, list);
@@ -2027,6 +2081,9 @@ $dynamic("forEach").FileList = function(f) {
 $dynamic("filter").FileList = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").FileList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").FileList = function() {
   return this.$index(this.length - (1));
 }
@@ -2041,6 +2098,9 @@ $dynamic("filter$1").FileList = function($0) {
 };
 $dynamic("forEach$1").FileList = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").FileList = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("$dom_addEventListener$3").FileReader = function($0, $1, $2) {
   return this.addEventListener($0, $wrap_call$1(to$call$1($1)), $2);
@@ -2078,6 +2138,9 @@ $dynamic("forEach").Float32Array = function(f) {
 $dynamic("filter").Float32Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Float32Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Float32Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2092,6 +2155,9 @@ $dynamic("filter$1").Float32Array = function($0) {
 };
 $dynamic("forEach$1").Float32Array = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").Float32Array = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("is$List").Float64Array = function(){return true};
 $dynamic("is$Collection").Float64Array = function(){return true};
@@ -2117,6 +2183,9 @@ $dynamic("forEach").Float64Array = function(f) {
 $dynamic("filter").Float64Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Float64Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Float64Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2131,6 +2200,9 @@ $dynamic("filter$1").Float64Array = function($0) {
 };
 $dynamic("forEach$1").Float64Array = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").Float64Array = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("get$length").HTMLFormElement = function() { return this.length; };
 $dynamic("get$name").HTMLFormElement = function() { return this.name; };
@@ -2167,6 +2239,9 @@ $dynamic("forEach").HTMLCollection = function(f) {
 $dynamic("filter").HTMLCollection = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").HTMLCollection = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.get$length());
+}
 $dynamic("last").HTMLCollection = function() {
   return this.$index(this.get$length() - (1));
 }
@@ -2181,6 +2256,9 @@ $dynamic("filter$1").HTMLCollection = function($0) {
 };
 $dynamic("forEach$1").HTMLCollection = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").HTMLCollection = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("get$length").HTMLOptionsCollection = function() {
   return this.length;
@@ -2255,6 +2333,9 @@ $dynamic("forEach").Int16Array = function(f) {
 $dynamic("filter").Int16Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Int16Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Int16Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2269,6 +2350,9 @@ $dynamic("filter$1").Int16Array = function($0) {
 };
 $dynamic("forEach$1").Int16Array = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").Int16Array = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("is$List").Int32Array = function(){return true};
 $dynamic("is$Collection").Int32Array = function(){return true};
@@ -2294,6 +2378,9 @@ $dynamic("forEach").Int32Array = function(f) {
 $dynamic("filter").Int32Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Int32Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Int32Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2308,6 +2395,9 @@ $dynamic("filter$1").Int32Array = function($0) {
 };
 $dynamic("forEach$1").Int32Array = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").Int32Array = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("is$List").Int8Array = function(){return true};
 $dynamic("is$Collection").Int8Array = function(){return true};
@@ -2333,6 +2423,9 @@ $dynamic("forEach").Int8Array = function(f) {
 $dynamic("filter").Int8Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Int8Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Int8Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2347,6 +2440,9 @@ $dynamic("filter$1").Int8Array = function($0) {
 };
 $dynamic("forEach$1").Int8Array = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").Int8Array = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("$dom_addEventListener$3").JavaScriptAudioNode = function($0, $1, $2) {
   return this.addEventListener($0, $wrap_call$1(to$call$1($1)), $2);
@@ -2390,6 +2486,9 @@ $dynamic("forEach").MediaList = function(f) {
 $dynamic("filter").MediaList = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").MediaList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").MediaList = function() {
   return this.$index(this.length - (1));
 }
@@ -2404,6 +2503,9 @@ $dynamic("filter$1").MediaList = function($0) {
 };
 $dynamic("forEach$1").MediaList = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").MediaList = function($0) {
+  return this.indexOf($0, (0));
 };
 $inherits(_MediaStreamEventsImpl, _EventsImpl);
 function _MediaStreamEventsImpl() {}
@@ -2440,6 +2542,9 @@ $dynamic("forEach").NamedNodeMap = function(f) {
 $dynamic("filter").NamedNodeMap = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").NamedNodeMap = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").NamedNodeMap = function() {
   return this.$index(this.length - (1));
 }
@@ -2454,6 +2559,9 @@ $dynamic("filter$1").NamedNodeMap = function($0) {
 };
 $dynamic("forEach$1").NamedNodeMap = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").NamedNodeMap = function($0) {
+  return this.indexOf($0, (0));
 };
 function _ChildNodeListLazy(_this) {
   this._this = _this;
@@ -2494,6 +2602,9 @@ _ChildNodeListLazy.prototype.forEach = function(f) {
 _ChildNodeListLazy.prototype.filter = function(f) {
   return new _NodeListWrapper(_Collections.filter(this, [], f));
 }
+_ChildNodeListLazy.prototype.indexOf = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.get$length());
+}
 _ChildNodeListLazy.prototype.get$length = function() {
   return this._this.get$$$dom_childNodes().length;
 }
@@ -2508,12 +2619,18 @@ _ChildNodeListLazy.prototype.filter$1 = function($0) {
 _ChildNodeListLazy.prototype.forEach$1 = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
 };
+_ChildNodeListLazy.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 $inherits(_ListWrapper_Node, _ListWrapper);
 function _ListWrapper_Node(_list) {
   this._html_list = _list;
 }
 _ListWrapper_Node.prototype.add$1 = _ListWrapper_Node.prototype.add;
 _ListWrapper_Node.prototype.clear$0 = _ListWrapper_Node.prototype.clear$_;
+_ListWrapper_Node.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 $inherits(_NodeListWrapper, _ListWrapper_Node);
 function _NodeListWrapper(list) {
   _ListWrapper_Node.call(this, list);
@@ -2557,6 +2674,9 @@ $dynamic("forEach").NodeList = function(f) {
 $dynamic("filter").NodeList = function(f) {
   return new _NodeListWrapper(_Collections.filter(this, [], f));
 }
+$dynamic("indexOf").NodeList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").NodeList = function() {
   return this.$index(this.length - (1));
 }
@@ -2575,6 +2695,9 @@ $dynamic("filter$1").NodeList = function($0) {
 };
 $dynamic("forEach$1").NodeList = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").NodeList = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("$dom_addEventListener$3").Notification = function($0, $1, $2) {
   return this.addEventListener($0, $wrap_call$1(to$call$1($1)), $2);
@@ -2721,6 +2844,9 @@ $dynamic("forEach").StyleSheetList = function(f) {
 $dynamic("filter").StyleSheetList = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").StyleSheetList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").StyleSheetList = function() {
   return this.$index(this.length - (1));
 }
@@ -2735,6 +2861,9 @@ $dynamic("filter$1").StyleSheetList = function($0) {
 };
 $dynamic("forEach$1").StyleSheetList = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").StyleSheetList = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("get$name").HTMLTextAreaElement = function() { return this.name; };
 $dynamic("get$value").HTMLTextAreaElement = function() { return this.value; };
@@ -2780,6 +2909,9 @@ $dynamic("forEach").TouchList = function(f) {
 $dynamic("filter").TouchList = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").TouchList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").TouchList = function() {
   return this.$index(this.length - (1));
 }
@@ -2794,6 +2926,9 @@ $dynamic("filter$1").TouchList = function($0) {
 };
 $dynamic("forEach$1").TouchList = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").TouchList = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("is$List").Uint16Array = function(){return true};
 $dynamic("is$Collection").Uint16Array = function(){return true};
@@ -2819,6 +2954,9 @@ $dynamic("forEach").Uint16Array = function(f) {
 $dynamic("filter").Uint16Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Uint16Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Uint16Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2833,6 +2971,9 @@ $dynamic("filter$1").Uint16Array = function($0) {
 };
 $dynamic("forEach$1").Uint16Array = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").Uint16Array = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("is$List").Uint32Array = function(){return true};
 $dynamic("is$Collection").Uint32Array = function(){return true};
@@ -2858,6 +2999,9 @@ $dynamic("forEach").Uint32Array = function(f) {
 $dynamic("filter").Uint32Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Uint32Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Uint32Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2872,6 +3016,9 @@ $dynamic("filter$1").Uint32Array = function($0) {
 };
 $dynamic("forEach$1").Uint32Array = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").Uint32Array = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("is$List").Uint8Array = function(){return true};
 $dynamic("is$Collection").Uint8Array = function(){return true};
@@ -2897,6 +3044,9 @@ $dynamic("forEach").Uint8Array = function(f) {
 $dynamic("filter").Uint8Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Uint8Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Uint8Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2911,6 +3061,9 @@ $dynamic("filter$1").Uint8Array = function($0) {
 };
 $dynamic("forEach$1").Uint8Array = function($0) {
   return this.forEach($wrap_call$1(to$call$1($0)));
+};
+$dynamic("indexOf$1").Uint8Array = function($0) {
+  return this.indexOf($0, (0));
 };
 $dynamic("get$name").WebGLActiveInfo = function() { return this.name; };
 $dynamic("$dom_addEventListener$3").WebSocket = function($0, $1, $2) {
@@ -3091,6 +3244,21 @@ function _FixedSizeListIterator_html_Touch(array) {
   _VariableSizeListIterator_html_Touch.call(this, array);
 }
 function _Lists() {}
+_Lists.indexOf = function(a, element, startIndex, endIndex) {
+  if (startIndex >= a.get$length()) {
+    return (-1);
+  }
+  if (startIndex < (0)) {
+    startIndex = (0);
+  }
+  for (var i = startIndex;
+   i < endIndex; i++) {
+    if ($eq$(a.$index(i), element)) {
+      return i;
+    }
+  }
+  return (-1);
+}
 function get$$document() {
   return document;
 }
@@ -3099,13 +3267,17 @@ var _pendingRequests;
 var _pendingMeasurementFrameCallbacks;
 function Gamecard() {
   this.fields = new Array();
+  this.addedNumbers = new Array();
   for (var i = (0);
    i < (5); i++) {
     this.fields.add(new Array());
     for (var x = (0);
      x < (5); x++) {
       this.fields.$index(i).add$1((0));
-      this.fields.$index(i).$setindex(x, this.getRandomNumber());
+      var temp = (101);
+      while (temp > (99) || temp < (1) || ($gte$(this.addedNumbers.indexOf$1(temp), (0)))) temp = this.getRandomNumber();
+      this.fields.$index(i).$setindex(x, temp);
+      this.addedNumbers.add(temp);
       if (x == (2) && i == (2)) {
         this.fields.$index(i).$setindex(x, "free");
       }
@@ -3113,7 +3285,7 @@ function Gamecard() {
   }
 }
 Gamecard.prototype.getRandomNumber = function() {
-  var a = new DateImplementation.now$ctor().get$milliseconds() / (100);
+  var a = new DateImplementation.now$ctor().get$milliseconds() / (10) + (Math.random() * (10)).toInt();
   return a.toInt();
 }
 function main() {

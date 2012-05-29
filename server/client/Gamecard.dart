@@ -2,9 +2,12 @@ class Gamecard {
   
   List<List> fields;
   
+  List<int> addedNumbers;
+  
   Gamecard(){
   
     fields = new List<List>();
+    addedNumbers = new List<int>();
     
     for(int i = 0; i < 5; i++){
       
@@ -14,7 +17,16 @@ class Gamecard {
         
         fields[i].add(0);
         
-        fields[i][x] = getRandomNumber();
+        int temp = 101;
+        
+        while(temp > 99 || temp < 1 || (addedNumbers.indexOf(temp) >= 0)) temp = getRandomNumber();
+        
+        fields[i][x] = temp;
+          
+        addedNumbers.add(temp);
+
+        
+
         
         if(x == 2 && i == 2){
           
@@ -28,7 +40,7 @@ class Gamecard {
   
   int getRandomNumber(){
     
-    var a = new Date.now().milliseconds / 100;
+    var a = new Date.now().milliseconds / 10 + (Math.random()*10).toInt();
       
     return a.toInt();
   }
