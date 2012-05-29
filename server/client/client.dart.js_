@@ -3415,7 +3415,7 @@ function addCellClickHandlers() {
         el.get$on().get$click().add$1((function (el, event2) {
           if ($globals.currentNumber.toString() == el.get$innerHTML().toString()) {
             el.get$style().set$textDecoration("underline");
-            el.get$style().set$backgroundColor("white");
+            el.get$style().set$backgroundColor("red");
           }
         }).bind(null, el)
         );
@@ -3439,7 +3439,7 @@ function GameHandler(event3) {
        x < (5); x++) {
         if ($eq$($globals.computercard.fields.$index(i).$index(x), $globals.currentNumber)) {
           get$$document().query(("#c" + i + x)).style.set$textDecoration("underline");
-          get$$document().query(("#c" + i + x)).style.set$backgroundColor("white");
+          get$$document().query(("#c" + i + x)).style.set$backgroundColor("red");
         }
       }
     }

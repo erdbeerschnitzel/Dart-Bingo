@@ -1334,7 +1334,7 @@ Isolate.$defineClass("Closure8", "Closure12", ["box_0"], {
  $call$1: function(event2) {
   if ($.eqB($.toString($.currentNumber), $.toString(this.box_0.el_1.get$innerHTML()))) {
     this.box_0.el_1.get$style().set$textDecoration('underline');
-    this.box_0.el_1.get$style().set$backgroundColor('white');
+    this.box_0.el_1.get$style().set$backgroundColor('red');
   } else {
   }
  }
@@ -1560,7 +1560,7 @@ $.GameHandler = function(event3) {
       for (var x = 0; x < 5; x = x + 1) {
         if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.currentNumber)) {
           $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$textDecoration('underline');
-          $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$backgroundColor('white');
+          $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$backgroundColor('red');
         } else {
         }
       }

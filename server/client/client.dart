@@ -9,32 +9,32 @@ bool active = false;
 bool first = true;
 
 void main() {
-  
+ 
+ // init some Objects
  addNumbers = new List<int>();
  
  computercard = new Gamecard();
  
  playercard = new Gamecard();
  
+ // attach handlers
  document.query('#getGamecard').on.click.add(GamecardHandler);
  
  document.query('#startGame').on.click.add(GameHandler);
  
  document.query('#Bingo').on.click.add(BingoHandler);
  
- show('something');
+ show('Welcome to Bingo');
 }
 
 void show(String message) {
-  document.query('#status').innerHTML = message;
   
+  document.query('#status').innerHTML = message;
   
 }
 
 void GamecardHandler(event){
-  
-    show("clicked!");
-    
+     
     computercard = new Gamecard();
     
     playercard = new Gamecard();
@@ -44,8 +44,12 @@ void GamecardHandler(event){
     addCellClickHandlers();
 
     document.query('#computertable').innerHTML = createCard(computercard, true);
+    
+    show("Gamecards created!");
 }
 
+// very static
+// TODO: improve card creating algo
 String createCard(Gamecard card, bool forComputer){
   
   String cardstring = "";
@@ -116,7 +120,7 @@ void addCellClickHandlers(){
           if(currentNumber.toString() == el.innerHTML.toString()){
             
             el.style.textDecoration = 'underline';
-            el.style.backgroundColor = 'white';
+            el.style.backgroundColor = 'red';
           }
 
         });         
@@ -146,7 +150,7 @@ void GameHandler(event3){
         if(computercard.fields[i][x] == currentNumber){
           
           document.query('#c$i$x').style.textDecoration = 'underline';
-          document.query('#c$i$x').style.backgroundColor = 'white';
+          document.query('#c$i$x').style.backgroundColor = 'red';
           
         }
         
