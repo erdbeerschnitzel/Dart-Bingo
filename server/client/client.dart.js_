@@ -3177,8 +3177,8 @@ Gamecard.prototype.getRandomNumber = function() {
   return a;
 }
 function main() {
-  var getButton = get$$document().query("#getGamecard");
-  getButton.get$on().get$click().add$1(GamecardHandler);
+  var getGamecardButton = get$$document().query("#getGamecard");
+  getGamecardButton.get$on().get$click().add$1(GamecardHandler);
   show("something");
 }
 function show(message) {
@@ -3214,9 +3214,12 @@ function GamecardHandler(event) {
     }
   }
   get$$document().query("#playertable").set$innerHTML(card);
-  for (i = (0);
+  addClickHandlers();
+}
+function addClickHandlers() {
+  for (var i = (0);
    i < (5); i++) {
-    for (x = (0);
+    for (var x = (0);
      x < (5); x++) {
       if (i == (2) && x == (2)) {
       }

@@ -4,9 +4,9 @@
 void main() {
   
   
- ButtonElement getButton = document.query('#getGamecard');
+ ButtonElement getGamecardButton = document.query('#getGamecard');
  
- getButton.on.click.add(GamecardHandler);
+ getGamecardButton.on.click.add(GamecardHandler);
   
  show('something');
 }
@@ -60,27 +60,32 @@ void GamecardHandler(event){
     
     document.query('#playertable').innerHTML = card;
     
-
     
-    for(i = 0; i < 5; i++){
+    addClickHandlers();
+
+}
+
+void addClickHandlers(){
+  
+  for(int i = 0; i < 5; i++){
+    
+    
+    for(int x = 0; x < 5; x++){
       
-            
-      for(x = 0; x < 5; x++){
+      if(i == 2 && x == 2){
         
-        if(i == 2 && x == 2){
-          
-        }
-        else {
-          
-          TableCellElement el = document.query('#p$i$x');
-          
-          el.on.click.add((event2) {
-            el.style.textDecoration = 'underline';
-            el.style.backgroundColor = 'white';
-          });         
-        }
-      }    
-    }
+      }
+      else {
+        
+        TableCellElement el = document.query('#p$i$x');
+        
+        el.on.click.add((event2) {
+          el.style.textDecoration = 'underline';
+          el.style.backgroundColor = 'white';
+        });         
+      }
+    }    
+  }
 }
 
 

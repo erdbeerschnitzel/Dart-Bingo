@@ -2275,24 +2275,7 @@ $.GamecardHandler = function(event$) {
     var x0 = x1;
   }
   $.document().query$1('#playertable').set$innerHTML(card);
-  for (var i1 = 0, x3 = x; i1 < 5; i1 = i2) {
-    var t6 = i1 === 2;
-    for (var x4 = 0; x4 < 5; x4 = x4 + 1) {
-      var t7 = ({});
-      if (t6) {
-        var t8 = x4 === 2;
-      } else {
-        t8 = t6;
-      }
-      if (t8) {
-      } else {
-        t7.el_1 = $.document().query$1('#p' + $.stringToString(i1) + $.stringToString(x4));
-        $.add$1(t7.el_1.get$on().get$click(), new $.Closure5(t7));
-      }
-    }
-    x3 = x4;
-    var i2 = i1 + 1;
-  }
+  $.addClickHandlers();
 };
 
 $.contains$2 = function(receiver, other, startIndex) {
@@ -2428,6 +2411,25 @@ $.toInt = function(receiver) {
 
 $._SpeechRecognitionEventsImpl$1 = function(_ptr) {
   return new $._SpeechRecognitionEventsImpl(_ptr);
+};
+
+$.addClickHandlers = function() {
+  for (var i = 0; i < 5; i = i + 1) {
+    var t0 = i === 2;
+    for (var x = 0; x < 5; x = x + 1) {
+      var t1 = ({});
+      if (t0) {
+        var t2 = x === 2;
+      } else {
+        t2 = t0;
+      }
+      if (t2) {
+      } else {
+        t1.el_1 = $.document().query$1('#p' + $.stringToString(i) + $.stringToString(x));
+        $.add$1(t1.el_1.get$on().get$click(), new $.Closure5(t1));
+      }
+    }
+  }
 };
 
 $._SVGElementInstanceEventsImpl$1 = function(_ptr) {
