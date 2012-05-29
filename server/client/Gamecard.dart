@@ -40,7 +40,7 @@ class Gamecard {
   
   int getRandomNumber(){
     
-    var a = new Date.now().milliseconds / 10 + (Math.random()*10).toInt();
+    var a = (Math.random()*100).toInt();
       
     return a.toInt();
   }

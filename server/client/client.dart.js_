@@ -172,29 +172,6 @@ function $inherits(child, parent) {
     child.prototype.constructor = child;
   }
 }
-Function.prototype.bind = Function.prototype.bind ||
-  function(thisObj) {
-    var func = this;
-    var funcLength = func.$length || func.length;
-    var argsLength = arguments.length;
-    if (argsLength > 1) {
-      var boundArgs = Array.prototype.slice.call(arguments, 1);
-      var bound = function() {
-        // Prepend the bound arguments to the current arguments.
-        var newArgs = Array.prototype.slice.call(arguments);
-        Array.prototype.unshift.apply(newArgs, boundArgs);
-        return func.apply(thisObj, newArgs);
-      };
-      bound.$length = Math.max(0, funcLength - (argsLength - 1));
-      return bound;
-    } else {
-      var bound = function() {
-        return func.apply(thisObj, arguments);
-      };
-      bound.$length = funcLength;
-      return bound;
-    }
-  };
 function $dynamic(name) {
   var f = Object.prototype[name];
   if (f && f.methods) return f.methods;
@@ -245,6 +222,29 @@ function $dynamic(name) {
   return methods;
 }
 if (typeof $dynamicMetadata == 'undefined') $dynamicMetadata = [];
+Function.prototype.bind = Function.prototype.bind ||
+  function(thisObj) {
+    var func = this;
+    var funcLength = func.$length || func.length;
+    var argsLength = arguments.length;
+    if (argsLength > 1) {
+      var boundArgs = Array.prototype.slice.call(arguments, 1);
+      var bound = function() {
+        // Prepend the bound arguments to the current arguments.
+        var newArgs = Array.prototype.slice.call(arguments);
+        Array.prototype.unshift.apply(newArgs, boundArgs);
+        return func.apply(thisObj, newArgs);
+      };
+      bound.$length = Math.max(0, funcLength - (argsLength - 1));
+      return bound;
+    } else {
+      var bound = function() {
+        return func.apply(thisObj, arguments);
+      };
+      bound.$length = funcLength;
+      return bound;
+    }
+  };
 function $dynamicSetMetadata(inputTable) {
   // TODO: Deal with light isolates.
   var table = [];
@@ -567,9 +567,6 @@ JSSyntaxRegExp.prototype.hasMatch = function(str) {
   return this.re.test(str);
 }
 var NumImplementation = Number;
-NumImplementation.prototype.abs = function() {
-  'use strict'; return Math.abs(this);
-}
 NumImplementation.prototype.hashCode = function() {
   'use strict'; return this & 0x1FFFFFFF;
 }
@@ -1090,126 +1087,6 @@ StringImplementation.prototype.hashCode = function() {
       return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
 }
 StringImplementation.prototype.indexOf$1 = StringImplementation.prototype.indexOf;
-DateImplementation.now$ctor = function() {
-  this.timeZone = new TimeZoneImplementation.local$ctor();
-  this.value = DateImplementation._now();
-  this._asJs();
-}
-DateImplementation.now$ctor.prototype = DateImplementation.prototype;
-DateImplementation.fromEpoch$ctor = function(value, isUtc) {
-  this.value = value;
-  this.timeZone = isUtc ? const$0005 : new TimeZoneImplementation.local$ctor();
-}
-DateImplementation.fromEpoch$ctor.prototype = DateImplementation.prototype;
-function DateImplementation() {}
-DateImplementation.prototype.get$value = function() { return this.value; };
-DateImplementation.prototype.$eq = function(other) {
-  if (!(other instanceof DateImplementation)) return false;
-  return (this.value == other.get$value());
-}
-DateImplementation.prototype.$gte = function(other) {
-  return this.value >= other.value;
-}
-DateImplementation.prototype.hashCode = function() {
-  return this.value;
-}
-DateImplementation.prototype.get$year = function() {
-  return this.isUtc() ? this._asJs().getUTCFullYear() :
-      this._asJs().getFullYear();
-}
-DateImplementation.prototype.get$month = function() {
-  return this.isUtc() ? this._asJs().getUTCMonth() + 1 :
-        this._asJs().getMonth() + 1;
-}
-DateImplementation.prototype.get$day = function() {
-  return this.isUtc() ? this._asJs().getUTCDate() :
-        this._asJs().getDate();
-}
-DateImplementation.prototype.get$hours = function() {
-  return this.isUtc() ? this._asJs().getUTCHours() :
-        this._asJs().getHours();
-}
-DateImplementation.prototype.get$minutes = function() {
-  return this.isUtc() ? this._asJs().getUTCMinutes() :
-        this._asJs().getMinutes();
-}
-DateImplementation.prototype.get$seconds = function() {
-  return this.isUtc() ? this._asJs().getUTCSeconds() :
-        this._asJs().getSeconds();
-}
-DateImplementation.prototype.get$milliseconds = function() {
-  return this.isUtc() ? this._asJs().getUTCMilliseconds() :
-      this._asJs().getMilliseconds();
-}
-DateImplementation.prototype.isUtc = function() {
-  return this.timeZone.isUtc;
-}
-DateImplementation.prototype.get$isUtc = function() {
-  return this.isUtc.bind(this);
-}
-DateImplementation.prototype.toString = function() {
-  function fourDigits(n) {
-    var absN = n.abs();
-    var sign = n < (0) ? "-" : "";
-    if (absN >= (1000)) return ("" + n);
-    if (absN >= (100)) return ("" + sign + "0" + absN);
-    if (absN >= (10)) return ("" + sign + "00" + absN);
-    if (absN >= (1)) return ("" + sign + "000" + absN);
-  }
-  function threeDigits(n) {
-    if (n >= (100)) return ("" + n);
-    if (n >= (10)) return ("0" + n);
-    return ("00" + n);
-  }
-  function twoDigits(n) {
-    if (n >= (10)) return ("" + n);
-    return ("0" + n);
-  }
-  var y = fourDigits(this.get$year());
-  var m = twoDigits(this.get$month());
-  var d = twoDigits(this.get$day());
-  var h = twoDigits(this.get$hours());
-  var min = twoDigits(this.get$minutes());
-  var sec = twoDigits(this.get$seconds());
-  var ms = threeDigits(this.get$milliseconds());
-  if (this.timeZone.isUtc) {
-    return ("" + y + "-" + m + "-" + d + " " + h + ":" + min + ":" + sec + "." + ms + "Z");
-  }
-  else {
-    return ("" + y + "-" + m + "-" + d + " " + h + ":" + min + ":" + sec + "." + ms);
-  }
-}
-DateImplementation.prototype.add = function(duration) {
-  return new DateImplementation.fromEpoch$ctor(this.value + duration.inMilliseconds, this.timeZone.isUtc);
-}
-DateImplementation._now = function() {
-  return new Date().valueOf();
-}
-DateImplementation.prototype._asJs = function() {
-    if (!this.date) {
-      this.date = new Date(this.value);
-    }
-    return this.date;
-}
-DateImplementation.prototype.add$1 = DateImplementation.prototype.add;
-TimeZoneImplementation.utc$ctor = function() {
-  this.isUtc = true;
-}
-TimeZoneImplementation.utc$ctor.prototype = TimeZoneImplementation.prototype;
-TimeZoneImplementation.local$ctor = function() {
-  this.isUtc = false;
-}
-TimeZoneImplementation.local$ctor.prototype = TimeZoneImplementation.prototype;
-function TimeZoneImplementation() {}
-TimeZoneImplementation.prototype.$eq = function(other) {
-  if (!(other instanceof TimeZoneImplementation)) return false;
-  return $eq$(this.isUtc, other.get$isUtc());
-}
-TimeZoneImplementation.prototype.toString = function() {
-  if (this.isUtc) return "TimeZone (UTC)";
-  return "TimeZone (Local)";
-}
-TimeZoneImplementation.prototype.get$isUtc = function() { return this.isUtc; };
 $inherits(_ArgumentMismatchException, ClosureArgumentMismatchException);
 function _ArgumentMismatchException(_message) {
   this._dart_coreimpl_message = _message;
@@ -3285,7 +3162,7 @@ function Gamecard() {
   }
 }
 Gamecard.prototype.getRandomNumber = function() {
-  var a = new DateImplementation.now$ctor().get$milliseconds() / (10) + (Math.random() * (10)).toInt();
+  var a = (Math.random() * (100)).toInt();
   return a.toInt();
 }
 function main() {
@@ -3370,7 +3247,6 @@ var const$0001 = Object.create(NoMoreElementsException.prototype, {});
 var const$0002 = Object.create(EmptyQueueException.prototype, {});
 var const$0003 = Object.create(UnsupportedOperationException.prototype, {_message: {"value": "", writeable: false}});
 var const$0004 = new JSSyntaxRegExp("^#[_a-zA-Z]\\w*$");
-var const$0005 = Object.create(TimeZoneImplementation.prototype, {isUtc: {"value": true, writeable: false}});
 $static_init();
 if (typeof window != 'undefined' && typeof document != 'undefined' &&
     window.addEventListener && document.readyState == 'loading') {

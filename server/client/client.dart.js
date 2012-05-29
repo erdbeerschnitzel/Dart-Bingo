@@ -309,16 +309,16 @@ Isolate.$defineClass("HashSetImplementation", "Object", ["_backingMap?"], {
   var result = $.HashSetImplementation$0();
   $.setRuntimeTypeInfo(result, ({E: 'E'}));
   t0.result_2 = result;
-  $.forEach(this._backingMap, new $.Closure13(t0));
+  $.forEach(this._backingMap, new $.Closure10(t0));
   return t0.result_2;
  },
  forEach$1: function(f) {
   var t0 = ({});
   t0.f_1 = f;
-  $.forEach(this._backingMap, new $.Closure12(t0));
+  $.forEach(this._backingMap, new $.Closure9(t0));
  },
  addAll$1: function(collection) {
-  $.forEach(collection, new $.Closure11(this));
+  $.forEach(collection, new $.Closure8(this));
  },
  contains$1: function(value) {
   return this._backingMap.containsKey$1(value);
@@ -507,80 +507,6 @@ Isolate.$defineClass("_AllMatchesIterator", "Object", ["_done", "_next", "_str",
  }
 });
 
-Isolate.$defineClass("DateImplementation", "Object", ["_isUtc", "value?"], {
- _asJs$0: function() {
-  return $.lazyAsJsDate(this);
- },
- add$1: function(duration) {
-  $.checkNull(duration);
-  return $.DateImplementation$fromEpoch$2($.add(this.value, duration.get$inMilliseconds()), this.isUtc$0());
- },
- toString$0: function() {
-  var t0 = new $.Closure5();
-  var t1 = new $.Closure6();
-  var t2 = new $.Closure7();
-  var y = t0.$call$1(this.get$year());
-  var m = t2.$call$1(this.get$month());
-  var d = t2.$call$1(this.get$day());
-  var h = t2.$call$1(this.get$hours());
-  var min = t2.$call$1(this.get$minutes());
-  var sec = t2.$call$1(this.get$seconds());
-  var ms = t1.$call$1(this.get$milliseconds());
-  if (this.isUtc$0() === true) {
-    return '' + $.stringToString(y) + '-' + $.stringToString(m) + '-' + $.stringToString(d) + ' ' + $.stringToString(h) + ':' + $.stringToString(min) + ':' + $.stringToString(sec) + '.' + $.stringToString(ms) + 'Z';
-  } else {
-    return '' + $.stringToString(y) + '-' + $.stringToString(m) + '-' + $.stringToString(d) + ' ' + $.stringToString(h) + ':' + $.stringToString(min) + ':' + $.stringToString(sec) + '.' + $.stringToString(ms);
-  }
- },
- isUtc$0: function() {
-  return this._isUtc;
- },
- get$milliseconds: function() {
-  return $.getMilliseconds(this);
- },
- get$seconds: function() {
-  return $.getSeconds(this);
- },
- get$minutes: function() {
-  return $.getMinutes(this);
- },
- get$hours: function() {
-  return $.getHours(this);
- },
- get$day: function() {
-  return $.getDay(this);
- },
- get$month: function() {
-  return $.getMonth(this);
- },
- get$year: function() {
-  return $.getYear(this);
- },
- hashCode$0: function() {
-  return this.value;
- },
- operator$ge$1: function(other) {
-  return $.ge(this.value, other.get$value());
- },
- operator$gt$1: function(other) {
-  return $.gt(this.value, other.get$value());
- },
- operator$lt$1: function(other) {
-  return $.lt(this.value, other.get$value());
- },
- operator$eq$1: function(other) {
-  if (!((typeof other === 'object') && !!other.is$DateImplementation)) {
-    return false;
-  } else {
-  }
-  return $.eq(this.value, other.value);
- },
- DateImplementation$now$0: function() {
-  this._asJs$0();
- },
- is$DateImplementation: true
-});
-
 Isolate.$defineClass("ListIterator", "Object", ["list", "i"], {
  next$0: function() {
   if (this.hasNext$0() !== true) {
@@ -596,7 +522,7 @@ Isolate.$defineClass("ListIterator", "Object", ["list", "i"], {
  }
 });
 
-Isolate.$defineClass("Closure14", "Object", [], {
+Isolate.$defineClass("Closure11", "Object", [], {
  toString$0: function() {
   return 'Closure';
  }
@@ -715,7 +641,7 @@ Isolate.$defineClass("IllegalJSRegExpException", "Object", ["_errmsg", "_pattern
 
 Isolate.$defineClass("Gamecard", "Object", ["addedNumbers", "fields"], {
  getRandomNumber$0: function() {
-  return $.toInt($.add($.div($.DateImplementation$now$0().get$milliseconds(), 10), $.toInt($.mul($.random(), 10))));
+  return $.toInt($.toInt($.mul($.random(), 100)));
  },
  Gamecard$0: function() {
   var t0 = $.List((void 0));
@@ -838,7 +764,7 @@ Isolate.$defineClass("FilteredElementList", "Object", ["_childNodes", "_node"], 
  add$1: function(value) {
   $.add$1(this._childNodes, value);
  },
- get$add: function() { return new $.Closure15(this); },
+ get$add: function() { return new $.Closure12(this); },
  set$length: function(newLength) {
   var len = $.get$length(this);
   if ($.geB(newLength, len)) {
@@ -1321,7 +1247,7 @@ Isolate.$defineClass("_VariableSizeListIterator", "Object", [], {
  }
 });
 
-Isolate.$defineClass("Closure", "Closure14", ["box_0"], {
+Isolate.$defineClass("Closure", "Closure11", ["box_0"], {
  $call$2: function(k, v) {
   if (this.box_0.first_3 !== true) {
     $.add$1(this.box_0.result_1, ', ');
@@ -1334,13 +1260,13 @@ Isolate.$defineClass("Closure", "Closure14", ["box_0"], {
  }
 });
 
-Isolate.$defineClass("Closure2", "Closure14", [], {
+Isolate.$defineClass("Closure2", "Closure11", [], {
  $call$1: function(n) {
   return typeof n === 'object' && n.is$Element();
  }
 });
 
-Isolate.$defineClass("Closure3", "Closure14", ["box_0", "output_2"], {
+Isolate.$defineClass("Closure3", "Closure11", ["box_0", "output_2"], {
  $call$1: function(element) {
   if (this.box_0.f_1.$call$1(element) === true) {
     $.add$1(this.output_2, element);
@@ -1349,95 +1275,43 @@ Isolate.$defineClass("Closure3", "Closure14", ["box_0", "output_2"], {
  }
 });
 
-Isolate.$defineClass("Closure4", "Closure14", [], {
+Isolate.$defineClass("Closure4", "Closure11", [], {
  $call$1: function(el) {
   return el.remove$0();
  }
 });
 
-Isolate.$defineClass("Closure5", "Closure14", [], {
- $call$1: function(n) {
-  var absN = $.abs(n);
-  if ($.ltB(n, 0)) {
-    var sign = '-';
-  } else {
-    sign = '';
-  }
-  if ($.geB(absN, 1000)) {
-    return '' + $.stringToString(n);
-  } else {
-  }
-  if ($.geB(absN, 100)) {
-    return '' + $.stringToString(sign) + '0' + $.stringToString(absN);
-  } else {
-  }
-  if ($.geB(absN, 10)) {
-    return '' + $.stringToString(sign) + '00' + $.stringToString(absN);
-  } else {
-  }
-  if ($.geB(absN, 1)) {
-    return '' + $.stringToString(sign) + '000' + $.stringToString(absN);
-  } else {
-  }
-  throw $.captureStackTrace($.IllegalArgumentException$1(n));
- }
-});
-
-Isolate.$defineClass("Closure6", "Closure14", [], {
- $call$1: function(n) {
-  if ($.geB(n, 100)) {
-    return '' + $.stringToString(n);
-  } else {
-  }
-  if ($.geB(n, 10)) {
-    return '0' + $.stringToString(n);
-  } else {
-  }
-  return '00' + $.stringToString(n);
- }
-});
-
-Isolate.$defineClass("Closure7", "Closure14", [], {
- $call$1: function(n) {
-  if ($.geB(n, 10)) {
-    return '' + $.stringToString(n);
-  } else {
-  }
-  return '0' + $.stringToString(n);
- }
-});
-
-Isolate.$defineClass("Closure8", "Closure14", ["box_0"], {
+Isolate.$defineClass("Closure5", "Closure11", ["box_0"], {
  $call$0: function() {
   return this.box_0.closure_1.$call$0();
  }
 });
 
-Isolate.$defineClass("Closure9", "Closure14", ["box_0"], {
+Isolate.$defineClass("Closure6", "Closure11", ["box_0"], {
  $call$0: function() {
   return this.box_0.closure_1.$call$1(this.box_0.arg1_2);
  }
 });
 
-Isolate.$defineClass("Closure10", "Closure14", ["box_0"], {
+Isolate.$defineClass("Closure7", "Closure11", ["box_0"], {
  $call$0: function() {
   return this.box_0.closure_1.$call$2(this.box_0.arg1_2, this.box_0.arg2_3);
  }
 });
 
-Isolate.$defineClass("Closure11", "Closure14", ["this_0"], {
+Isolate.$defineClass("Closure8", "Closure11", ["this_0"], {
  $call$1: function(value) {
   this.this_0.add$1(value);
  }
 });
 
-Isolate.$defineClass("Closure12", "Closure14", ["box_0"], {
+Isolate.$defineClass("Closure9", "Closure11", ["box_0"], {
  $call$2: function(key, value) {
   this.box_0.f_1.$call$1(key);
  }
 });
 
-Isolate.$defineClass("Closure13", "Closure14", ["box_0"], {
+Isolate.$defineClass("Closure10", "Closure11", ["box_0"], {
  $call$2: function(key, value) {
   if (this.box_0.f_1.$call$1(key) === true) {
     $.add$1(this.box_0.result_2, key);
@@ -1446,19 +1320,19 @@ Isolate.$defineClass("Closure13", "Closure14", ["box_0"], {
  }
 });
 
-Isolate.$defineClass("Closure14", "Object", [], {
+Isolate.$defineClass("Closure11", "Object", [], {
  toString$0: function() {
   return 'Closure';
  }
 });
 
-Isolate.$defineClass('Closure15', 'Closure14', function BoundClosure(self) { this.self = self; }, {
+Isolate.$defineClass('Closure12', 'Closure11', function BoundClosure(self) { this.self = self; }, {
  $call$1: function(arg0) { return this.self.add$1(arg0); }
 });
-Isolate.$defineClass('Closure16', 'Closure14', function BoundClosure(self) { this.self = self; }, {
+Isolate.$defineClass('Closure13', 'Closure11', function BoundClosure(self) { this.self = self; }, {
  $call$0: function() { return this.self.click$0(); }
 });
-Isolate.$defineClass('Closure17', 'Closure14', function BoundClosure(self) { this.self = self; }, {
+Isolate.$defineClass('Closure14', 'Closure11', function BoundClosure(self) { this.self = self; }, {
  $call$0: function() { return this.self.click$0(); }
 });
 $.mul$slow = function(a, b) {
@@ -1665,12 +1539,6 @@ $.toString = function(value) {
   return String(value);
 };
 
-$.DateImplementation$now$0 = function() {
-  var t0 = new $.DateImplementation(false, $.dateNow());
-  t0.DateImplementation$now$0();
-  return t0;
-};
-
 $.get$length = function(receiver) {
   var t0 = typeof receiver === 'string';
   if (!t0) {
@@ -1691,15 +1559,6 @@ $.ge$slow = function(a, b) {
   } else {
   }
   return a.operator$ge$1(b);
-};
-
-$.getMilliseconds = function(receiver) {
-  if (receiver.isUtc$0() === true) {
-    var t0 = ($.lazyAsJsDate(receiver).getUTCMilliseconds());
-  } else {
-    t0 = ($.lazyAsJsDate(receiver).getMilliseconds());
-  }
-  return t0;
 };
 
 $.ListIterator$1 = function(list) {
@@ -2125,13 +1984,13 @@ $.invokeClosure = function(closure, isolate, numberOfArguments, arg1, arg2) {
   t0.arg1_2 = arg1;
   t0.closure_1 = closure;
   if ($.eqB(numberOfArguments, 0)) {
-    return new $.Closure8(t0).$call$0();
+    return new $.Closure5(t0).$call$0();
   } else {
     if ($.eqB(numberOfArguments, 1)) {
-      return new $.Closure9(t0).$call$0();
+      return new $.Closure6(t0).$call$0();
     } else {
       if ($.eqB(numberOfArguments, 2)) {
-        return new $.Closure10(t0).$call$0();
+        return new $.Closure7(t0).$call$0();
       } else {
         throw $.captureStackTrace($.ExceptionImplementation$1('Unsupported number of arguments for wrapped closure'));
       }
@@ -2159,15 +2018,6 @@ $.gt = function(a, b) {
 };
 
 $.assert = function(condition) {
-};
-
-$.getSeconds = function(receiver) {
-  if (receiver.isUtc$0() === true) {
-    var t0 = ($.lazyAsJsDate(receiver).getUTCSeconds());
-  } else {
-    t0 = ($.lazyAsJsDate(receiver).getSeconds());
-  }
-  return t0;
 };
 
 $._WindowEventsImpl$1 = function(_ptr) {
@@ -2238,15 +2088,6 @@ $.mul = function(a, b) {
   return t2;
 };
 
-$.getHours = function(receiver) {
-  if (receiver.isUtc$0() === true) {
-    var t0 = ($.lazyAsJsDate(receiver).getUTCHours());
-  } else {
-    t0 = ($.lazyAsJsDate(receiver).getHours());
-  }
-  return t0;
-};
-
 $.random = function() {
   return $.random2();
 };
@@ -2262,6 +2103,10 @@ $.stringToString = function(value) {
   } else {
   }
   return res;
+};
+
+$._NotificationEventsImpl$1 = function(_ptr) {
+  return new $._NotificationEventsImpl(_ptr);
 };
 
 $.lt$slow = function(a, b) {
@@ -2290,10 +2135,6 @@ $.last = function(receiver) {
   } else {
   }
   return $.index(receiver, $.sub($.get$length(receiver), 1));
-};
-
-$._NotificationEventsImpl$1 = function(_ptr) {
-  return new $._NotificationEventsImpl(_ptr);
 };
 
 $.index$slow = function(a, index) {
@@ -2469,15 +2310,6 @@ $.IndexOutOfRangeException$1 = function(_index) {
   return new $.IndexOutOfRangeException(_index);
 };
 
-$.getDay = function(receiver) {
-  if (receiver.isUtc$0() === true) {
-    var t0 = ($.lazyAsJsDate(receiver).getUTCDate());
-  } else {
-    t0 = ($.lazyAsJsDate(receiver).getDate());
-  }
-  return t0;
-};
-
 $._TextTrackEventsImpl$1 = function(_ptr) {
   return new $._TextTrackEventsImpl(_ptr);
 };
@@ -2510,8 +2342,8 @@ $._EventsImpl$1 = function(_ptr) {
   return new $._EventsImpl(_ptr);
 };
 
-$.DateImplementation$fromEpoch$2 = function(value, isUtc) {
-  return new $.DateImplementation($.checkNull(isUtc), value);
+$._IDBRequestEventsImpl$1 = function(_ptr) {
+  return new $._IDBRequestEventsImpl(_ptr);
 };
 
 $.HashSetImplementation$0 = function() {
@@ -2538,10 +2370,6 @@ $.stringSplitUnchecked = function(receiver, pattern) {
       throw $.captureStackTrace('StringImplementation.split(Pattern) UNIMPLEMENTED');
     }
   }
-};
-
-$._IDBRequestEventsImpl$1 = function(_ptr) {
-  return new $._IDBRequestEventsImpl(_ptr);
 };
 
 $.checkGrowable = function(list, reason) {
@@ -2638,21 +2466,6 @@ $.checkString = function(value) {
   return value;
 };
 
-$.div = function(a, b) {
-  var t0 = typeof a === 'number';
-  if (t0) {
-    var t1 = typeof b === 'number';
-  } else {
-    t1 = t0;
-  }
-  if (t1) {
-    var t2 = (a / b);
-  } else {
-    t2 = $.div$slow(a, b);
-  }
-  return t2;
-};
-
 $.add = function(a, b) {
   var t0 = typeof a === 'number';
   if (t0) {
@@ -2692,24 +2505,6 @@ $.geB = function(a, b) {
     t2 = $.ge$slow(a, b) === true;
   }
   return t2;
-};
-
-$.getMonth = function(receiver) {
-  if (receiver.isUtc$0() === true) {
-    var t0 = ($.lazyAsJsDate(receiver).getUTCMonth()) + 1;
-  } else {
-    t0 = ($.lazyAsJsDate(receiver).getMonth()) + 1;
-  }
-  return t0;
-};
-
-$.getMinutes = function(receiver) {
-  if (receiver.isUtc$0() === true) {
-    var t0 = ($.lazyAsJsDate(receiver).getUTCMinutes());
-  } else {
-    t0 = ($.lazyAsJsDate(receiver).getMinutes());
-  }
-  return t0;
 };
 
 $.defineProperty = function(obj, property, value) {
@@ -2769,14 +2564,6 @@ $.objectToString = function(object) {
     name0 = name$;
   }
   return 'Instance of \'' + $.stringToString(name0) + '\'';
-};
-
-$.abs = function(receiver) {
-  if (!(typeof receiver === 'number')) {
-    return receiver.abs$0();
-  } else {
-  }
-  return Math.abs(receiver);
 };
 
 $._firstProbe = function(hashCode, length$) {
@@ -2920,14 +2707,6 @@ $.mapToString = function(m) {
   return result.toString$0();
 };
 
-$.lazyAsJsDate = function(receiver) {
-  if (receiver.date === (void 0)) {
-    receiver.date = new Date(receiver.get$value());
-  } else {
-  }
-  return receiver.date;
-};
-
 $.startsWith = function(receiver, other) {
   if (!(typeof receiver === 'string')) {
     return receiver.startsWith$1(other);
@@ -2988,16 +2767,16 @@ $._emitMap = function(m, result, visiting) {
   $.removeLast(t0.visiting_2);
 };
 
+$._JavaScriptAudioNodeEventsImpl$1 = function(_ptr) {
+  return new $._JavaScriptAudioNodeEventsImpl(_ptr);
+};
+
 $._IDBDatabaseEventsImpl$1 = function(_ptr) {
   return new $._IDBDatabaseEventsImpl(_ptr);
 };
 
 $.isFirefox = function() {
   return $.contains$2($.userAgent(), 'Firefox', 0);
-};
-
-$._JavaScriptAudioNodeEventsImpl$1 = function(_ptr) {
-  return new $._JavaScriptAudioNodeEventsImpl(_ptr);
 };
 
 $.toStringForNativeObject = function(obj) {
@@ -3095,21 +2874,6 @@ $.dynamicBind = function(obj, name$, methods, arguments$) {
   }
   return nullCheckMethod.apply(obj, arguments$);
   var method1;
-};
-
-$.ge = function(a, b) {
-  var t0 = typeof a === 'number';
-  if (t0) {
-    var t1 = typeof b === 'number';
-  } else {
-    t1 = t0;
-  }
-  if (t1) {
-    var t2 = (a >= b);
-  } else {
-    t2 = $.ge$slow(a, b);
-  }
-  return t2;
 };
 
 $._MessagePortEventsImpl$1 = function(_ptr) {
@@ -3306,14 +3070,6 @@ $.substring$1 = function(receiver, startIndex) {
   return $.substring$2(receiver, startIndex, (void 0));
 };
 
-$.div$slow = function(a, b) {
-  if ($.checkNumbers(a, b) === true) {
-    return a / b;
-  } else {
-  }
-  return a.operator$div$1(b);
-};
-
 $.StringBufferImpl$1 = function(content$) {
   var t0 = new $.StringBufferImpl((void 0), (void 0));
   t0.StringBufferImpl$1(content$);
@@ -3382,15 +3138,6 @@ $.eqNullB = function(a) {
 
 $.Element$tag = function(tag) {
   return document.createElement(tag);
-};
-
-$.getYear = function(receiver) {
-  if (receiver.isUtc$0() === true) {
-    var t0 = ($.lazyAsJsDate(receiver).getUTCFullYear());
-  } else {
-    t0 = ($.lazyAsJsDate(receiver).getFullYear());
-  }
-  return t0;
 };
 
 $._FrameSetElementEventsImpl$1 = function(_ptr) {
@@ -3474,8 +3221,8 @@ $.lt = function(a, b) {
   return t2;
 };
 
-$.dateNow = function() {
-  return Date.now();
+$._AbstractWorkerEventsImpl$1 = function(_ptr) {
+  return new $._AbstractWorkerEventsImpl(_ptr);
 };
 
 $.unwrapException = function(ex) {
@@ -3547,10 +3294,6 @@ $.unwrapException = function(ex) {
     }
   }
   return ex;
-};
-
-$._AbstractWorkerEventsImpl$1 = function(_ptr) {
-  return new $._AbstractWorkerEventsImpl(_ptr);
 };
 
 $.ceil = function(receiver) {
@@ -3902,9 +3645,6 @@ $.$defineNativeClass('HTMLAreaElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('Attr', ["value?"], {
-});
-
 $.$defineNativeClass('AudioBuffer', ["length?"], {
 });
 
@@ -3916,9 +3656,6 @@ $.$defineNativeClass('AudioContext', [], {
 
 $.$defineNativeClass('HTMLAudioElement', [], {
  is$Element: function() { return true; }
-});
-
-$.$defineNativeClass('AudioParam', ["value?"], {
 });
 
 $.$defineNativeClass('HTMLBRElement', [], {
@@ -3950,7 +3687,7 @@ $.$defineNativeClass('HTMLBodyElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLButtonElement', ["value?"], {
+$.$defineNativeClass('HTMLButtonElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -4027,9 +3764,6 @@ $.$defineNativeClass('DOMSelection', [], {
  toString$0: function() {
   return this.toString();
  }
-});
-
-$.$defineNativeClass('DOMSettableTokenList', ["value?"], {
 });
 
 $.$defineNativeClass('DOMStringList', ["length?"], {
@@ -4161,7 +3895,7 @@ $.$defineNativeClass('DocumentFragment', [], {
  },
  click$0: function() {
  },
- get$click: function() { return new $.Closure16(this); },
+ get$click: function() { return new $.Closure13(this); },
  get$parent: function() {
   return;
  },
@@ -4199,7 +3933,7 @@ $.$defineNativeClass('Element', ["innerHTML!"], {
  click$0: function() {
   return this.click();
  },
- get$click: function() { return new $.Closure17(this); },
+ get$click: function() { return new $.Closure14(this); },
  get$$$dom_lastElementChild: function() {
   return this.lastElementChild;;
  },
@@ -4550,9 +4284,6 @@ $.$defineNativeClass('HTMLHtmlElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('IDBCursorWithValue', ["value?"], {
-});
-
 $.$defineNativeClass('IDBDatabase', [], {
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener),useCapture);
@@ -4623,7 +4354,7 @@ $.$defineNativeClass('HTMLImageElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLInputElement', ["value?", "pattern?"], {
+$.$defineNativeClass('HTMLInputElement', ["pattern?"], {
  get$on: function() {
   return $._InputElementEventsImpl$1(this);
  },
@@ -4781,7 +4512,7 @@ $.$defineNativeClass('HTMLKeygenElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLLIElement', ["value?"], {
+$.$defineNativeClass('HTMLLIElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -4902,7 +4633,7 @@ $.$defineNativeClass('HTMLMetaElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLMeterElement', ["value?"], {
+$.$defineNativeClass('HTMLMeterElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -5107,11 +4838,11 @@ $.$defineNativeClass('HTMLOptGroupElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLOptionElement', ["value?"], {
+$.$defineNativeClass('HTMLOptionElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLOutputElement', ["value?"], {
+$.$defineNativeClass('HTMLOutputElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -5119,7 +4850,7 @@ $.$defineNativeClass('HTMLParagraphElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLParamElement', ["value?"], {
+$.$defineNativeClass('HTMLParamElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -5136,7 +4867,7 @@ $.$defineNativeClass('HTMLPreElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLProgressElement', ["value?"], {
+$.$defineNativeClass('HTMLProgressElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -5144,7 +4875,7 @@ $.$defineNativeClass('HTMLQuoteElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('RadioNodeList', ["value?"], {
+$.$defineNativeClass('RadioNodeList', [], {
  is$List2: function() { return true; },
  is$Collection: function() { return true; }
 });
@@ -5178,9 +4909,6 @@ $.$defineNativeClass('SVGAltGlyphElement', [], {
 
 $.$defineNativeClass('SVGAltGlyphItemElement', [], {
  is$Element: function() { return true; }
-});
-
-$.$defineNativeClass('SVGAngle', ["value?"], {
 });
 
 $.$defineNativeClass('SVGAnimateColorElement', [], {
@@ -5423,9 +5151,6 @@ $.$defineNativeClass('SVGImageElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('SVGLength', ["value?"], {
-});
-
 $.$defineNativeClass('SVGLengthList', [], {
  clear$0: function() {
   return this.clear();
@@ -5458,9 +5183,6 @@ $.$defineNativeClass('SVGMetadataElement', [], {
 
 $.$defineNativeClass('SVGMissingGlyphElement', [], {
  is$Element: function() { return true; }
-});
-
-$.$defineNativeClass('SVGNumber', ["value?"], {
 });
 
 $.$defineNativeClass('SVGNumberList', [], {
@@ -5589,7 +5311,7 @@ $.$defineNativeClass('HTMLScriptElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLSelectElement', ["value?", "length="], {
+$.$defineNativeClass('HTMLSelectElement', ["length="], {
  is$Element: function() { return true; }
 });
 
@@ -5757,7 +5479,7 @@ $.$defineNativeClass('HTMLTableSectionElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLTextAreaElement', ["value?"], {
+$.$defineNativeClass('HTMLTextAreaElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -6083,9 +5805,9 @@ $.$defineNativeClass('XPathException', [], {
  }
 });
 
-// 273 dynamic classes.
-// 289 classes
-// 25 !leaf
+// 266 dynamic classes.
+// 283 classes
+// 24 !leaf
 (function(){
   var v0/*class(_SVGTextPositioningElementImpl)*/ = 'SVGTextPositioningElement|SVGTextElement|SVGTSpanElement|SVGTRefElement|SVGAltGlyphElement';
   var v1/*class(_SVGTextContentElementImpl)*/ = [v0/*class(_SVGTextPositioningElementImpl)*/,'SVGTextContentElement|SVGTextPathElement'].join('|');
@@ -6109,7 +5831,6 @@ $.$defineNativeClass('XPathException', [], {
     ['SVGTextContentElement', v1/*class(_SVGTextContentElementImpl)*/],
     ['AbstractWorker', v15/*class(_AbstractWorkerImpl)*/],
     ['Uint8Array', 'Uint8Array|Uint8ClampedArray'],
-    ['AudioParam', 'AudioParam|AudioGain'],
     ['WorkerContext', v11/*class(_WorkerContextImpl)*/],
     ['CSSValueList', 'CSSValueList|WebKitCSSFilterValue|WebKitCSSTransformValue'],
     ['CharacterData', v10/*class(_CharacterDataImpl)*/],
