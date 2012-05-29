@@ -21,7 +21,7 @@ class Gamecard {
         // middle of gamecard
         if(x == 2 && i == 2){
           
-          fields[i][x] = "free";
+          fields[i][x] = "";
         }
         else {
           

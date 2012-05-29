@@ -1550,24 +1550,10 @@ $.allMatches = function(receiver, str) {
 $.GameHandler = function(event3) {
   $.currentNumber = $.getRandomNumber();
   $.show('the current number is ' + $.stringToString($.currentNumber));
-  for (var i = 0; i < 5; i = i + 1) {
-    for (var x = 0; x < 5; x = x + 1) {
-      if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.currentNumber)) {
-        $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$textDecoration('underline');
-        $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$backgroundColor('red');
-        $.indexSet($.index($.computercard.get$fields(), i), x, 0);
-        if ($.checkBingo($.computercard) === true) {
-          $.endGame();
-        } else {
-        }
-      } else {
-      }
-    }
-  }
   if ($.first === true) {
     $.active = true;
     $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
-    $.document().query$1('#startGame').set$value('Next Number');
+    $.document().query$1('#startGame').get$on().get$click().remove$1($.GameHandler);
     $.first = false;
   } else {
   }
@@ -2083,37 +2069,23 @@ $.invokeClosure = function(closure, isolate, numberOfArguments, arg1, arg2) {
   }
 };
 
-$.createCard = function(card, forComputer) {
-  var t0 = forComputer === true;
-  for (var t1 = $.iterator(card.get$fields()), cardstring = '', x = 0, i = 0; t1.hasNext$0() === true; cardstring = cardstring0, x = x0, i = i0) {
-    var t2 = t1.next$0();
+$.createCard = function(card) {
+  for (var t0 = $.iterator(card.get$fields()), cardstring = '', x = 0, i = 0; t0.hasNext$0() === true; cardstring = cardstring0, x = x0, i = i0) {
+    var t1 = t0.next$0();
     var cardstring1 = cardstring + '<tr>';
-    var t3 = i < 5;
-    for (var t4 = $.iterator(t2), x1 = x, cardstring2 = cardstring1; t4.hasNext$0() === true; x1 = x2, cardstring2 = cardstring3) {
-      t4.next$0();
-      var t5 = x1 < 5;
-      if (t0) {
-        if (t5) {
-          var t6 = t3;
-        } else {
-          t6 = t5;
-        }
-        if (t6) {
-          var cardstring4 = $.add($.add($.add(cardstring2 + '<td id="c', i), x1) + '"' + 'class=top>', $.index($.index(card.get$fields(), i), x1)) + '</td>';
-        } else {
-          cardstring4 = cardstring2;
-        }
+    var t2 = i < 5;
+    for (var t3 = $.iterator(t1), cardstring2 = cardstring1, x1 = x; t3.hasNext$0() === true; cardstring2 = cardstring3, x1 = x2) {
+      t3.next$0();
+      var t4 = x1 < 5;
+      if (t4) {
+        var t5 = t2;
       } else {
-        if (t5) {
-          var t7 = t3;
-        } else {
-          t7 = t5;
-        }
-        if (t7) {
-          cardstring4 = $.add($.add($.add(cardstring2 + '<td id="p', i), x1) + '"' + 'class=top>', $.index($.index(card.get$fields(), i), x1)) + '</td>';
-        } else {
-          cardstring4 = cardstring2;
-        }
+        t5 = t4;
+      }
+      if (t5) {
+        var cardstring4 = $.add($.add($.add(cardstring2 + '<td id="p', i), x1) + '"' + 'class=top>', $.index($.index(card.get$fields(), i), x1)) + '</td>';
+      } else {
+        cardstring4 = cardstring2;
       }
       if (x1 === 4) {
         var cardstring5 = cardstring4 + '</tr>';
@@ -2129,8 +2101,8 @@ $.createCard = function(card, forComputer) {
     } else {
       i0 = i + 1;
     }
-    var x0 = x1;
     var cardstring0 = cardstring2;
+    var x0 = x1;
   }
   return cardstring;
 };
@@ -2159,10 +2131,6 @@ $._DOMApplicationCacheEventsImpl$1 = function(_ptr) {
 };
 
 $.assert = function(condition) {
-};
-
-$.debug = function(message) {
-  $.document().query$1('#debug').set$innerHTML(message);
 };
 
 $._WindowEventsImpl$1 = function(_ptr) {
@@ -2376,14 +2344,11 @@ $._PeerConnection00EventsImpl$1 = function(_ptr) {
 };
 
 $.GamecardHandler = function(event$) {
-  $.computercard = $.Gamecard$0();
   $.playercard = $.Gamecard$0();
-  var t0 = $.createCard($.playercard, false);
+  var t0 = $.createCard($.playercard);
   $.document().query$1('#playertable').set$innerHTML(t0);
   $.addCellClickHandlers();
-  var t1 = $.createCard($.computercard, true);
-  $.document().query$1('#computertable').set$innerHTML(t1);
-  $.show('Gamecards created!');
+  $.show('Gamecard created!');
 };
 
 $.contains$2 = function(receiver, other, startIndex) {
@@ -2546,11 +2511,6 @@ $.filter3 = function(source, destination, f) {
   return destination;
 };
 
-$.endGame = function() {
-  $.show('ENDE!');
-  $.document().query$1('#startGame').get$on().get$click().remove$1($.GameHandler);
-};
-
 $._MediaStreamEventsImpl$1 = function(_ptr) {
   return new $._MediaStreamEventsImpl(_ptr);
 };
@@ -2622,40 +2582,6 @@ $.geB = function(a, b) {
     t2 = $.ge$slow(a, b) === true;
   }
   return t2;
-};
-
-$.checkBingo = function(card) {
-  for (var deb = '', i = 0, result = true; i < 5; deb = deb0, i = i0, result = result0) {
-    var t0 = i === 2;
-    for (var x = 0, result1 = result, deb1 = deb; x < 5; x = x0, result1 = result2, deb1 = deb2) {
-      if (t0) {
-        var t1 = x === 2;
-      } else {
-        t1 = t0;
-      }
-      if (t1) {
-        var result2 = result1;
-        var deb2 = deb1;
-      } else {
-        if ($.gtB($.index($.index(card.get$fields(), i), x), 0)) {
-          result2 = false;
-        } else {
-          result2 = result1;
-        }
-        deb2 = $.add(deb1 + ('' + $.stringToString(i) + $.stringToString(x) + ': '), $.index($.index(card.get$fields(), i), x)) + ' ';
-      }
-      var x0 = x + 1;
-    }
-    if (result1) {
-      return true;
-    } else {
-    }
-    var result0 = result1;
-    var deb0 = deb1;
-    var i0 = i + 1;
-  }
-  $.debug('the current number is ' + $.stringToString($.currentNumber) + ' and the result is ' + $.stringToString(deb));
-  return false;
 };
 
 $.defineProperty = function(obj, property, value) {
@@ -3386,7 +3312,6 @@ $.main = function() {
   var t0 = $.List((void 0));
   $.setRuntimeTypeInfo(t0, ({E: 'int'}));
   $.addNumbers = t0;
-  $.computercard = $.Gamecard$0();
   $.playercard = $.Gamecard$0();
   $.add$1($.document().query$1('#getGamecard').get$on().get$click(), $.GamecardHandler);
   $.add$1($.document().query$1('#startGame').get$on().get$click(), $.GameHandler);
@@ -3769,7 +3694,6 @@ $.CTC7 = new Isolate.$isolateProperties._DeletedKeySentinel();
 $.CTC6 = new Isolate.$isolateProperties.JSSyntaxRegExp(false, false, 'Chrome|DumpRenderTree');
 $.CTC8 = new Isolate.$isolateProperties.Object();
 $.CTC2 = new Isolate.$isolateProperties.NoMoreElementsException();
-$.computercard = (void 0);
 $.first = true;
 $.active = false;
 $._getTypeNameOf = (void 0);
@@ -3844,9 +3768,6 @@ $.$defineNativeClass('HTMLAreaElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('Attr', ["value!"], {
-});
-
 $.$defineNativeClass('AudioBuffer', ["length?"], {
 });
 
@@ -3858,9 +3779,6 @@ $.$defineNativeClass('AudioContext', [], {
 
 $.$defineNativeClass('HTMLAudioElement', [], {
  is$Element: function() { return true; }
-});
-
-$.$defineNativeClass('AudioParam', ["value!"], {
 });
 
 $.$defineNativeClass('HTMLBRElement', [], {
@@ -3895,7 +3813,7 @@ $.$defineNativeClass('HTMLBodyElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLButtonElement', ["value!"], {
+$.$defineNativeClass('HTMLButtonElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -3996,9 +3914,6 @@ $.$defineNativeClass('DOMSelection', [], {
  toString$0: function() {
   return this.toString();
  }
-});
-
-$.$defineNativeClass('DOMSettableTokenList', ["value!"], {
 });
 
 $.$defineNativeClass('DOMStringList', ["length?"], {
@@ -4653,7 +4568,7 @@ $.$defineNativeClass('HTMLImageElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLInputElement', ["value!", "pattern?"], {
+$.$defineNativeClass('HTMLInputElement', ["pattern?"], {
  get$on: function() {
   return $._InputElementEventsImpl$1(this);
  },
@@ -4814,7 +4729,7 @@ $.$defineNativeClass('HTMLKeygenElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLLIElement', ["value!"], {
+$.$defineNativeClass('HTMLLIElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -4944,7 +4859,7 @@ $.$defineNativeClass('HTMLMetaElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLMeterElement', ["value!"], {
+$.$defineNativeClass('HTMLMeterElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -5158,11 +5073,11 @@ $.$defineNativeClass('HTMLOptGroupElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLOptionElement', ["value!"], {
+$.$defineNativeClass('HTMLOptionElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLOutputElement', ["value!"], {
+$.$defineNativeClass('HTMLOutputElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -5170,7 +5085,7 @@ $.$defineNativeClass('HTMLParagraphElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLParamElement', ["value!"], {
+$.$defineNativeClass('HTMLParamElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -5190,7 +5105,7 @@ $.$defineNativeClass('HTMLPreElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLProgressElement', ["value!"], {
+$.$defineNativeClass('HTMLProgressElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -5198,7 +5113,7 @@ $.$defineNativeClass('HTMLQuoteElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('RadioNodeList', ["value!"], {
+$.$defineNativeClass('RadioNodeList', [], {
  is$List2: function() { return true; },
  is$Collection: function() { return true; }
 });
@@ -5232,9 +5147,6 @@ $.$defineNativeClass('SVGAltGlyphElement', [], {
 
 $.$defineNativeClass('SVGAltGlyphItemElement', [], {
  is$Element: function() { return true; }
-});
-
-$.$defineNativeClass('SVGAngle', ["value!"], {
 });
 
 $.$defineNativeClass('SVGAnimateColorElement', [], {
@@ -5483,9 +5395,6 @@ $.$defineNativeClass('SVGImageElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('SVGLength', ["value!"], {
-});
-
 $.$defineNativeClass('SVGLengthList', [], {
  clear$0: function() {
   return this.clear();
@@ -5518,9 +5427,6 @@ $.$defineNativeClass('SVGMetadataElement', [], {
 
 $.$defineNativeClass('SVGMissingGlyphElement', [], {
  is$Element: function() { return true; }
-});
-
-$.$defineNativeClass('SVGNumber', ["value!"], {
 });
 
 $.$defineNativeClass('SVGNumberList', [], {
@@ -5652,7 +5558,7 @@ $.$defineNativeClass('HTMLScriptElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLSelectElement', ["value!", "length="], {
+$.$defineNativeClass('HTMLSelectElement', ["length="], {
  is$Element: function() { return true; }
 });
 
@@ -5831,7 +5737,7 @@ $.$defineNativeClass('HTMLTableSectionElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLTextAreaElement', ["value!"], {
+$.$defineNativeClass('HTMLTextAreaElement', [], {
  is$Element: function() { return true; }
 });
 
@@ -6181,9 +6087,9 @@ $.$defineNativeClass('XPathException', [], {
  }
 });
 
-// 278 dynamic classes.
-// 297 classes
-// 27 !leaf
+// 272 dynamic classes.
+// 292 classes
+// 26 !leaf
 (function(){
   var v0/*class(_SVGTextPositioningElementImpl)*/ = 'SVGTextPositioningElement|SVGTextElement|SVGTSpanElement|SVGTRefElement|SVGAltGlyphElement';
   var v1/*class(_SVGTextContentElementImpl)*/ = [v0/*class(_SVGTextPositioningElementImpl)*/,'SVGTextContentElement|SVGTextPathElement'].join('|');
@@ -6208,7 +6114,6 @@ $.$defineNativeClass('XPathException', [], {
     ['SVGTextContentElement', v1/*class(_SVGTextContentElementImpl)*/],
     ['AbstractWorker', v15/*class(_AbstractWorkerImpl)*/],
     ['Uint8Array', 'Uint8Array|Uint8ClampedArray'],
-    ['AudioParam', 'AudioParam|AudioGain'],
     ['WorkerContext', v11/*class(_WorkerContextImpl)*/],
     ['CSSValueList', 'CSSValueList|WebKitCSSFilterValue|WebKitCSSTransformValue'],
     ['CharacterData', v10/*class(_CharacterDataImpl)*/],

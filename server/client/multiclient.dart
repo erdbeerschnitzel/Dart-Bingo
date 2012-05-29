@@ -3,7 +3,6 @@
 
 // globals
 Gamecard playercard;
-Gamecard computercard;
 int currentNumber = 22;
 List<int> addNumbers;
 bool active = false;
@@ -13,9 +12,7 @@ void main() {
  
  // init some Objects
  addNumbers = new List<int>();
- 
- computercard = new Gamecard();
- 
+
  playercard = new Gamecard();
  
  // attach handlers
@@ -42,23 +39,19 @@ void debug(String message) {
 
 // handles gamecard creating
 void GamecardHandler(event){
-     
-    computercard = new Gamecard();
     
     playercard = new Gamecard();
   
-    document.query('#playertable').innerHTML = createCard(playercard, false);
+    document.query('#playertable').innerHTML = createCard(playercard);
     
     addCellClickHandlers();
 
-    document.query('#computertable').innerHTML = createCard(computercard, true);
-    
-    show("Gamecards created!");
+    show("Gamecard created!");
 }
 
 // very static
 // TODO: improve card creating algo
-String createCard(Gamecard card, bool forComputer){
+String createCard(Gamecard card){
   
   String cardstring = "";
   
@@ -72,16 +65,8 @@ String createCard(Gamecard card, bool forComputer){
     for(var value in liste){
       
         // this adds a td element with specific class and specific value
-       if(forComputer){
-          
-          if(x < 5 && i < 5)  cardstring = cardstring + '<td id="c' + i + x + '"' + 'class=top>' + card.fields[i][x] + '</td>';
-        }
-        else {
-          
-          if(x < 5 && i < 5)  cardstring = cardstring + '<td id="p' + i + x + '"' + 'class=top>' + card.fields[i][x] + '</td>';
-          
-        }
-        
+        if(x < 5 && i < 5)  cardstring = cardstring + '<td id="p' + i + x + '"' + 'class=top>' + card.fields[i][x] + '</td>';
+
         // close the tr element
         if(x == 4){ 
           
@@ -140,29 +125,11 @@ void GameHandler(event3){
 
   currentNumber = getRandomNumber();  
   show("the current number is $currentNumber");
-  
-  for(int i = 0; i < 5; i++){
-    
-    
-    for(int x = 0; x < 5; x++){
-      
-      if(computercard.fields[i][x] == currentNumber){
-        
-        document.query('#c$i$x').style.textDecoration = 'underline';
-        document.query('#c$i$x').style.backgroundColor = 'red';
-        computercard.fields[i][x] = 0;
-        
-        if(checkBingo(computercard)) endGame();
-      }
-      
-    }
-    
-  }
-  
+
   if(first){
     active = true;
     document.query('#getGamecard').on.click.remove(GamecardHandler);
-    document.query('#startGame').value = "Next Number";
+    document.query('#startGame').on.click.remove(GameHandler);
     first = false;
   }
 
