@@ -3139,6 +3139,7 @@ function _CSSMatrixFactoryProvider() {}
 function _DOMParserFactoryProvider() {}
 function _DOMURLFactoryProvider() {}
 function _DeprecatedPeerConnectionFactoryProvider() {}
+function _Elements() {}
 function _EventSourceFactoryProvider() {}
 function _FileReaderFactoryProvider() {}
 function _FileReaderSyncFactoryProvider() {}
@@ -3161,7 +3162,6 @@ function _XMLHttpRequestFactoryProvider() {}
 function _XMLSerializerFactoryProvider() {}
 function _XPathEvaluatorFactoryProvider() {}
 function _XSLTProcessorFactoryProvider() {}
-function _Elements() {}
 function _Collections() {}
 _Collections.forEach = function(iterable, f) {
   for (var $$i = iterable.iterator(); $$i.hasNext(); ) {
