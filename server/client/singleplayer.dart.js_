@@ -3371,12 +3371,6 @@ function main() {
   get$$document().query("#Bingo").get$on().get$click().add$1(BingoHandler);
   show("Welcome to Bingo");
 }
-function show(message) {
-  get$$document().query("#status").set$innerHTML(message);
-}
-function debug(message) {
-  get$$document().query("#debug").set$innerHTML(message);
-}
 function GamecardHandler(event) {
   $globals.computercard = new Gamecard();
   $globals.playercard = new Gamecard();
@@ -3384,6 +3378,45 @@ function GamecardHandler(event) {
   addCellClickHandlers();
   get$$document().query("#computertable").set$innerHTML(createCard($globals.computercard, true));
   show("Gamecards created!");
+  $globals.first = false;
+}
+function GameHandler(event3) {
+  if (!$globals.first) {
+    $globals.currentNumber = getRandomNumber();
+    show(("the current number is " + $globals.currentNumber));
+    for (var i = (0);
+     i < (5); i++) {
+      for (var x = (0);
+       x < (5); x++) {
+        if ($eq$($globals.computercard.fields.$index(i).$index(x), $globals.currentNumber)) {
+          get$$document().query(("#c" + i + x)).style.set$textDecoration("underline");
+          get$$document().query(("#c" + i + x)).style.set$backgroundColor("red");
+          $globals.computercard.fields.$index(i).$setindex(x, (0));
+          if (checkBingo($globals.computercard)) endGame();
+        }
+      }
+    }
+    $globals.active = true;
+    get$$document().query("#getGamecard").get$on().get$click().remove$1(GamecardHandler);
+    get$$document().query("#startGame").set$value("Next Number");
+    $globals.first = false;
+  }
+  else {
+    show("Get some Gamecards first!");
+  }
+}
+function BingoHandler(event4) {
+  if (!$globals.active) {
+    show("You need to start the Game!");
+  }
+  else {
+  }
+}
+function show(message) {
+  get$$document().query("#status").set$innerHTML(message);
+}
+function debug(message) {
+  get$$document().query("#debug").set$innerHTML(message);
 }
 function createCard(card, forComputer) {
   var cardstring = "";
@@ -3438,28 +3471,6 @@ function addCellClickHandlers() {
     }
   }
 }
-function GameHandler(event3) {
-  $globals.currentNumber = getRandomNumber();
-  show(("the current number is " + $globals.currentNumber));
-  for (var i = (0);
-   i < (5); i++) {
-    for (var x = (0);
-     x < (5); x++) {
-      if ($eq$($globals.computercard.fields.$index(i).$index(x), $globals.currentNumber)) {
-        get$$document().query(("#c" + i + x)).style.set$textDecoration("underline");
-        get$$document().query(("#c" + i + x)).style.set$backgroundColor("red");
-        $globals.computercard.fields.$index(i).$setindex(x, (0));
-        if (checkBingo($globals.computercard)) endGame();
-      }
-    }
-  }
-  if ($globals.first) {
-    $globals.active = true;
-    get$$document().query("#getGamecard").get$on().get$click().remove$1(GamecardHandler);
-    get$$document().query("#startGame").set$value("Next Number");
-    $globals.first = false;
-  }
-}
 function endGame() {
   show("ENDE!");
   get$$document().query("#startGame").get$on().get$click().remove$1(GameHandler);
@@ -3488,13 +3499,6 @@ function getRandomNumber() {
   while (a > (99) || a < (1) || ($gte$($globals.addNumbers.indexOf$1(a), (0)))) a = (Math.random() * (100)).toInt();
   $globals.addNumbers.add(a);
   return a;
-}
-function BingoHandler(event4) {
-  if (!$globals.active) {
-    show("You need to start the Game!");
-  }
-  else {
-  }
 }
 (function(){
   var v0/*HTMLMediaElement*/ = 'HTMLMediaElement|HTMLAudioElement|HTMLVideoElement';

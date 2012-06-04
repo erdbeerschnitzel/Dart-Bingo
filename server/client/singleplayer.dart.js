@@ -1486,28 +1486,29 @@ $.allMatches = function(receiver, str) {
 };
 
 $.GameHandler = function(event3) {
-  $.currentNumber = $.getRandomNumber();
-  $.show('the current number is ' + $.stringToString($.currentNumber));
-  for (var i = 0; i < 5; i = i + 1) {
-    for (var x = 0; x < 5; x = x + 1) {
-      if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.currentNumber)) {
-        $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$textDecoration('underline');
-        $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$backgroundColor('red');
-        $.indexSet($.index($.computercard.get$fields(), i), x, 0);
-        if ($.checkBingo($.computercard) === true) {
-          $.endGame();
+  if ($.first !== true) {
+    $.currentNumber = $.getRandomNumber();
+    $.show('the current number is ' + $.stringToString($.currentNumber));
+    for (var i = 0; i < 5; i = i + 1) {
+      for (var x = 0; x < 5; x = x + 1) {
+        if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.currentNumber)) {
+          $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$textDecoration('underline');
+          $.document().query$1('#c' + $.stringToString(i) + $.stringToString(x)).get$style().set$backgroundColor('red');
+          $.indexSet($.index($.computercard.get$fields(), i), x, 0);
+          if ($.checkBingo($.computercard) === true) {
+            $.endGame();
+          } else {
+          }
         } else {
         }
-      } else {
       }
     }
-  }
-  if ($.first === true) {
     $.active = true;
     $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
     $.document().query$1('#startGame').set$value('Next Number');
     $.first = false;
   } else {
+    $.show('Get some Gamecards first!');
   }
 };
 
@@ -2887,6 +2888,7 @@ $.GamecardHandler = function(event$) {
   var t1 = $.createCard($.computercard, true);
   $.document().query$1('#computertable').set$innerHTML(t1);
   $.show('Gamecards created!');
+  $.first = false;
 };
 
 $.contains$2 = function(receiver, other, startIndex) {

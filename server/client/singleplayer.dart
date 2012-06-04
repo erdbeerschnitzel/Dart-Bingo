@@ -28,17 +28,8 @@ void main() {
  show('Welcome to Bingo');
 }
 
-void show(String message) {
-  
-  document.query('#status').innerHTML = message;
-  
-}
-
-void debug(String message) {
-  
-  document.query('#debug').innerHTML = message;
-  
-}
+// **** HANDLERS ****
+// ******************
 
 // handles gamecard creating
 void GamecardHandler(event){
@@ -54,6 +45,78 @@ void GamecardHandler(event){
     document.query('#computertable').innerHTML = createCard(computercard, true);
     
     show("Gamecards created!");
+    
+    first = false;
+}
+
+// handle next number and computer logic
+void GameHandler(event3){
+
+  if(!first){
+  
+  currentNumber = getRandomNumber();  
+  show("the current number is $currentNumber");
+  
+  for(int i = 0; i < 5; i++){
+    
+    
+    for(int x = 0; x < 5; x++){
+      
+      if(computercard.fields[i][x] == currentNumber){
+        
+        document.query('#c$i$x').style.textDecoration = 'underline';
+        document.query('#c$i$x').style.backgroundColor = 'red';
+        computercard.fields[i][x] = 0;
+        
+        if(checkBingo(computercard)) endGame();
+      }
+      
+    }
+    
+  }
+  
+  
+    active = true;
+    document.query('#getGamecard').on.click.remove(GamecardHandler);
+    document.query('#startGame').value = "Next Number";
+    first = false;
+    
+  }
+  else {
+    
+    show("Get some Gamecards first!");
+  }
+
+}
+
+
+// handle bingo button
+void BingoHandler(event4){
+  
+  if(!active){
+    
+    show("You need to start the Game!");
+  }
+  else {
+    
+    
+  }
+  
+}
+
+// **** Methods ****
+// *****************
+
+void show(String message) {
+  
+  document.query('#status').innerHTML = message;
+  
+}
+
+void debug(String message) {
+  
+  document.query('#debug').innerHTML = message;
+  
 }
 
 // very static
@@ -135,38 +198,7 @@ void addCellClickHandlers(){
   }
 }
 
-// handle next number and computer logic
-void GameHandler(event3){
 
-  currentNumber = getRandomNumber();  
-  show("the current number is $currentNumber");
-  
-  for(int i = 0; i < 5; i++){
-    
-    
-    for(int x = 0; x < 5; x++){
-      
-      if(computercard.fields[i][x] == currentNumber){
-        
-        document.query('#c$i$x').style.textDecoration = 'underline';
-        document.query('#c$i$x').style.backgroundColor = 'red';
-        computercard.fields[i][x] = 0;
-        
-        if(checkBingo(computercard)) endGame();
-      }
-      
-    }
-    
-  }
-  
-  if(first){
-    active = true;
-    document.query('#getGamecard').on.click.remove(GamecardHandler);
-    document.query('#startGame').value = "Next Number";
-    first = false;
-  }
-
-}
 
 void endGame(){
   
@@ -218,19 +250,5 @@ int getRandomNumber(){
   addNumbers.add(a);
     
   return a;
-}
-
-// handle bingo button
-void BingoHandler(event4){
-  
-  if(!active){
-    
-    show("You need to start the Game!");
-  }
-  else {
-    
-    
-  }
-  
 }
 
