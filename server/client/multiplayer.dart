@@ -25,17 +25,25 @@ void main() {
  show('Welcome to Bingo');
 }
 
-void show(String message) {
-  
-  document.query('#status').innerHTML = message;
-  
+// **** HANDLERS ****
+// ******************
+
+
+// handle next number and computer logic
+void GameHandler(event3){
+
+  currentNumber = getRandomNumber();  
+  show("the current number is $currentNumber");
+
+  if(first){
+    active = true;
+    document.query('#getGamecard').on.click.remove(GamecardHandler);
+    document.query('#startGame').on.click.remove(GameHandler);
+    first = false;
+  }
+
 }
 
-void debug(String message) {
-  
-  document.query('#debug').innerHTML = message;
-  
-}
 
 // handles gamecard creating
 void GamecardHandler(event){
@@ -90,6 +98,34 @@ String createCard(Gamecard card){
   return cardstring;
 }
 
+// handle bingo button
+void BingoHandler(event4){
+  
+  if(!active){
+    
+    show("You need to start the Game!");
+  }
+  else {
+    
+    
+  }
+  
+}
+
+// **** Methods ****
+// *****************
+
+void show(String message) {
+  
+  document.query('#status').innerHTML = message;
+  
+}
+
+void debug(String message) {
+  
+  document.query('#debug').innerHTML = message;
+  
+}
 
 // add CellClickHandlers to playercard
 void addCellClickHandlers(){
@@ -120,20 +156,7 @@ void addCellClickHandlers(){
   }
 }
 
-// handle next number and computer logic
-void GameHandler(event3){
 
-  currentNumber = getRandomNumber();  
-  show("the current number is $currentNumber");
-
-  if(first){
-    active = true;
-    document.query('#getGamecard').on.click.remove(GamecardHandler);
-    document.query('#startGame').on.click.remove(GameHandler);
-    first = false;
-  }
-
-}
 
 void endGame(){
   
@@ -187,17 +210,5 @@ int getRandomNumber(){
   return a;
 }
 
-// handle bingo button
-void BingoHandler(event4){
-  
-  if(!active){
-    
-    show("You need to start the Game!");
-  }
-  else {
-    
-    
-  }
-  
-}
+
 
