@@ -30,23 +30,28 @@ void main() {
 
 
 // handle next number and computer logic
-void GameHandler(event3){
+void GameHandler(gameevent){
+  
+  if(!first){
 
   currentNumber = getRandomNumber();  
   show("the current number is $currentNumber");
 
-  if(first){
     active = true;
     document.query('#getGamecard').on.click.remove(GamecardHandler);
     document.query('#startGame').on.click.remove(GameHandler);
-    first = false;
+
+  }
+  else {
+    
+    show("Get some Gamecards first!");
   }
 
 }
 
 
 // handles gamecard creating
-void GamecardHandler(event){
+void GamecardHandler(gamecardevent){
     
     playercard = new Gamecard();
   
@@ -55,11 +60,13 @@ void GamecardHandler(event){
     addCellClickHandlers();
 
     show("Gamecard created!");
+    
+    first = false;
 }
 
 
 // handle bingo button
-void BingoHandler(event4){
+void BingoHandler(bingoevent){
   
   if(!active){
     

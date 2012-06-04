@@ -3338,21 +3338,34 @@ function main() {
   get$$document().query("#Bingo").get$on().get$click().add$1(BingoHandler);
   show("Welcome to Bingo");
 }
-function GameHandler(event3) {
-  $globals.currentNumber = getRandomNumber();
-  show(("the current number is " + $globals.currentNumber));
-  if ($globals.first) {
+function GameHandler(gameevent) {
+  if (!$globals.first) {
+    $globals.currentNumber = getRandomNumber();
+    show(("the current number is " + $globals.currentNumber));
     $globals.active = true;
     get$$document().query("#getGamecard").get$on().get$click().remove$1(GamecardHandler);
     get$$document().query("#startGame").get$on().get$click().remove$1(GameHandler);
-    $globals.first = false;
+  }
+  else {
+    show("Get some Gamecards first!");
   }
 }
-function GamecardHandler(event) {
+function GamecardHandler(gamecardevent) {
   $globals.playercard = new Gamecard();
   get$$document().query("#playertable").set$innerHTML(createCard($globals.playercard));
   addCellClickHandlers();
   show("Gamecard created!");
+  $globals.first = false;
+}
+function BingoHandler(bingoevent) {
+  if (!$globals.active) {
+    show("You need to start the Game!");
+  }
+  else {
+  }
+}
+function show(message) {
+  get$$document().query("#status").set$innerHTML(message);
 }
 function createCard(card) {
   var cardstring = "";
@@ -3381,16 +3394,6 @@ function createCard(card) {
     }
   }
   return cardstring;
-}
-function BingoHandler(event4) {
-  if (!$globals.active) {
-    show("You need to start the Game!");
-  }
-  else {
-  }
-}
-function show(message) {
-  get$$document().query("#status").set$innerHTML(message);
 }
 function addCellClickHandlers() {
   for (var i = (0);

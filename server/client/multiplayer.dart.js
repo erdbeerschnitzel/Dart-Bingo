@@ -1553,15 +1553,15 @@ $.allMatches = function(receiver, str) {
   return $.allMatchesInStringUnchecked(receiver, str);
 };
 
-$.GameHandler = function(event3) {
-  $.currentNumber = $.getRandomNumber();
-  $.show('the current number is ' + $.stringToString($.currentNumber));
-  if ($.first === true) {
+$.GameHandler = function(gameevent) {
+  if ($.first !== true) {
+    $.currentNumber = $.getRandomNumber();
+    $.show('the current number is ' + $.stringToString($.currentNumber));
     $.active = true;
     $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
     $.document().query$1('#startGame').get$on().get$click().remove$1($.GameHandler);
-    $.first = false;
   } else {
+    $.show('Get some Gamecards first!');
   }
 };
 
@@ -2368,12 +2368,13 @@ $._PeerConnection00EventsImpl$1 = function(_ptr) {
   return new $._PeerConnection00EventsImpl(_ptr);
 };
 
-$.GamecardHandler = function(event$) {
+$.GamecardHandler = function(gamecardevent) {
   $.playercard = $.Gamecard$0();
   var t0 = $.createCard($.playercard);
   $.document().query$1('#playertable').set$innerHTML(t0);
   $.addCellClickHandlers();
   $.show('Gamecard created!');
+  $.first = false;
 };
 
 $.contains$2 = function(receiver, other, startIndex) {
@@ -2732,7 +2733,7 @@ $.gt$slow = function(a, b) {
   return a.operator$gt$1(b);
 };
 
-$.BingoHandler = function(event4) {
+$.BingoHandler = function(bingoevent) {
   if ($.active !== true) {
     $.show('You need to start the Game!');
   } else {

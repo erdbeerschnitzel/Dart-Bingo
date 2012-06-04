@@ -32,7 +32,7 @@ void main() {
 // ******************
 
 // handles gamecard creating
-void GamecardHandler(event){
+void GamecardHandler(gamecardevent){
      
     computercard = new Gamecard();
     
@@ -50,7 +50,7 @@ void GamecardHandler(event){
 }
 
 // handle next number and computer logic
-void GameHandler(event3){
+void GameHandler(gameevent){
 
   if(!first){
   
@@ -75,11 +75,9 @@ void GameHandler(event3){
     
   }
   
-  
     active = true;
     document.query('#getGamecard').on.click.remove(GamecardHandler);
     document.query('#startGame').value = "Next Number";
-    first = false;
     
   }
   else {
@@ -91,7 +89,7 @@ void GameHandler(event3){
 
 
 // handle bingo button
-void BingoHandler(event4){
+void BingoHandler(bingoevent){
   
   if(!active){
     

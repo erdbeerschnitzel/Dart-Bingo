@@ -3371,7 +3371,7 @@ function main() {
   get$$document().query("#Bingo").get$on().get$click().add$1(BingoHandler);
   show("Welcome to Bingo");
 }
-function GamecardHandler(event) {
+function GamecardHandler(gamecardevent) {
   $globals.computercard = new Gamecard();
   $globals.playercard = new Gamecard();
   get$$document().query("#playertable").set$innerHTML(createCard($globals.playercard, false));
@@ -3380,7 +3380,7 @@ function GamecardHandler(event) {
   show("Gamecards created!");
   $globals.first = false;
 }
-function GameHandler(event3) {
+function GameHandler(gameevent) {
   if (!$globals.first) {
     $globals.currentNumber = getRandomNumber();
     show(("the current number is " + $globals.currentNumber));
@@ -3399,13 +3399,12 @@ function GameHandler(event3) {
     $globals.active = true;
     get$$document().query("#getGamecard").get$on().get$click().remove$1(GamecardHandler);
     get$$document().query("#startGame").set$value("Next Number");
-    $globals.first = false;
   }
   else {
     show("Get some Gamecards first!");
   }
 }
-function BingoHandler(event4) {
+function BingoHandler(bingoevent) {
   if (!$globals.active) {
     show("You need to start the Game!");
   }

@@ -1485,7 +1485,7 @@ $.allMatches = function(receiver, str) {
   return $.allMatchesInStringUnchecked(receiver, str);
 };
 
-$.GameHandler = function(event3) {
+$.GameHandler = function(gameevent) {
   if ($.first !== true) {
     $.currentNumber = $.getRandomNumber();
     $.show('the current number is ' + $.stringToString($.currentNumber));
@@ -1506,7 +1506,6 @@ $.GameHandler = function(event3) {
     $.active = true;
     $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
     $.document().query$1('#startGame').set$value('Next Number');
-    $.first = false;
   } else {
     $.show('Get some Gamecards first!');
   }
@@ -2116,7 +2115,7 @@ $.regExpAttachGlobalNative = function(regExp) {
   regExp._re = $.regExpMakeNative(regExp, true);
 };
 
-$.BingoHandler = function(event4) {
+$.BingoHandler = function(bingoevent) {
   if ($.active !== true) {
     $.show('You need to start the Game!');
   } else {
@@ -2879,7 +2878,7 @@ $.toString = function(value) {
   return String(value);
 };
 
-$.GamecardHandler = function(event$) {
+$.GamecardHandler = function(gamecardevent) {
   $.computercard = $.Gamecard$0();
   $.playercard = $.Gamecard$0();
   var t0 = $.createCard($.playercard, false);
