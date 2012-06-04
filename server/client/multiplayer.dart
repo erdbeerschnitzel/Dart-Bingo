@@ -57,6 +57,36 @@ void GamecardHandler(event){
     show("Gamecard created!");
 }
 
+
+// handle bingo button
+void BingoHandler(event4){
+  
+  if(!active){
+    
+    show("You need to start the Game!");
+  }
+  else {
+    
+    
+  }
+  
+}
+
+// **** Methods ****
+// *****************
+
+void show(String message) {
+  
+  document.query('#status').innerHTML = message;
+  
+}
+
+void debug(String message) {
+  
+  document.query('#debug').innerHTML = message;
+  
+}
+
 // very static
 // TODO: improve card creating algo
 String createCard(Gamecard card){
@@ -96,35 +126,6 @@ String createCard(Gamecard card){
   }
   
   return cardstring;
-}
-
-// handle bingo button
-void BingoHandler(event4){
-  
-  if(!active){
-    
-    show("You need to start the Game!");
-  }
-  else {
-    
-    
-  }
-  
-}
-
-// **** Methods ****
-// *****************
-
-void show(String message) {
-  
-  document.query('#status').innerHTML = message;
-  
-}
-
-void debug(String message) {
-  
-  document.query('#debug').innerHTML = message;
-  
 }
 
 // add CellClickHandlers to playercard
