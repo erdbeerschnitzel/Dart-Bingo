@@ -3492,13 +3492,12 @@ function GameHandler(gameevent) {
   if (!$globals.first) {
     $globals.ws = _WebSocketFactoryProvider.WebSocket$factory("ws://localhost:8080/bingo");
     $globals.ws.get$on().get$message().add($wrap_call$1((function (e) {
-      get$$document().query("#wsmsg").set$innerHTML(("" + e.data));
+      get$$document().query("#status").set$innerHTML(("" + e.data));
       if (MessageHandler(e.data) != "") {
         $globals.ws.send(MessageHandler(e.data));
       }
     })
     ), false);
-    $globals.active = true;
     get$$document().query("#getGamecard").get$on().get$click().remove$1(GamecardHandler);
     get$$document().query("#startGame").get$on().get$click().remove$1(GameHandler);
     get$$document().query("#startGame").set$value("I'm ready!");
@@ -3509,13 +3508,15 @@ function GameHandler(gameevent) {
   }
 }
 function ReadyHandler(readyevent) {
-  if ($eq$(get$$document().query("#startGame").get$value(), "I'm ready!")) {
-    $globals.ws.send("client ready");
-    get$$document().query("#startGame").set$value("I'm not ready!");
-  }
-  else {
-    $globals.ws.send("client notready");
-    get$$document().query("#startGame").set$value("I'm ready!");
+  if (!$globals.gameStarted) {
+    if ($eq$(get$$document().query("#startGame").get$value(), "I'm ready!")) {
+      $globals.ws.send("client ready");
+      get$$document().query("#startGame").set$value("I'm not ready!");
+    }
+    else {
+      $globals.ws.send("client notready");
+      get$$document().query("#startGame").set$value("I'm ready!");
+    }
   }
 }
 function GamecardHandler(gamecardevent) {
@@ -3526,8 +3527,8 @@ function GamecardHandler(gamecardevent) {
   $globals.first = false;
 }
 function BingoHandler(bingoevent) {
-  if (!$globals.active) {
-    show("You need to start the Game!");
+  if (!$globals.gameStarted) {
+    show("The Game has'n started yet!");
   }
   else {
   }
@@ -3535,11 +3536,14 @@ function BingoHandler(bingoevent) {
 function MessageHandler(msg) {
   if (msg == "Hello from Server!") return "client hello!";
   if (msg.contains("Other Players:")) {
-    get$$document().query("#wsmsg").set$innerHTML(msg);
+    show(msg);
     return "";
   }
   if (msg.contains("Starting the Game")) {
     $globals.gameStarted = true;
+    get$$document().query("#startGame").get$on().get$click().remove$1(ReadyHandler);
+    get$$document().query("#startGame").remove();
+    get$$document().query("#getGamecard").remove();
     return "";
   }
   if (msg.contains("Number")) {
@@ -3636,7 +3640,6 @@ function addCellClickHandlers() {
   $dynamicSetMetadata(table);
 })();
 function $static_init(){
-  $globals.active = false;
   $globals.currentNumber = (22);
   $globals.first = true;
   $globals.gameStarted = false;

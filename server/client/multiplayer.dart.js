@@ -1351,7 +1351,7 @@ Isolate.$defineClass("Closure4", "Closure13", [], {
 Isolate.$defineClass("Closure5", "Closure13", [], {
  $call$1: function(e) {
   var t0 = '' + $.stringToString(e.get$data());
-  $.document().query$1('#wsmsg').set$innerHTML(t0);
+  $.document().query$1('#status').set$innerHTML(t0);
   if (!$.eqB($.MessageHandler(e.get$data()), '')) {
     $.ws.send$1($.MessageHandler(e.get$data()));
   } else {
@@ -1527,7 +1527,6 @@ $.GameHandler = function(gameevent) {
   if ($.first !== true) {
     $.ws = $.WebSocket('ws://localhost:8080/bingo');
     $.add$1($.ws.get$on().get$message(), new $.Closure5());
-    $.active = true;
     $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
     $.document().query$1('#startGame').get$on().get$click().remove$1($.GameHandler);
     $.document().query$1('#startGame').set$value('I\'m ready!');
@@ -2099,12 +2098,15 @@ $.regExpExec = function(regExp, str) {
 };
 
 $.ReadyHandler = function(readyevent) {
-  if ($.eqB($.document().query$1('#startGame').get$value(), 'I\'m ready!')) {
-    $.ws.send$1('client ready');
-    $.document().query$1('#startGame').set$value('I\'m not ready!');
+  if ($.gameStarted !== true) {
+    if ($.eqB($.document().query$1('#startGame').get$value(), 'I\'m ready!')) {
+      $.ws.send$1('client ready');
+      $.document().query$1('#startGame').set$value('I\'m not ready!');
+    } else {
+      $.ws.send$1('client notready');
+      $.document().query$1('#startGame').set$value('I\'m ready!');
+    }
   } else {
-    $.ws.send$1('client notready');
-    $.document().query$1('#startGame').set$value('I\'m ready!');
   }
 };
 
@@ -2182,8 +2184,8 @@ $.regExpAttachGlobalNative = function(regExp) {
 };
 
 $.BingoHandler = function(bingoevent) {
-  if ($.active !== true) {
-    $.show('You need to start the Game!');
+  if ($.gameStarted !== true) {
+    $.show('The Game has\'n started yet!');
   } else {
   }
 };
@@ -3442,12 +3444,15 @@ $.MessageHandler = function(msg) {
   } else {
   }
   if ($.contains$1(msg, 'Other Players:') === true) {
-    $.document().query$1('#wsmsg').set$innerHTML(msg);
+    $.show(msg);
     return '';
   } else {
   }
   if ($.contains$1(msg, 'Starting the Game') === true) {
     $.gameStarted = true;
+    $.document().query$1('#startGame').get$on().get$click().remove$1($.ReadyHandler);
+    $.document().query$1('#startGame').remove$0();
+    $.document().query$1('#getGamecard').remove$0();
     return '';
   } else {
   }
@@ -3910,7 +3915,6 @@ $.CTC5 = new Isolate.$isolateProperties.JSSyntaxRegExp(false, false, '[-[\\]{}()
 $.CTC2 = new Isolate.$isolateProperties.NoMoreElementsException();
 $.first = true;
 $.gameStarted = false;
-$.active = false;
 $._getTypeNameOf = (void 0);
 $.playercard = (void 0);
 $._cachedBrowserPrefix = (void 0);

@@ -111,9 +111,9 @@ void sendMessageToAllClients(String msg){
 
 void startTimer(){
 
-  new Timer.repeating(30000, (Timer t) {
+  new Timer.repeating(15000, (Timer t) {
 
-    sendMessageToAllClients("Number: " + getRandomNumber());
+    if(gameStarted) sendMessageToAllClients("Number: " + getRandomNumber());
 
   });
 }
@@ -230,9 +230,17 @@ int getRandomNumber(){
 }
 
 void removeConnection(WebSocketConnection conn) {
+  
   int index = connections.indexOf(conn);
   if (index > -1) {
     connections.removeRange(index, 1);
+    clients.removeRange(index, 1);
+  }
+  
+  if(clients.length < 1) {
+    
+    print("" + new Date.now() + ": All Clients disconnected. Game stopped.");
+    gameStarted = false;
   }
   
   sendMessageToAllClients("Other Players: " + (connections.length - 1));

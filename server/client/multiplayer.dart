@@ -6,7 +6,6 @@ Gamecard playercard;
 WebSocket ws;
 int currentNumber = 22;
 List<int> addNumbers;
-bool active = false;
 bool first = true;
 bool gameStarted = false;
 
@@ -39,7 +38,7 @@ void GameHandler(gameevent){
   ws =  new WebSocket("ws://localhost:8080/bingo");
   
   ws.on.message.add((MessageEvent e) {
-    document.query('#wsmsg').innerHTML = "${e.data}";
+    document.query('#status').innerHTML = "${e.data}";
     
     if(MessageHandler(e.data) != ""){
       
@@ -48,7 +47,6 @@ void GameHandler(gameevent){
     
   });
 
-    active = true;
     document.query('#getGamecard').on.click.remove(GamecardHandler);
     document.query('#startGame').on.click.remove(GameHandler);
     document.query('#startGame').value = "I'm ready!";
@@ -65,19 +63,19 @@ void GameHandler(gameevent){
 // handles ready button
 void ReadyHandler(readyevent){
   
-  if(document.query('#startGame').value == "I'm ready!"){
+  if(!gameStarted){
     
-    ws.send("client ready");
-    document.query('#startGame').value = "I'm not ready!";
-  }
-  else {
-    
-    ws.send("client notready");
-    document.query('#startGame').value = "I'm ready!";
-  }
-
-  
-  
+    if(document.query('#startGame').value == "I'm ready!"){
+      
+      ws.send("client ready");
+      document.query('#startGame').value = "I'm not ready!";
+    }
+    else {
+      
+      ws.send("client notready");
+      document.query('#startGame').value = "I'm ready!";
+    }       
+  }  
 }
 
 // handles gamecard creating
@@ -98,9 +96,9 @@ void GamecardHandler(gamecardevent){
 // handle bingo button
 void BingoHandler(bingoevent){
   
-  if(!active){
+  if(!gameStarted){
     
-    show("You need to start the Game!");
+    show("The Game has'n started yet!");
   }
   else {
     
@@ -115,13 +113,18 @@ String MessageHandler(String msg){
   
   if(msg.contains('Other Players:')) {
     
-    document.query('#wsmsg').innerHTML = msg;
+    show(msg);
     return "";
   }
   
   if(msg.contains('Starting the Game')) {
     
     gameStarted = true;
+
+    document.query('#startGame').on.click.remove(ReadyHandler);
+    document.query('#startGame').remove();
+    document.query('#getGamecard').remove();
+    
     return "";
   }
   
