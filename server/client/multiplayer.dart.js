@@ -1348,10 +1348,14 @@ Isolate.$defineClass("Closure4", "Closure13", [], {
  }
 });
 
-Isolate.$defineClass("Closure5", "Closure13", [], {
+Isolate.$defineClass("Closure5", "Closure13", ["box_0"], {
  $call$1: function(e) {
   var t0 = '' + $.stringToString(e.get$data());
   $.document().query$1('#wsmsg').set$innerHTML(t0);
+  if (!$.eqB($.MessageHandler(e.get$data()), '')) {
+    this.box_0.ws_1.send$1($.MessageHandler(e.get$data()));
+  } else {
+  }
  }
 });
 
@@ -1520,10 +1524,12 @@ $.allMatches = function(receiver, str) {
 };
 
 $.GameHandler = function(gameevent) {
+  var t0 = ({});
   if ($.first !== true) {
     $.currentNumber = $.getRandomNumber();
     $.show('the current number is ' + $.stringToString($.currentNumber));
-    $.add$1($.WebSocket('ws://localhost:8080/bingo').get$on().get$message(), new $.Closure5());
+    t0.ws_1 = $.WebSocket('ws://localhost:8080/bingo');
+    $.add$1(t0.ws_1.get$on().get$message(), new $.Closure5(t0));
     $.active = true;
     $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
     $.document().query$1('#startGame').get$on().get$click().remove$1($.GameHandler);
@@ -3294,10 +3300,6 @@ $.indexOf2 = function(a, element, startIndex, endIndex) {
   return -1;
 };
 
-$._isPowerOfTwo = function(x) {
-  return $.eq($.and(x, $.sub(x, 1)), 0);
-};
-
 $.removeLast = function(receiver) {
   if ($.isJsArray(receiver) === true) {
     $.checkGrowable(receiver, 'removeLast');
@@ -3334,6 +3336,10 @@ $.indexOf$1 = function(receiver, element) {
   } else {
   }
   return receiver.indexOf$1(element);
+};
+
+$._isPowerOfTwo = function(x) {
+  return $.eq($.and(x, $.sub(x, 1)), 0);
 };
 
 $.StackOverflowException$0 = function() {
@@ -3393,6 +3399,19 @@ $.gtB = function(a, b) {
     t2 = $.gt$slow(a, b) === true;
   }
   return t2;
+};
+
+$.MessageHandler = function(msg) {
+  if ($.eqB(msg, 'Hello from Server!')) {
+    return 'Hello from Client!';
+  } else {
+  }
+  if ($.contains$1(msg, 'Other Players:') === true) {
+    $.document().query$1('#players').set$innerHTML(msg);
+    return '';
+  } else {
+  }
+  return '';
 };
 
 $.setRuntimeTypeInfo = function(target, typeInfo) {
@@ -4109,6 +4128,9 @@ $.$defineNativeClass('DedicatedWorkerContext', [], {
 });
 
 $.$defineNativeClass('DeprecatedPeerConnection', [], {
+ send$1: function(text) {
+  return this.send(text);
+ },
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
@@ -6137,6 +6159,9 @@ $.$defineNativeClass('HTMLVideoElement', [], {
 });
 
 $.$defineNativeClass('WebSocket', [], {
+ send$1: function(data) {
+  return this.send(data);
+ },
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
@@ -6192,6 +6217,9 @@ $.$defineNativeClass('WorkerNavigator', ["userAgent?"], {
 });
 
 $.$defineNativeClass('XMLHttpRequest', [], {
+ send$1: function(data) {
+  return this.send(data);
+ },
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },

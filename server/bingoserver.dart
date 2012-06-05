@@ -1,13 +1,13 @@
 #import('dart:io');
 
 List<WebSocketConnection> connections;
-
+WebSocketHandler wsHandler;
 
 void main() {
   
   connections = new List();
-  WebSocketHandler wsHandler = new WebSocketHandler();
-  addWebSocketHandlers(wsHandler);
+  wsHandler = new WebSocketHandler();
+  addWebSocketHandlers();
   
 
   HttpServer server = new HttpServer();
@@ -23,16 +23,31 @@ void main() {
 
 }
 
-void addWebSocketHandlers(WebSocketHandler wsHandler){
+void addWebSocketHandlers(){
   
   wsHandler.onOpen = (WebSocketConnection conn) {
-    print("Client connected...");
+    
+    print("" + new Date.now() + ": Client connected...");
     conn.send("Hello from Server!");
+    
     connections.add(conn);    
     conn.onClosed = (a, b) => removeConnection(conn);
     conn.onError = (_) => removeConnection(conn);
+    conn.onMessage = (msg) => delegateMessage(msg);
   };
   
+}
+
+void delegateMessage(String msg){
+  
+  print("" + new Date.now() + ": Client sent message: $msg");
+ 
+  if(msg.contains("Hello from Client!") && connections.length > 1) {
+    
+    connections.forEach((WebSocketConnection conn) {
+      conn.send("Other Players: " + (connections.length - 1));
+    });  
+  }
 }
 
 void startTimer(){
@@ -161,4 +176,9 @@ void removeConnection(WebSocketConnection conn) {
   if (index > -1) {
     connections.removeRange(index, 1);
   }
+  
+  connections.forEach((WebSocketConnection conn) {
+    conn.send("Other Players: " + (connections.length - 1));
+  });   
+  
 }

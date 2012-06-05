@@ -1080,6 +1080,9 @@ StringImplementation.prototype.startsWith = function(other) {
 StringImplementation.prototype.isEmpty = function() {
   return this.length == (0);
 }
+StringImplementation.prototype.contains = function(pattern, startIndex) {
+  'use strict'; return this.indexOf(pattern, startIndex) >= 0;
+}
 StringImplementation.prototype.split$_ = function(pattern) {
   if ((typeof(pattern) == 'string')) return this._split(pattern);
   if (!!(pattern && pattern.is$RegExp())) return this._splitRegExp(pattern);
@@ -3356,6 +3359,9 @@ function GameHandler(gameevent) {
     var ws = _WebSocketFactoryProvider.WebSocket$factory("ws://localhost:8080/bingo");
     ws.get$on().get$message().add($wrap_call$1((function (e) {
       get$$document().query("#wsmsg").set$innerHTML(("" + e.data));
+      if (MessageHandler(e.data) != "") {
+        ws.send(MessageHandler(e.data));
+      }
     })
     ), false);
     $globals.active = true;
@@ -3379,6 +3385,14 @@ function BingoHandler(bingoevent) {
   }
   else {
   }
+}
+function MessageHandler(msg) {
+  if (msg == "Hello from Server!") return "Hello from Client!";
+  if (msg.contains("Other Players:")) {
+    get$$document().query("#players").set$innerHTML(msg);
+    return "";
+  }
+  return "";
 }
 function show(message) {
   get$$document().query("#status").set$innerHTML(message);

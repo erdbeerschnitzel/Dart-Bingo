@@ -41,6 +41,12 @@ void GameHandler(gameevent){
   
   ws.on.message.add((MessageEvent e) {
     document.query('#wsmsg').innerHTML = "${e.data}";
+    
+    if(MessageHandler(e.data) != ""){
+      
+      ws.send(MessageHandler(e.data));
+    }
+    
   });
 
     active = true;
@@ -82,6 +88,20 @@ void BingoHandler(bingoevent){
     
     
   }
+  
+}
+
+String MessageHandler(String msg){
+  
+  if(msg == "Hello from Server!") return "Hello from Client!";
+  
+  if(msg.contains('Other Players:')) {
+    
+    document.query('#players').innerHTML = msg;
+    return "";
+  }
+  
+  return "";
   
 }
 
