@@ -3,6 +3,7 @@
 
 // globals
 Gamecard playercard;
+WebSocket ws;
 int currentNumber = 22;
 List<int> addNumbers;
 bool active = false;
@@ -34,10 +35,7 @@ void GameHandler(gameevent){
   
   if(!first){
 
-  currentNumber = getRandomNumber();  
-  show("the current number is $currentNumber");
-  
-  WebSocket ws =  new WebSocket("ws://localhost:8080/bingo");
+  ws =  new WebSocket("ws://localhost:8080/bingo");
   
   ws.on.message.add((MessageEvent e) {
     document.query('#wsmsg').innerHTML = "${e.data}";
@@ -52,6 +50,8 @@ void GameHandler(gameevent){
     active = true;
     document.query('#getGamecard').on.click.remove(GamecardHandler);
     document.query('#startGame').on.click.remove(GameHandler);
+    document.query('#startGame').value = "I'm ready!";
+    document.query('#startGame').on.click.add(ReadyHandler);
 
   }
   else {
@@ -61,6 +61,11 @@ void GameHandler(gameevent){
 
 }
 
+// handles ready button
+void ReadyHandler(readyevent){
+  
+  ws.send("client ready");
+}
 
 // handles gamecard creating
 void GamecardHandler(gamecardevent){
@@ -93,7 +98,7 @@ void BingoHandler(bingoevent){
 
 String MessageHandler(String msg){
   
-  if(msg == "Hello from Server!") return "Hello from Client!";
+  if(msg == "Hello from Server!") return "client hello!";
   
   if(msg.contains('Other Players:')) {
     

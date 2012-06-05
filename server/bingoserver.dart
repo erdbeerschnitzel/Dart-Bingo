@@ -1,11 +1,14 @@
 #import('dart:io');
+#source('client\\Client.dart');
 
 List<WebSocketConnection> connections;
+List<Client> clients;
 WebSocketHandler wsHandler;
 
 void main() {
   
   connections = new List();
+  clients = new List();
   wsHandler = new WebSocketHandler();
   addWebSocketHandlers();
   
@@ -23,31 +26,58 @@ void main() {
 
 }
 
+// add Handlers to WebsocketConnectionHandler :)
 void addWebSocketHandlers(){
   
   wsHandler.onOpen = (WebSocketConnection conn) {
     
     print("" + new Date.now() + ": Client connected...");
     conn.send("Hello from Server!");
+
+    clients.add(new Client.bla(conn, false));
     
     connections.add(conn);    
     conn.onClosed = (a, b) => removeConnection(conn);
     conn.onError = (_) => removeConnection(conn);
-    conn.onMessage = (msg) => delegateMessage(msg);
+    conn.onMessage = (msg) => delegateMessage(msg, conn);
   };
   
 }
 
-void delegateMessage(String msg){
+// check incoming messages
+void delegateMessage(String msg, WebSocketConnection originalconnection){
   
   print("" + new Date.now() + ": Client sent message: $msg");
  
-  if(msg.contains("Hello from Client!") && connections.length > 1) {
+  if(msg.contains("client hello") && connections.length > 1) sendMessageToAllClients("Other Players: " + (connections.length - 1));
+  
+  if(msg.contains("client ready") && connections.length == 1){
     
-    connections.forEach((WebSocketConnection conn) {
-      conn.send("Other Players: " + (connections.length - 1));
-    });  
+    connections[0].send("You need to wait for other players!");
+    clients[0].ready = true;
   }
+
+  if(msg.contains("client ready") && connections.length > 1){
+    
+    int numberReady = 0;
+    
+    clients.forEach((Client client) {
+      
+      if(client.con == originalconnection) client.ready = true;
+      
+      if(client.ready) numberReady++;
+    });
+    
+    sendMessageToAllClients("Other Players: " + (connections.length - 1) + "   Players Ready: $numberReady");
+  }
+}
+
+// send a message to all WebSocket clients
+void sendMessageToAllClients(String msg){
+  
+  connections.forEach((WebSocketConnection conn) {
+    conn.send(msg);
+  });  
 }
 
 void startTimer(){
@@ -62,9 +92,7 @@ void startTimer(){
       done.add(time);
       print("adding $time");
       
-      connections.forEach((WebSocketConnection conn) {
-        conn.send(time.toString());
-      });
+      sendMessageToAllClients(time.toString());
     }
     else {
       //print('not adding $time');
@@ -154,7 +182,6 @@ void serveFile(HttpRequest req, HttpResponse resp) {
     file.exists().then((bool exists) {
       if (exists) {
         file.readAsText().then((String text) {
-          //resp.headers.set(HttpHeaders.CONTENT_TYPE, getContentType(file));
           resp.outputStream.writeString(text);
           resp.outputStream.close();
         });      
@@ -177,8 +204,5 @@ void removeConnection(WebSocketConnection conn) {
     connections.removeRange(index, 1);
   }
   
-  connections.forEach((WebSocketConnection conn) {
-    conn.send("Other Players: " + (connections.length - 1));
-  });   
-  
+  sendMessageToAllClients("Other Players: " + (connections.length - 1));
 }
