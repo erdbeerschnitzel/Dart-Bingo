@@ -36,6 +36,12 @@ void GameHandler(gameevent){
 
   currentNumber = getRandomNumber();  
   show("the current number is $currentNumber");
+  
+  WebSocket ws =  new WebSocket("ws://localhost:8080/bingo");
+  
+  ws.on.message.add((MessageEvent e) {
+    document.query('#wsmsg').innerHTML = "${e.data}";
+  });
 
     active = true;
     document.query('#getGamecard').on.click.remove(GamecardHandler);

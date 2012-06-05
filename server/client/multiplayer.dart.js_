@@ -3093,6 +3093,9 @@ $dynamic("indexOf$1").Uint8Array = function($0) {
   return this.indexOf($0, (0));
 };
 $dynamic("get$name").WebGLActiveInfo = function() { return this.name; };
+$dynamic("get$on").WebSocket = function() {
+  return new _WebSocketEventsImpl(this);
+}
 $dynamic("$dom_addEventListener$3").WebSocket = function($0, $1, $2) {
   return this.addEventListener($0, $wrap_call$1(to$call$1($1)), $2);
 };
@@ -3100,7 +3103,12 @@ $dynamic("$dom_removeEventListener$3").WebSocket = function($0, $1, $2) {
   return this.removeEventListener($0, $wrap_call$1(to$call$1($1)), $2);
 };
 $inherits(_WebSocketEventsImpl, _EventsImpl);
-function _WebSocketEventsImpl() {}
+function _WebSocketEventsImpl(_ptr) {
+  _EventsImpl.call(this, _ptr);
+}
+_WebSocketEventsImpl.prototype.get$message = function() {
+  return this._get("message");
+}
 $dynamic("get$length").DOMWindow = function() { return this.length; };
 $dynamic("get$name").DOMWindow = function() { return this.name; };
 $dynamic("$dom_addEventListener$3").DOMWindow = function($0, $1, $2) {
@@ -3192,6 +3200,9 @@ _DOMWindowCrossFrameImpl.prototype.get$length = function() {
 function _AudioContextFactoryProvider() {}
 function _PointFactoryProvider() {}
 function _WebSocketFactoryProvider() {}
+_WebSocketFactoryProvider.WebSocket$factory = function(url) {
+  return new WebSocket(url);
+}
 function _TextFactoryProvider() {}
 function _IDBKeyRangeFactoryProvider() {}
 function _TypedArrayFactoryProvider() {}
@@ -3342,6 +3353,11 @@ function GameHandler(gameevent) {
   if (!$globals.first) {
     $globals.currentNumber = getRandomNumber();
     show(("the current number is " + $globals.currentNumber));
+    var ws = _WebSocketFactoryProvider.WebSocket$factory("ws://localhost:8080/bingo");
+    ws.get$on().get$message().add($wrap_call$1((function (e) {
+      get$$document().query("#wsmsg").set$innerHTML(("" + e.data));
+    })
+    ), false);
     $globals.active = true;
     get$$document().query("#getGamecard").get$on().get$click().remove$1(GamecardHandler);
     get$$document().query("#startGame").get$on().get$click().remove$1(GameHandler);
