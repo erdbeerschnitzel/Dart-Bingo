@@ -260,6 +260,9 @@ function $dynamicSetMetadata(inputTable) {
   }
   $dynamicMetadata = table;
 }
+$defProp(Object.prototype, "get$dynamic", function() {
+  "use strict"; return this;
+});
 $defProp(Object.prototype, "noSuchMethod", function(name, args) {
   $throw(new NoSuchMethodException(this, name, args));
 });
@@ -274,6 +277,9 @@ $defProp(Object.prototype, "add$1", function($0) {
 });
 $defProp(Object.prototype, "clear$0", function() {
   return this.noSuchMethod("clear", []);
+});
+$defProp(Object.prototype, "end$0", function() {
+  return this.noSuchMethod("end", []);
 });
 $defProp(Object.prototype, "filter$1", function($0) {
   return this.noSuchMethod("filter", [$0]);
@@ -304,6 +310,9 @@ $defProp(Object.prototype, "remove$0", function() {
 });
 $defProp(Object.prototype, "remove$1", function($0) {
   return this.noSuchMethod("remove", [$0]);
+});
+$defProp(Object.prototype, "start$0", function() {
+  return this.noSuchMethod("start", []);
 });
 function IndexOutOfRangeException(_index) {
   this._index = _index;
@@ -569,8 +578,81 @@ JSSyntaxRegExp._create$ctor = function(pattern, flags) {
 }
 JSSyntaxRegExp._create$ctor.prototype = JSSyntaxRegExp.prototype;
 JSSyntaxRegExp.prototype.is$RegExp = function(){return true};
+JSSyntaxRegExp.prototype.firstMatch = function(str) {
+  var m = this._exec(str);
+  return m == null ? null : new MatchImplementation(this.pattern, str, this._matchStart(m), this.get$_lastIndex(), m);
+}
+JSSyntaxRegExp.prototype._exec = function(str) {
+  return this.re.exec(str);
+}
+JSSyntaxRegExp.prototype._matchStart = function(m) {
+  return m.index;
+}
+JSSyntaxRegExp.prototype.get$_lastIndex = function() {
+  return this.re.lastIndex;
+}
 JSSyntaxRegExp.prototype.hasMatch = function(str) {
   return this.re.test(str);
+}
+JSSyntaxRegExp.prototype.allMatches = function(str) {
+  return new _AllMatchesIterable(this, str);
+}
+JSSyntaxRegExp.prototype.get$_global = function() {
+  return new JSSyntaxRegExp._create$ctor(this.pattern, $add$($add$("g", (this.multiLine ? "m" : "")), (this.ignoreCase ? "i" : "")));
+}
+function MatchImplementation(pattern, str, _start, _end, _groups) {
+  this.pattern = pattern;
+  this.str = str;
+  this._start = _start;
+  this._end = _end;
+  this._groups = _groups;
+}
+MatchImplementation.prototype.start = function() {
+  return this._start;
+}
+MatchImplementation.prototype.end = function() {
+  return this._end;
+}
+MatchImplementation.prototype.$index = function(groupIndex) {
+  return this._groups.$index(groupIndex);
+}
+MatchImplementation.prototype.end$0 = MatchImplementation.prototype.end;
+MatchImplementation.prototype.start$0 = MatchImplementation.prototype.start;
+function _AllMatchesIterable(_re, _str) {
+  this._re = _re;
+  this._str = _str;
+}
+_AllMatchesIterable.prototype.iterator = function() {
+  return new _AllMatchesIterator(this._re, this._str);
+}
+function _AllMatchesIterator(re, _str) {
+  this._str = _str;
+  this._done = false;
+  this._re = re.get$_global();
+}
+_AllMatchesIterator.prototype.next = function() {
+  if (!this.hasNext()) {
+    $throw(const$0001);
+  }
+  var result = this._next;
+  this._next = null;
+  return result;
+}
+_AllMatchesIterator.prototype.hasNext = function() {
+  if (this._done) {
+    return false;
+  }
+  else if (this._next != null) {
+    return true;
+  }
+  this._next = this._re.firstMatch(this._str);
+  if (this._next == null) {
+    this._done = true;
+    return false;
+  }
+  else {
+    return true;
+  }
 }
 var NumImplementation = Number;
 NumImplementation.prototype.hashCode = function() {
@@ -1083,6 +1165,29 @@ StringImplementation.prototype.isEmpty = function() {
 StringImplementation.prototype.contains = function(pattern, startIndex) {
   'use strict'; return this.indexOf(pattern, startIndex) >= 0;
 }
+StringImplementation.prototype._replaceRegExp = function(from, to) {
+  'use strict';return this.replace(from.re, to);
+}
+StringImplementation.prototype._replaceAll = function(from, to) {
+  'use strict';
+  from = new RegExp(from.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), 'g');
+  to = to.replace(/\$/g, '$$$$'); // Escape sequences are fun!
+  return this.replace(from, to);
+}
+StringImplementation.prototype.replaceAll = function(from, to) {
+  if ((typeof(from) == 'string')) return this._replaceAll(from, to);
+  if (!!(from && from.is$RegExp())) return this._replaceRegExp(from.get$dynamic().get$_global(), to);
+  var buffer = new StringBufferImpl("");
+  var lastMatchEnd = (0);
+  var $$list = from.allMatches(this);
+  for (var $$i = $$list.iterator(); $$i.hasNext(); ) {
+    var match = $$i.next();
+    buffer.add$1(this.substring(lastMatchEnd, match.start$0()));
+    buffer.add$1(to);
+    lastMatchEnd = match.end$0();
+  }
+  buffer.add$1(this.substring(lastMatchEnd));
+}
 StringImplementation.prototype.split$_ = function(pattern) {
   if ((typeof(pattern) == 'string')) return this._split(pattern);
   if (!!(pattern && pattern.is$RegExp())) return this._splitRegExp(pattern);
@@ -1093,6 +1198,9 @@ StringImplementation.prototype._split = function(pattern) {
 }
 StringImplementation.prototype._splitRegExp = function(pattern) {
   'use strict'; return this.split(pattern.re);
+}
+StringImplementation.prototype.allMatches = function(str) {
+  $throw("String.allMatches(String str) unimplemented.");
 }
 StringImplementation.prototype.hashCode = function() {
       'use strict';
@@ -2457,6 +2565,9 @@ $dynamic("$dom_removeEventListener$3").MediaStream = function($0, $1, $2) {
   return this.removeEventListener($0, $wrap_call$1(to$call$1($1)), $2);
 };
 $dynamic("get$name").HTMLMapElement = function() { return this.name; };
+$dynamic("start$0").HTMLMarqueeElement = function() {
+  return this.start();
+};
 $dynamic("$dom_addEventListener$3").MediaController = function($0, $1, $2) {
   return this.addEventListener($0, $wrap_call$1(to$call$1($1)), $2);
 };
@@ -2521,6 +2632,9 @@ $dynamic("$dom_addEventListener$3").MessagePort = function($0, $1, $2) {
 };
 $dynamic("$dom_removeEventListener$3").MessagePort = function($0, $1, $2) {
   return this.removeEventListener($0, $wrap_call$1(to$call$1($1)), $2);
+};
+$dynamic("start$0").MessagePort = function() {
+  return this.start();
 };
 $inherits(_MessagePortEventsImpl, _EventsImpl);
 function _MessagePortEventsImpl() {}
@@ -2814,6 +2928,9 @@ $dynamic("$dom_addEventListener$3").SpeechRecognition = function($0, $1, $2) {
 };
 $dynamic("$dom_removeEventListener$3").SpeechRecognition = function($0, $1, $2) {
   return this.removeEventListener($0, $wrap_call$1(to$call$1($1)), $2);
+};
+$dynamic("start$0").SpeechRecognition = function() {
+  return this.start();
 };
 $inherits(_SpeechRecognitionEventsImpl, _EventsImpl);
 function _SpeechRecognitionEventsImpl() {}
@@ -3418,7 +3535,15 @@ function BingoHandler(bingoevent) {
 function MessageHandler(msg) {
   if (msg == "Hello from Server!") return "client hello!";
   if (msg.contains("Other Players:")) {
-    get$$document().query("#players").set$innerHTML(msg);
+    get$$document().query("#wsmsg").set$innerHTML(msg);
+    return "";
+  }
+  if (msg.contains("Starting the Game")) {
+    $globals.gameStarted = true;
+    return "";
+  }
+  if (msg.contains("Number")) {
+    $globals.currentNumber = msg.replaceAll("Number: ", "");
     return "";
   }
   return "";
@@ -3514,6 +3639,7 @@ function $static_init(){
   $globals.active = false;
   $globals.currentNumber = (22);
   $globals.first = true;
+  $globals.gameStarted = false;
 }
 var const$0000 = Object.create(_DeletedKeySentinel.prototype, {});
 var const$0001 = Object.create(NoMoreElementsException.prototype, {});

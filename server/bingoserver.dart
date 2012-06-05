@@ -3,12 +3,15 @@
 
 List<WebSocketConnection> connections;
 List<Client> clients;
+List<int> addNumbers;
 WebSocketHandler wsHandler;
+bool gameStarted = false;
 
 void main() {
   
   connections = new List();
   clients = new List();
+  addNumbers = new List();
   wsHandler = new WebSocketHandler();
   addWebSocketHandlers();
   
@@ -67,22 +70,34 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
       
       if(client.ready) numberReady++;
     });
-    
-    sendMessageToAllClients("Other Players: " + (connections.length - 1) + "   Players Ready: $numberReady");
   }
   
+ 
   if(msg.contains("client notready") && connections.length > 1){
-    
-    int numberReady = 0;
     
     clients.forEach((Client client) {
       
       if(client.con == originalconnection) client.ready = false;
-      
-      if(client.ready) numberReady++;
+
     });
+  
+  }
+  
+  int numberReady = 0;
+  
+  clients.forEach((Client client) {
     
-    sendMessageToAllClients("Other Players: " + (connections.length - 1) + "   Players Ready: $numberReady");
+    if(client.ready) numberReady++;
+  });  
+  
+  sendMessageToAllClients("Other Players: " + (connections.length - 1) + "   Players Ready: $numberReady");
+  
+  if(numberReady == clients.length) {
+    
+    gameStarted = true;
+    startTimer();
+    print("" + new Date.now() + ": Game started...");
+    sendMessageToAllClients("All players are ready! Starting the Game!");
   }
 }
 
@@ -95,22 +110,11 @@ void sendMessageToAllClients(String msg){
 }
 
 void startTimer(){
-  
-  List<int> done = new List<int>();
-  
-  new Timer.repeating(1000, (Timer t) {
-    int time = (10*Math.random()).toInt();
-    time = time.abs().toInt();
-    
-    if(!(done.indexOf(time)>-1)){
-      done.add(time);
-      print("adding $time");
-      
-      sendMessageToAllClients(time.toString());
-    }
-    else {
-      //print('not adding $time');
-    }
+
+  new Timer.repeating(30000, (Timer t) {
+
+    sendMessageToAllClients("Number: " + getRandomNumber());
+
   });
 }
 
@@ -210,6 +214,19 @@ void serveFile(HttpRequest req, HttpResponse resp) {
       resp.outputStream.close();
     }
   }
+}
+
+// get a random number between 1 and 99
+// no duplicates
+int getRandomNumber(){
+  
+  int a = (Math.random()*100).toInt();
+  
+  while(a > 99 || a < 1 || (addNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
+  
+  addNumbers.add(a);
+    
+  return a;
 }
 
 void removeConnection(WebSocketConnection conn) {

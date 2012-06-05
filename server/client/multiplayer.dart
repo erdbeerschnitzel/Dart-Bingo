@@ -8,6 +8,7 @@ int currentNumber = 22;
 List<int> addNumbers;
 bool active = false;
 bool first = true;
+bool gameStarted = false;
 
 void main() {
  
@@ -30,7 +31,7 @@ void main() {
 // ******************
 
 
-// handle next number and computer logic
+// handle next number
 void GameHandler(gameevent){
   
   if(!first){
@@ -114,7 +115,20 @@ String MessageHandler(String msg){
   
   if(msg.contains('Other Players:')) {
     
-    document.query('#players').innerHTML = msg;
+    document.query('#wsmsg').innerHTML = msg;
+    return "";
+  }
+  
+  if(msg.contains('Starting the Game')) {
+    
+    gameStarted = true;
+    return "";
+  }
+  
+  if(msg.contains('Number')) {
+    
+    currentNumber = msg.replaceAll("Number: ", "");
+
     return "";
   }
   
@@ -128,12 +142,6 @@ String MessageHandler(String msg){
 void show(String message) {
   
   document.query('#status').innerHTML = message;
-  
-}
-
-void debug(String message) {
-  
-  document.query('#debug').innerHTML = message;
   
 }
 
@@ -242,8 +250,6 @@ bool checkBingo(Gamecard card){
     if(result) return true;    
     
   }
-  
-  debug("the current number is $currentNumber and the result is $deb");
   
   return false;
 }

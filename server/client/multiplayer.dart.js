@@ -26,7 +26,7 @@ Isolate.$defineClass("HashMapImplementation", "Object", ["_numberOfDeleted", "_n
     var key = $.index(this._keys, i);
     var t0 = !(key === (void 0));
     if (t0) {
-      var t1 = !(key === $.CTC7);
+      var t1 = !(key === $.CTC8);
     } else {
       t1 = t0;
     }
@@ -48,7 +48,7 @@ Isolate.$defineClass("HashMapImplementation", "Object", ["_numberOfDeleted", "_n
     this._numberOfEntries = $.sub(this._numberOfEntries, 1);
     var value = $.index(this._values, index);
     $.indexSet(this._values, index, (void 0));
-    $.indexSet(this._keys, index, $.CTC7);
+    $.indexSet(this._keys, index, $.CTC8);
     this._numberOfDeleted = $.add(this._numberOfDeleted, 1);
     return value;
   } else {
@@ -68,7 +68,7 @@ Isolate.$defineClass("HashMapImplementation", "Object", ["_numberOfDeleted", "_n
   var index = this._probeForAdding$1(key);
   var t0 = $.index(this._keys, index) === (void 0);
   if (!t0) {
-    var t1 = $.index(this._keys, index) === $.CTC7;
+    var t1 = $.index(this._keys, index) === $.CTC8;
   } else {
     t1 = t0;
   }
@@ -106,7 +106,7 @@ Isolate.$defineClass("HashMapImplementation", "Object", ["_numberOfDeleted", "_n
     var t2 = oldKeys[i];
     var t3 = t2 === (void 0);
     if (!t3) {
-      var t4 = t2 === $.CTC7;
+      var t4 = t2 === $.CTC8;
     } else {
       t4 = t3;
     }
@@ -157,7 +157,7 @@ Isolate.$defineClass("HashMapImplementation", "Object", ["_numberOfDeleted", "_n
           var key = $.index(oldKeys, i);
           var t1 = key === (void 0);
           if (!t1) {
-            var t2 = key === $.CTC7;
+            var t2 = key === $.CTC8;
           } else {
             t2 = t1;
           }
@@ -222,7 +222,7 @@ Isolate.$defineClass("HashMapImplementation", "Object", ["_numberOfDeleted", "_n
       } else {
         var t0 = $.ltB(insertionIndex, 0);
         if (t0) {
-          var t1 = $.CTC7 === existingKey;
+          var t1 = $.CTC8 === existingKey;
         } else {
           t1 = t0;
         }
@@ -268,7 +268,7 @@ Isolate.$defineClass("HashMapImplementation", "Object", ["_numberOfDeleted", "_n
           } else {
             var t0 = $.ltB(insertionIndex, 0);
             if (t0) {
-              var t1 = $.CTC7 === existingKey;
+              var t1 = $.CTC8 === existingKey;
             } else {
               t1 = t0;
             }
@@ -370,7 +370,7 @@ Isolate.$defineClass("HashSetIterator", "Object", ["_nextValidIndex", "_entries"
     entry = $.index(this._entries, this._nextValidIndex);
     var t1 = entry === (void 0);
     if (!t1) {
-      var t2 = entry === $.CTC7;
+      var t2 = entry === $.CTC8;
     } else {
       t2 = t1;
     }
@@ -390,7 +390,7 @@ Isolate.$defineClass("HashSetIterator", "Object", ["_nextValidIndex", "_entries"
     return false;
   } else {
   }
-  if ($.index(this._entries, this._nextValidIndex) === $.CTC7) {
+  if ($.index(this._entries, this._nextValidIndex) === $.CTC8) {
     this._advance$0();
   } else {
   }
@@ -1466,14 +1466,14 @@ $._containsRef = function(c, ref) {
   return false;
 };
 
-$._NodeListWrapper$1 = function(list) {
-  return new $._NodeListWrapper(list);
-};
-
 $.forEach2 = function(iterable, f) {
   for (var t0 = $.iterator(iterable); t0.hasNext$0() === true; ) {
     f.$call$1(t0.next$0());
   }
+};
+
+$._NodeListWrapper$1 = function(list) {
+  return new $._NodeListWrapper(list);
 };
 
 $.isJsArray = function(value) {
@@ -1661,6 +1661,10 @@ $.tdiv = function(a, b) {
   return a.operator$tdiv$1(b);
 };
 
+$.JSSyntaxRegExp$3 = function(pattern, multiLine, ignoreCase) {
+  return new $.JSSyntaxRegExp(ignoreCase, multiLine, pattern);
+};
+
 $.typeNameInChrome = function(obj) {
   var name$ = (obj.constructor.name);
   if (name$ === 'Window') {
@@ -1701,6 +1705,37 @@ $.shr = function(a, b) {
   } else {
   }
   return a.operator$shr$1(b);
+};
+
+$.stringReplaceAllUnchecked = function(receiver, from, to) {
+  if (typeof receiver !== 'string') return $.stringReplaceAllUnchecked$bailout(receiver, from, to,  0);
+  if (typeof from === 'string') {
+    if (from === '') {
+      if (receiver === '') {
+        return to;
+      } else {
+        var result = $.StringBufferImpl$1('');
+        var length$ = receiver.length;
+        result.add$1(to);
+        for (var i = 0; i < length$; i = i + 1) {
+          var t0 = receiver.length;
+          if (i < 0 || i >= t0) throw $.ioore(i);
+          result.add$1(receiver[i]);
+          result.add$1(to);
+        }
+        return result.toString$0();
+      }
+    } else {
+      return $.stringReplaceJS(receiver, $.regExpMakeNative($.JSSyntaxRegExp$3((from.replace($.regExpMakeNative($.CTC5, true), "\\$&")), false, false), true), to);
+    }
+  } else {
+    if (typeof from === 'object' && !!from.is$JSSyntaxRegExp) {
+      return $.stringReplaceJS(receiver, $.regExpMakeNative(from, true), to);
+    } else {
+      $.checkNull(from);
+      throw $.captureStackTrace('StringImplementation.replaceAll(Pattern) UNIMPLEMENTED');
+    }
+  }
 };
 
 $.eqNull = function(a) {
@@ -1957,10 +1992,6 @@ $._DocumentEventsImpl$1 = function(_ptr) {
   return new $._DocumentEventsImpl(_ptr);
 };
 
-$.regExpTest = function(regExp, str) {
-  return $.regExpGetNative(regExp).test(str);
-};
-
 $.filter = function(receiver, predicate) {
   if ($.isJsArray(receiver) !== true) {
     return receiver.filter$1(predicate);
@@ -1969,8 +2000,8 @@ $.filter = function(receiver, predicate) {
   }
 };
 
-$.WebSocket = function(url) {
-  return new WebSocket(url);;
+$.regExpTest = function(regExp, str) {
+  return $.regExpGetNative(regExp).test(str);
 };
 
 $.filter2 = function(source, destination, f) {
@@ -1982,6 +2013,10 @@ $.filter2 = function(source, destination, f) {
     }
   }
   return destination;
+};
+
+$.WebSocket = function(url) {
+  return new WebSocket(url);;
 };
 
 $._EventsImpl$1 = function(_ptr) {
@@ -2025,6 +2060,14 @@ $._SVGElementInstanceEventsImpl$1 = function(_ptr) {
   return new $._SVGElementInstanceEventsImpl(_ptr);
 };
 
+$.iterator = function(receiver) {
+  if ($.isJsArray(receiver) === true) {
+    return $.ListIterator$1(receiver);
+  } else {
+  }
+  return receiver.iterator$0();
+};
+
 $.filter3 = function(source, destination, f) {
   for (var t0 = $.iterator(source); t0.hasNext$0() === true; ) {
     var t1 = t0.next$0();
@@ -2034,14 +2077,6 @@ $.filter3 = function(source, destination, f) {
     }
   }
   return destination;
-};
-
-$.iterator = function(receiver) {
-  if ($.isJsArray(receiver) === true) {
-    return $.ListIterator$1(receiver);
-  } else {
-  }
-  return receiver.iterator$0();
 };
 
 $.add$1 = function(receiver, value) {
@@ -2274,6 +2309,10 @@ $.MatchImplementation$5 = function(pattern, str, _start, _end, _groups) {
   return new $.MatchImplementation(_groups, _end, _start, str, pattern);
 };
 
+$.stringReplaceJS = function(receiver, replacer, to) {
+  return receiver.replace(replacer, to.replace('$', '$$$$'));
+};
+
 $.UnsupportedOperationException$1 = function(_message) {
   return new $.UnsupportedOperationException(_message);
 };
@@ -2313,6 +2352,15 @@ $._DedicatedWorkerContextEventsImpl$1 = function(_ptr) {
 
 $._FileReaderEventsImpl$1 = function(_ptr) {
   return new $._FileReaderEventsImpl(_ptr);
+};
+
+$.replaceAll = function(receiver, from, to) {
+  if (!(typeof receiver === 'string')) {
+    return receiver.replaceAll$2(from, to);
+  } else {
+  }
+  $.checkString(to);
+  return $.stringReplaceAllUnchecked(receiver, from, to);
 };
 
 $.NoMoreElementsException$0 = function() {
@@ -2980,7 +3028,7 @@ $.dynamicFunction = function(name$) {
   } else {
   }
   var methods = ({});
-  var dartMethod = (Object.getPrototypeOf($.CTC8)[name$]);
+  var dartMethod = (Object.getPrototypeOf($.CTC9)[name$]);
   if (!(dartMethod === (void 0))) {
     methods['Object'] = dartMethod;
   } else {
@@ -3214,7 +3262,7 @@ $.getFunctionForTypeNameOf = function() {
   } else {
   }
   var userAgent = (navigator.userAgent);
-  if ($.contains$1(userAgent, $.CTC6) === true) {
+  if ($.contains$1(userAgent, $.CTC7) === true) {
     return $.typeNameInChrome;
   } else {
     if ($.contains$1(userAgent, 'Firefox') === true) {
@@ -3394,11 +3442,29 @@ $.MessageHandler = function(msg) {
   } else {
   }
   if ($.contains$1(msg, 'Other Players:') === true) {
-    $.document().query$1('#players').set$innerHTML(msg);
+    $.document().query$1('#wsmsg').set$innerHTML(msg);
+    return '';
+  } else {
+  }
+  if ($.contains$1(msg, 'Starting the Game') === true) {
+    $.gameStarted = true;
+    return '';
+  } else {
+  }
+  if ($.contains$1(msg, 'Number') === true) {
+    $.currentNumber = $.replaceAll(msg, 'Number: ', '');
     return '';
   } else {
   }
   return '';
+};
+
+$.forEach = function(receiver, f) {
+  if ($.isJsArray(receiver) !== true) {
+    return receiver.forEach$1(f);
+  } else {
+    return $.forEach2(receiver, f);
+  }
 };
 
 $.setRuntimeTypeInfo = function(target, typeInfo) {
@@ -3414,14 +3480,6 @@ $.document = function() {
 
 $._FileWriterEventsImpl$1 = function(_ptr) {
   return new $._FileWriterEventsImpl(_ptr);
-};
-
-$.forEach = function(receiver, f) {
-  if ($.isJsArray(receiver) !== true) {
-    return receiver.forEach$1(f);
-  } else {
-    return $.forEach2(receiver, f);
-  }
 };
 
 $.NoSuchMethodException$4 = function(_receiver, _functionName, _arguments, _existingArgumentNames) {
@@ -3620,6 +3678,47 @@ $.getRange2$bailout = function(a, start, length$, accumulator, state, env0) {
   }
 };
 
+$.stringReplaceAllUnchecked$bailout = function(receiver, from, to, state, env0) {
+  switch (state) {
+    case 1:
+      t0 = env0;
+      break;
+  }
+  switch (state) {
+    case 0:
+    case 1:
+      state = 0;
+      if (typeof from === 'string') {
+        if (from === '') {
+          if ($.eqB(receiver, '')) {
+            return to;
+          } else {
+            var result = $.StringBufferImpl$1('');
+            var length$ = $.get$length(receiver);
+            result.add$1(to);
+            var i = 0;
+            L0: while (true) {
+              if (!$.ltB(i, length$)) break L0;
+              result.add$1($.index(receiver, i));
+              result.add$1(to);
+              i = i + 1;
+            }
+            return result.toString$0();
+          }
+        } else {
+          return $.stringReplaceJS(receiver, $.regExpMakeNative($.JSSyntaxRegExp$3((from.replace($.regExpMakeNative($.CTC5, true), "\\$&")), false, false), true), to);
+        }
+      } else {
+        if (typeof from === 'object' && !!from.is$JSSyntaxRegExp) {
+          return $.stringReplaceJS(receiver, $.regExpMakeNative(from, true), to);
+        } else {
+          $.checkNull(from);
+          throw $.captureStackTrace('StringImplementation.replaceAll(Pattern) UNIMPLEMENTED');
+        }
+      }
+  }
+};
+
 $.indexOf2$bailout = function(a, element, startIndex, endIndex, state, env0, env1) {
   switch (state) {
     case 1:
@@ -3803,12 +3902,14 @@ Isolate.makeConstantList = function(list) {
 $.CTC = Isolate.makeConstantList([]);
 $.CTC3 = new Isolate.$isolateProperties.UnsupportedOperationException('');
 $.CTC4 = new Isolate.$isolateProperties.IllegalArgumentException('Invalid list length');
-$.CTC5 = new Isolate.$isolateProperties.JSSyntaxRegExp(false, false, '^#[_a-zA-Z]\\w*$');
-$.CTC7 = new Isolate.$isolateProperties._DeletedKeySentinel();
-$.CTC6 = new Isolate.$isolateProperties.JSSyntaxRegExp(false, false, 'Chrome|DumpRenderTree');
-$.CTC8 = new Isolate.$isolateProperties.Object();
+$.CTC6 = new Isolate.$isolateProperties.JSSyntaxRegExp(false, false, '^#[_a-zA-Z]\\w*$');
+$.CTC8 = new Isolate.$isolateProperties._DeletedKeySentinel();
+$.CTC7 = new Isolate.$isolateProperties.JSSyntaxRegExp(false, false, 'Chrome|DumpRenderTree');
+$.CTC9 = new Isolate.$isolateProperties.Object();
+$.CTC5 = new Isolate.$isolateProperties.JSSyntaxRegExp(false, false, '[-[\\]{}()*+?.,\\\\^$|#\\s]');
 $.CTC2 = new Isolate.$isolateProperties.NoMoreElementsException();
 $.first = true;
+$.gameStarted = false;
 $.active = false;
 $._getTypeNameOf = (void 0);
 $.playercard = (void 0);
@@ -4157,7 +4258,7 @@ $.$defineNativeClass('HTMLDocument', [], {
   return this.querySelector(selectors);;
  },
  query$1: function(selectors) {
-  if ($.CTC5.hasMatch$1(selectors) === true) {
+  if ($.CTC6.hasMatch$1(selectors) === true) {
     return this.$dom_getElementById$1($.substring$1(selectors, 1));
   } else {
   }
