@@ -26,11 +26,13 @@ void main() {
 void addWebSocketHandlers(WebSocketHandler wsHandler){
   
   wsHandler.onOpen = (WebSocketConnection conn) {
+    print("Client connected...");
+    conn.send("Hello from Server!");
     connections.add(conn);    
     conn.onClosed = (a, b) => removeConnection(conn);
     conn.onError = (_) => removeConnection(conn);
   };
-
+  
 }
 
 void startTimer(){
@@ -64,7 +66,7 @@ void serveFile(HttpRequest req, HttpResponse resp) {
   String heads = req.headers.toString();
   
   //login post
-  if((path.contains("client.html") && req.method == "POST") || (path.contains("client.html") && heads.contains("multiplayer.html"))){
+  if((path.contains("singleplayer.html") && req.method == "POST") || (path.contains("singleplayer.html") && heads.contains("multiplayer.html"))){
     
     print("matched");
     
@@ -112,7 +114,7 @@ void serveFile(HttpRequest req, HttpResponse resp) {
       
           if(valid){
             
-            File client = new File("./client/client.html");
+            File client = new File("./client/singleplayer.html");
             
             resp.outputStream.writeString(client.readAsTextSync());
             resp.outputStream.close();
@@ -131,7 +133,7 @@ void serveFile(HttpRequest req, HttpResponse resp) {
     
   } else {
     
-    if(!path.contains("client.html")){
+    if(!path.contains("singleplayer.html")){
   
     File file = new File(path);
     file.exists().then((bool exists) {
