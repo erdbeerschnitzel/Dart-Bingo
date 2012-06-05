@@ -3392,7 +3392,14 @@ function GameHandler(gameevent) {
   }
 }
 function ReadyHandler(readyevent) {
-  $globals.ws.send("client ready");
+  if ($eq$(get$$document().query("#startGame").get$value(), "I'm ready!")) {
+    $globals.ws.send("client ready");
+    get$$document().query("#startGame").set$value("I'm not ready!");
+  }
+  else {
+    $globals.ws.send("client notready");
+    get$$document().query("#startGame").set$value("I'm ready!");
+  }
 }
 function GamecardHandler(gamecardevent) {
   $globals.playercard = new Gamecard();

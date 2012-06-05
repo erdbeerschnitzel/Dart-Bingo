@@ -70,6 +70,20 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
     
     sendMessageToAllClients("Other Players: " + (connections.length - 1) + "   Players Ready: $numberReady");
   }
+  
+  if(msg.contains("client notready") && connections.length > 1){
+    
+    int numberReady = 0;
+    
+    clients.forEach((Client client) {
+      
+      if(client.con == originalconnection) client.ready = false;
+      
+      if(client.ready) numberReady++;
+    });
+    
+    sendMessageToAllClients("Other Players: " + (connections.length - 1) + "   Players Ready: $numberReady");
+  }
 }
 
 // send a message to all WebSocket clients

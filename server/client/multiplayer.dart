@@ -64,7 +64,19 @@ void GameHandler(gameevent){
 // handles ready button
 void ReadyHandler(readyevent){
   
-  ws.send("client ready");
+  if(document.query('#startGame').value == "I'm ready!"){
+    
+    ws.send("client ready");
+    document.query('#startGame').value = "I'm not ready!";
+  }
+  else {
+    
+    ws.send("client notready");
+    document.query('#startGame').value = "I'm ready!";
+  }
+
+  
+  
 }
 
 // handles gamecard creating

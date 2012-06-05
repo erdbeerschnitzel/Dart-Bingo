@@ -2064,7 +2064,13 @@ $.regExpExec = function(regExp, str) {
 };
 
 $.ReadyHandler = function(readyevent) {
-  $.ws.send$1('client ready');
+  if ($.eqB($.document().query$1('#startGame').get$value(), 'I\'m ready!')) {
+    $.ws.send$1('client ready');
+    $.document().query$1('#startGame').set$value('I\'m not ready!');
+  } else {
+    $.ws.send$1('client notready');
+    $.document().query$1('#startGame').set$value('I\'m ready!');
+  }
 };
 
 $.geB = function(a, b) {
@@ -3877,7 +3883,7 @@ $.$defineNativeClass('HTMLAreaElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('Attr', ["value!"], {
+$.$defineNativeClass('Attr', ["value="], {
 });
 
 $.$defineNativeClass('AudioBuffer', ["length?"], {
@@ -3893,7 +3899,7 @@ $.$defineNativeClass('HTMLAudioElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('AudioParam', ["value!"], {
+$.$defineNativeClass('AudioParam', ["value="], {
 });
 
 $.$defineNativeClass('HTMLBRElement', [], {
@@ -3928,7 +3934,7 @@ $.$defineNativeClass('HTMLBodyElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLButtonElement', ["value!"], {
+$.$defineNativeClass('HTMLButtonElement', ["value="], {
  is$Element: function() { return true; }
 });
 
@@ -4034,7 +4040,7 @@ $.$defineNativeClass('DOMSelection', [], {
  }
 });
 
-$.$defineNativeClass('DOMSettableTokenList', ["value!"], {
+$.$defineNativeClass('DOMSettableTokenList', ["value="], {
 });
 
 $.$defineNativeClass('DOMStringList', ["length?"], {
@@ -4609,6 +4615,9 @@ $.$defineNativeClass('HTMLHtmlElement', [], {
  is$Element: function() { return true; }
 });
 
+$.$defineNativeClass('IDBCursorWithValue', ["value?"], {
+});
+
 $.$defineNativeClass('IDBDatabase', [], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
@@ -4698,7 +4707,7 @@ $.$defineNativeClass('HTMLImageElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLInputElement', ["value!", "pattern?"], {
+$.$defineNativeClass('HTMLInputElement', ["value=", "pattern?"], {
  get$on: function() {
   return $._InputElementEventsImpl$1(this);
  },
@@ -4859,7 +4868,7 @@ $.$defineNativeClass('HTMLKeygenElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLLIElement', ["value!"], {
+$.$defineNativeClass('HTMLLIElement', ["value="], {
  is$Element: function() { return true; }
 });
 
@@ -4995,7 +5004,7 @@ $.$defineNativeClass('HTMLMetaElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLMeterElement', ["value!"], {
+$.$defineNativeClass('HTMLMeterElement', ["value="], {
  is$Element: function() { return true; }
 });
 
@@ -5209,11 +5218,11 @@ $.$defineNativeClass('HTMLOptGroupElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLOptionElement', ["value!"], {
+$.$defineNativeClass('HTMLOptionElement', ["value="], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLOutputElement', ["value!"], {
+$.$defineNativeClass('HTMLOutputElement', ["value="], {
  is$Element: function() { return true; }
 });
 
@@ -5221,7 +5230,7 @@ $.$defineNativeClass('HTMLParagraphElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLParamElement', ["value!"], {
+$.$defineNativeClass('HTMLParamElement', ["value="], {
  is$Element: function() { return true; }
 });
 
@@ -5247,7 +5256,7 @@ $.$defineNativeClass('HTMLPreElement', [], {
 $.$defineNativeClass('ProcessingInstruction', ["data?"], {
 });
 
-$.$defineNativeClass('HTMLProgressElement', ["value!"], {
+$.$defineNativeClass('HTMLProgressElement', ["value="], {
  is$Element: function() { return true; }
 });
 
@@ -5255,7 +5264,7 @@ $.$defineNativeClass('HTMLQuoteElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('RadioNodeList', ["value!"], {
+$.$defineNativeClass('RadioNodeList', ["value="], {
  is$List2: function() { return true; },
  is$Collection: function() { return true; }
 });
@@ -5297,7 +5306,7 @@ $.$defineNativeClass('SVGAltGlyphItemElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('SVGAngle', ["value!"], {
+$.$defineNativeClass('SVGAngle', ["value="], {
 });
 
 $.$defineNativeClass('SVGAnimateColorElement', [], {
@@ -5546,7 +5555,7 @@ $.$defineNativeClass('SVGImageElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('SVGLength', ["value!"], {
+$.$defineNativeClass('SVGLength', ["value="], {
 });
 
 $.$defineNativeClass('SVGLengthList', [], {
@@ -5583,7 +5592,7 @@ $.$defineNativeClass('SVGMissingGlyphElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('SVGNumber', ["value!"], {
+$.$defineNativeClass('SVGNumber', ["value="], {
 });
 
 $.$defineNativeClass('SVGNumberList', [], {
@@ -5715,7 +5724,7 @@ $.$defineNativeClass('HTMLScriptElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLSelectElement', ["value!", "length="], {
+$.$defineNativeClass('HTMLSelectElement', ["value=", "length="], {
  is$Element: function() { return true; }
 });
 
@@ -5897,7 +5906,7 @@ $.$defineNativeClass('HTMLTableSectionElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLTextAreaElement', ["value!"], {
+$.$defineNativeClass('HTMLTextAreaElement', ["value="], {
  is$Element: function() { return true; }
 });
 
@@ -6256,8 +6265,8 @@ $.$defineNativeClass('XPathException', ["message?"], {
  }
 });
 
-// 289 dynamic classes.
-// 307 classes
+// 290 dynamic classes.
+// 308 classes
 // 27 !leaf
 (function(){
   var v0/*class(_SVGTextPositioningElementImpl)*/ = 'SVGTextPositioningElement|SVGTextElement|SVGTSpanElement|SVGTRefElement|SVGAltGlyphElement';
