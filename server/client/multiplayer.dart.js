@@ -2129,6 +2129,12 @@ $.regExpAttachGlobalNative = function(regExp) {
 $.BingoHandler = function(bingoevent) {
   if ($.gameStarted !== true) {
     $.show('The Game has\'n started yet!');
+  } else {
+    if ($.checkBingo($.playercard) === true) {
+      $.ws.send$1('thisisbingo');
+    } else {
+      $.show('You don\'t have a Bingo!');
+    }
   }
 };
 
@@ -2876,6 +2882,23 @@ $.addAll = function(receiver, collection) {
   for (; iterator.hasNext$0() === true; ) {
     $.add$1(receiver, iterator.next$0());
   }
+};
+
+$.checkBingo = function(card) {
+  for (var result = true, i = 0; i < 5; ++i) {
+    for (var t1 = i === 2, x = 0; x < 5; ++x) {
+      if (t1 && x === 2) {
+      } else {
+        if ($.gtB($.index($.index(card.get$fields(), i), x), 0)) {
+          result = false;
+        }
+      }
+    }
+    if (result) {
+      return true;
+    }
+  }
+  return false;
 };
 
 $.objectToString = function(object) {

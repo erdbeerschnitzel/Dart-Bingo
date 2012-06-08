@@ -102,7 +102,14 @@ void BingoHandler(bingoevent){
   }
   else {
     
-    
+    if(checkBingo(playercard)) {
+      
+      ws.send("thisisbingo");
+    }
+    else {
+      
+      show("You don't have a Bingo!");
+    }
   }
   
 }
@@ -232,8 +239,6 @@ bool checkBingo(Gamecard card){
   
   bool result = true;
   
-  String deb = "";
-  
   for(int i = 0; i < 5; i++){
     
     
@@ -245,8 +250,7 @@ bool checkBingo(Gamecard card){
       {
       
         if(card.fields[i][x] > 0) result = false;
-        
-        deb = deb + "$i$x: " + card.fields[i][x] + " ";
+
       }
     }
       
