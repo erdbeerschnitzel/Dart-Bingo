@@ -6,6 +6,7 @@ List<Client> clients;
 List<int> addNumbers;
 WebSocketHandler wsHandler;
 bool gameStarted = false;
+Time messageTimer;
 
 void main() {
   
@@ -52,14 +53,17 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
   
   print("" + new Date.now() + ": Client sent message: $msg");
  
+  // handle client connect
   if(msg.contains("client hello") && connections.length > 1) sendMessageToAllClients("Other Players: " + (connections.length - 1));
   
+  // handle single client ready 
   if(msg.contains("client ready") && connections.length == 1){
     
     connections[0].send("You need to wait for other players!");
     clients[0].ready = true;
   }
 
+  // handle client ready
   if(msg.contains("client ready") && connections.length > 1){
     
     int numberReady = 0;
@@ -72,7 +76,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
     });
   }
   
- 
+  // handle client not ready
   if(msg.contains("client notready") && connections.length > 1){
     
     clients.forEach((Client client) {
@@ -92,6 +96,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
   
   sendMessageToAllClients("Other Players: " + (connections.length - 1) + "   Players Ready: $numberReady");
   
+  // when all clients are ready start the game
   if(numberReady == clients.length) {
     
     gameStarted = true;
@@ -99,6 +104,16 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
     print("" + new Date.now() + ": Game started...");
     sendMessageToAllClients("All players are ready! Starting the Game!");
   }
+  
+  
+  // handle bingo
+  if(msg.contains("thisisbingo")) {
+    
+    gameStarted = false;
+    messageTimer.cancel();
+    sendMessageToAllClients("Player has Bingo. Game stopped.");
+  }
+  
 }
 
 // send a message to all WebSocket clients
@@ -111,11 +126,12 @@ void sendMessageToAllClients(String msg){
 
 void startTimer(){
 
-  new Timer.repeating(15000, (Timer t) {
+  messageTimer = new Timer.repeating(15000, (Timer t) {
 
     if(gameStarted) sendMessageToAllClients("Number: " + getRandomNumber());
 
   });
+  
 }
 
 // serving http requests
