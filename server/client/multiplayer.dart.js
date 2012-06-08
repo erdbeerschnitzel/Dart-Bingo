@@ -2128,7 +2128,7 @@ $.regExpAttachGlobalNative = function(regExp) {
 
 $.BingoHandler = function(bingoevent) {
   if ($.gameStarted !== true) {
-    $.show('The Game has\'n started yet!');
+    $.show('The Game hasn\'t started yet or already ended!');
   } else {
     if ($.checkBingo($.playercard) === true) {
       $.ws.send$1('thisisbingo');
@@ -3225,6 +3225,10 @@ $.MessageHandler = function(msg) {
   }
   if ($.contains$1(msg, 'Number') === true) {
     $.currentNumber = $.replaceAll(msg, 'Number: ', '');
+    return '';
+  }
+  if ($.contains$1(msg, 'Player has Bingo. Game stopped.') === true) {
+    $.gameStarted = false;
     return '';
   }
   return '';

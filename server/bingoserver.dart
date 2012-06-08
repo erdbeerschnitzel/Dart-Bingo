@@ -6,7 +6,7 @@ List<Client> clients;
 List<int> addNumbers;
 WebSocketHandler wsHandler;
 bool gameStarted = false;
-Time messageTimer;
+Timer messageTimer;
 
 void main() {
   
@@ -257,6 +257,7 @@ void removeConnection(WebSocketConnection conn) {
     
     print("" + new Date.now() + ": All Clients disconnected. Game stopped.");
     gameStarted = false;
+    messageTimer.cancel();
   }
   
   sendMessageToAllClients("Other Players: " + (connections.length - 1));

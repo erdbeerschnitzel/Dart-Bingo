@@ -98,7 +98,7 @@ void BingoHandler(bingoevent){
   
   if(!gameStarted){
     
-    show("The Game has'n started yet!");
+    show("The Game hasn't started yet or already ended!");
   }
   else {
     
@@ -139,6 +139,12 @@ String MessageHandler(String msg){
     
     currentNumber = msg.replaceAll("Number: ", "");
 
+    return "";
+  }
+  
+  if(msg.contains("Player has Bingo. Game stopped.")){
+    
+    gameStarted = false;
     return "";
   }
   
