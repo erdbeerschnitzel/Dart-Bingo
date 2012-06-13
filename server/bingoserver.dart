@@ -1,5 +1,5 @@
 #import('dart:io');
-#source('client\\Client.dart');
+#source('Client.dart');
 
 List<WebSocketConnection> connections;
 List<Client> clients;
@@ -21,9 +21,6 @@ void main() {
   server.addRequestHandler((HttpRequest req) => (req.path == "/bingo"), wsHandler.onRequest);
   server.addRequestHandler((_) => true, serveFile); 
 
-
-  //startTimer();
-  
   server.listen("127.0.0.1", 8080);  
   
   print("running..." + new Date.now().milliseconds);
@@ -38,7 +35,7 @@ void addWebSocketHandlers(){
     print("" + new Date.now() + ": Client connected...");
     conn.send("Hello from Server!");
 
-    clients.add(new Client.bla(conn, false));
+    clients.add(new Client.start(conn, false));
     
     connections.add(conn);    
     conn.onClosed = (a, b) => removeConnection(conn);
@@ -97,7 +94,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
   sendMessageToAllClients("Other Players: " + (connections.length - 1) + "   Players Ready: $numberReady");
   
   // when all clients are ready start the game
-  if(numberReady == clients.length) {
+  if(numberReady == clients.length && numberReady > 1) {
     
     gameStarted = true;
     startTimer();

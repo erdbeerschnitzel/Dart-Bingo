@@ -5,11 +5,8 @@ class Client {
   bool ready = false;
   WebSocketConnection con; 
   
-  
   Client();
   
-  Client.bla(WebSocketConnection this.con, bool this.ready);
-  
-
+  Client.start(WebSocketConnection this.con, bool this.ready);
   
 }
