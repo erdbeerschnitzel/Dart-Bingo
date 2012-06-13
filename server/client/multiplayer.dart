@@ -80,7 +80,7 @@ void ReadyHandler(readyevent){
 
 // handles gamecard creating
 void GamecardHandler(gamecardevent){
-    
+
     playercard = new Gamecard();
   
     document.query('#playertable').innerHTML = createCard(playercard);
@@ -165,24 +165,24 @@ void show(String message) {
 // TODO: improve card creating algo
 String createCard(Gamecard card){
   
-  String cardstring = "";
+  StringBuffer cardstring = new StringBuffer();
   
   int i = 0;
   int x = 0;
   
   for(List liste in card.fields){
     
-    cardstring = cardstring + '<tr>';
+    cardstring.add('<tr>');
     
     for(var value in liste){
       
         // this adds a td element with specific class and specific value
-        if(x < 5 && i < 5)  cardstring = cardstring + '<td id="p' + i + x + '"' + 'class=top>' + card.fields[i][x] + '</td>';
+        if(x < 5 && i < 5)  cardstring.add('<td id="p$i$x"class=top>${card.fields[i][x]}</td>');
 
         // close the tr element
         if(x == 4){ 
           
-          cardstring = cardstring + '</tr>';
+          cardstring.add('</tr>');
           x = 0;
         
         } else {
@@ -199,7 +199,7 @@ String createCard(Gamecard card){
 
   }
   
-  return cardstring;
+  return cardstring.toString();
 }
 
 // add CellClickHandlers to playercard

@@ -2512,20 +2512,21 @@ $.checkNull = function(object) {
 };
 
 $.createCard = function(card) {
-  for (var t1 = $.iterator(card.get$fields()), cardstring = '', x = 0, i = 0; t1.hasNext$0() === true; ) {
+  var cardstring = $.StringBufferImpl$1('');
+  for (var t1 = $.iterator(card.get$fields()), x = 0, i = 0; t1.hasNext$0() === true; ) {
     var t2 = t1.next$0();
-    cardstring = cardstring + '<tr>';
+    cardstring.add$1('<tr>');
     for (t2 = $.iterator(t2), t3 = i < 5; t2.hasNext$0() === true; ) {
       t2.next$0();
-      if (x < 5 && t3) cardstring = $.add($.add($.add(cardstring + '<td id="p', i), x) + '"' + 'class=top>', $.index($.index(card.get$fields(), i), x)) + '</td>';
+      x < 5 && t3 && cardstring.add$1('<td id="p' + $.S(i) + $.S(x) + '"class=top>' + $.S($.index($.index(card.get$fields(), i), x)) + '</td>');
       if (x === 4) {
-        cardstring = cardstring + '</tr>';
+        cardstring.add$1('</tr>');
         x = 0;
       } else ++x;
     }
     i = i === 4 ? 0 : i + 1;
   }
-  return cardstring;
+  return cardstring.toString$0();
   var t3;
 };
 
@@ -2576,6 +2577,7 @@ $.index$slow = function(a, index) {
 };
 
 $.GamecardHandler = function(gamecardevent) {
+  $.show('wtf!');
   $.playercard = $.Gamecard$0();
   var t1 = $.createCard($.playercard);
   $.document().query$1('#playertable').set$innerHTML(t1);

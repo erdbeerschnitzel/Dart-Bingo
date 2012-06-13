@@ -121,32 +121,32 @@ void debug(String message) {
 // TODO: improve card creating algo
 String createCard(Gamecard card, bool forComputer){
   
-  String cardstring = "";
+  StringBuffer cardstring = new StringBuffer();
   
   int i = 0;
   int x = 0;
   
   for(List liste in card.fields){
     
-    cardstring = cardstring + '<tr>';
+    cardstring.add('<tr>');
     
     for(var value in liste){
       
         // this adds a td element with specific class and specific value
        if(forComputer){
           
-          if(x < 5 && i < 5)  cardstring = cardstring + '<td id="c' + i + x + '"' + 'class=top>' + card.fields[i][x] + '</td>';
+          if(x < 5 && i < 5)  cardstring.add('<td id="c$i$x"class=top>${card.fields[i][x]}</td>');
         }
         else {
           
-          if(x < 5 && i < 5)  cardstring = cardstring + '<td id="p' + i + x + '"' + 'class=top>' + card.fields[i][x] + '</td>';
+          if(x < 5 && i < 5)  cardstring.add('<td id="p$i$x"class=top>${card.fields[i][x]}</td>');
           
         }
         
         // close the tr element
         if(x == 4){ 
           
-          cardstring = cardstring + '</tr>';
+          cardstring.add('</tr>');
           x = 0;
         
         } else {
@@ -163,7 +163,7 @@ String createCard(Gamecard card, bool forComputer){
 
   }
   
-  return cardstring;
+  return cardstring.toString();
 }
 
 
@@ -224,7 +224,7 @@ bool checkBingo(Gamecard card){
       
         if(card.fields[i][x] > 0) result = false;
         
-        deb = deb + "$i$x: " + card.fields[i][x] + " ";
+        //deb = deb + "$i$x: " + card.fields[i][x] + " ";
       }
     }
       
@@ -232,7 +232,7 @@ bool checkBingo(Gamecard card){
     
   }
   
-  debug("the current number is $currentNumber and the result is $deb");
+  //debug("the current number is $currentNumber and the result is $deb");
   
   return false;
 }
