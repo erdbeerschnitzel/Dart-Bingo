@@ -9,7 +9,7 @@ bool gameStarted = false;
 Timer messageTimer;
 
 void main() {
-  
+
   connections = new List();
   clients = new List();
   addNumbers = new List();
@@ -23,16 +23,17 @@ void main() {
 
   server.listen("127.0.0.1", 8080);  
   
-  print("running..." + new Date.now().milliseconds);
+  print("running... ${new Date.now().milliseconds}");
 
 }
+
 
 // add Handlers to WebsocketConnectionHandler :)
 void addWebSocketHandlers(){
   
   wsHandler.onOpen = (WebSocketConnection conn) {
     
-    print("" + new Date.now() + ": Client connected...");
+    print("${new Date.now()}: Client connected...");
     conn.send("Hello from Server!");
 
     clients.add(new Client.start(conn, false));
@@ -48,10 +49,10 @@ void addWebSocketHandlers(){
 // check incoming messages
 void delegateMessage(String msg, WebSocketConnection originalconnection){
   
-  print("" + new Date.now() + ": Client sent message: $msg");
+  print("${new Date.now()}: Client sent message: $msg");
  
   // handle client connect
-  if(msg.contains("client hello") && connections.length > 1) sendMessageToAllClients("Other Players: " + (connections.length - 1));
+  if(msg.contains("client hello") && connections.length > 1) sendMessageToAllClients("Other Players: ${(connections.length - 1)}");
   
   // handle single client ready 
   if(msg.contains("client ready") && connections.length == 1){
@@ -91,14 +92,14 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
     if(client.ready) numberReady++;
   });  
   
-  sendMessageToAllClients("Other Players: " + (connections.length - 1) + "   Players Ready: $numberReady");
+  sendMessageToAllClients("Other Players: ${(connections.length - 1)}   Players Ready: $numberReady");
   
   // when all clients are ready start the game
   if(numberReady == clients.length && numberReady > 1) {
     
     gameStarted = true;
     startTimer();
-    print("" + new Date.now() + ": Game started...");
+    print("${new Date.now()}: Game started...");
     sendMessageToAllClients("All players are ready! Starting the Game!");
   }
   
@@ -125,7 +126,7 @@ void startTimer(){
 
   messageTimer = new Timer.repeating(15000, (Timer t) {
 
-    if(gameStarted) sendMessageToAllClients("Number: " + getRandomNumber());
+    if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
 
   });
   
@@ -252,10 +253,10 @@ void removeConnection(WebSocketConnection conn) {
   
   if(clients.length < 1) {
     
-    print("" + new Date.now() + ": All Clients disconnected. Game stopped.");
+    print("${new Date.now()}: All Clients disconnected. Game stopped.");
     gameStarted = false;
-    messageTimer.cancel();
+    if(!(messageTimer == null))  messageTimer.cancel();
   }
   
-  sendMessageToAllClients("Other Players: " + (connections.length - 1));
+  sendMessageToAllClients("Other Players: ${(connections.length - 1)}");
 }
