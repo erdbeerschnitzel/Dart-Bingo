@@ -1,4 +1,5 @@
 #import('dart:io');
+#import('dart:isolate');
 #source('Client.dart');
 
 List<WebSocketConnection> connections;
@@ -23,7 +24,7 @@ void main() {
 
   server.listen("127.0.0.1", 8080);  
   
-  print("running... ${new Date.now().milliseconds}");
+  print("running... ${new Date.now()}");
 
 }
 
@@ -122,13 +123,15 @@ void sendMessageToAllClients(String msg){
   });  
 }
 
+void timeHandler() {
+
+  if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
+
+}
+
 void startTimer(){
 
-  messageTimer = new Timer.repeating(15000, (Timer t) {
-
-    if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
-
-  });
+  messageTimer = new Timer.repeating(15000, timeHandler);
   
 }
 
