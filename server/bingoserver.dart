@@ -1,6 +1,7 @@
 #import('dart:io');
 #import('dart:isolate');
 #source('Client.dart');
+#source('LoginCheck.dart');
 
 List<WebSocketConnection> connections;
 List<Client> clients;
@@ -80,7 +81,10 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
     
     clients.forEach((Client client) {
       
-      if(client.con == originalconnection) client.ready = false;
+      if(client.con == originalconnection) {
+        client.ready = false;
+        print("client set to not ready");
+      }
 
     });
   
@@ -141,56 +145,14 @@ void serveFile(HttpRequest req, HttpResponse resp) {
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
   print("requested $path");
   
-  String heads = req.headers.toString();
+  
   
   //login post
-  if((path.contains("singleplayer.html") && req.method == "POST") || (path.contains("singleplayer.html") && heads.contains("multiplayer.html"))){
+  if((path.contains("singleplayer.html") && req.method == "POST") || (path.contains("singleplayer.html") && req.headers.toString().contains("multiplayer.html"))){
     
     print("matched");
-    
-    File file = new File("data.txt");
-    
-    file.exists().then((bool exists) {
-      if (exists) {
-        file.readAsLines().then((List<String> lines){
- 
-          bool valid = false;
-       
-          if(!heads.contains("multiplayer.html")){
-            
-            String postmessage = new String.fromCharCodes(req.inputStream.read());
-            
-            postmessage = postmessage.replaceAll("username=", "");
-            postmessage = postmessage.replaceAll("password=", "");
-            
-            if(postmessage.split("&").length > 1){
-              String user = postmessage.split("&")[0];
-              String pass = postmessage.split("&")[1];
-              
-              print("user: $user pass: $pass");
-              
-              for(String line in lines){
-                
-                if(line.split("=")[0] == user && line.split("=")[1] == pass){
-                  
-                  print("found login");
-                  valid = true;
-                  
-                }
-              }
-            }
-            else {
-              
-              print("Error reading POST");
-            }
-    
-          }
-          else {
-            valid = true;
-          }
-          
-      
-          if(valid){
+
+          if(LoginCheck.check(req)){
             
             File client = new File("./client/singleplayer.html");
             
@@ -202,11 +164,6 @@ void serveFile(HttpRequest req, HttpResponse resp) {
             resp.outputStream.writeString("login denied");
             resp.outputStream.close();
           }
-        });      
-      } else {
-        resp.outputStream.close();
-      }
-    });
     
     
   } else {
