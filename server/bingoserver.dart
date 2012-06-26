@@ -13,6 +13,7 @@ WebSocketHandler wsHandler;
 bool gameStarted = false;
 var messageTimer;
 final int MaxInactiveInterval = 60; // 
+Util util;
 
 //
 // ## main entry point ##
@@ -23,6 +24,7 @@ void main() {
   clients = new List();
   addNumbers = new List();
   wsHandler = new WebSocketHandler();
+  util = new Util();
   addWebSocketHandlers();
   
 
@@ -149,7 +151,7 @@ void startTimer(){
 // serving http requests
 void requestHandler(HttpRequest req, HttpResponse resp) {
   
-  String  htmlResponse;
+  String htmlResponse;
   
   try {
 
@@ -162,17 +164,17 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
 
     htmlResponse = createHtmlResponse(req, session).toString();
     
-    print("response: ${htmlResponse}");
+    //print("response: ${htmlResponse}");
     
   } catch (Exception err) {
     
-    htmlResponse = new Util().createErrorPage(err.toString()).toString();
+    htmlResponse = util.createErrorPage(err.toString()).toString();
   }
   
   resp.headers.add("Content-Type", "text/html; charset=UTF-8");
   resp.outputStream.writeString(htmlResponse);
   resp.outputStream.close();
-  
+
 
 }
 
@@ -184,8 +186,7 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
   if (session.isNew() || req.queryString == null) {
     
     print("new Session opened");
-    Util util = new Util();
-    print("w: ${util.createLoginPage()}");
+
     return util.createLoginPage();
   }
   
@@ -221,7 +222,7 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
           return new StringBuffer().add(text);
         });      
       } else {
-        return new Util().createErrorPage("Internal error reading User DB!");
+        return util.createErrorPage("Internal error reading User DB!");
       }
     });
   

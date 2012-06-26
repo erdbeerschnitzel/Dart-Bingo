@@ -1,27 +1,4 @@
 /*
-  *** Cookie based HTTP session manager library ***
-  Functions and methods in this library are almost equivalent to those of Java Sevlet.
-  Note: Under evaluation. Do not use this code for actual applications.
-        Applications should not use response.headers.set("Set-Cookie", someString);
-        Instard, use the setCookieParameter method.
-  Available functions and methods:
-    HttpSession getSession(HttpRequest request, HttpResponse response)
-    String getRequestedSessionId(HttpRequest request)
-    bool isRequestedSessionIdValid(HttpRequest request)
-    bool HttpSession#isNew()
-    void HttpSession#invalidate()
-    String HttpSession#getId()
-    int HttpSession#getCreationTime()
-    int HttpSession#getLastAccessedTime()
-    void HttpSession#setMaxInactiveInterval(int t)
-    int HttpSession#getMaxInactiveInterval()
-    Dynamic HttpSession#getAttribute(String name)
-    void HttpSession#setAttribute(String name, Dynamic value)
-    void HttpSession#removeAttribute(String name)
-    void setCookieParameter(HttpResponse response, String name, String value, [String path = null])
-    Map getCookieParameters(HttpRequest request)
-  Ref: www.cresc.co.jp/tech/java/Google_Dart/DartLanguageGuide.pdf (in Japanese)
-  May 2012, by Cresc Corp.
 */
 
 #library("HttpSessionManager");
@@ -39,11 +16,15 @@ final int _sessionGarbageCollectorTick = 300;  // repeat every 5 minutes
 HttpSession getSession(HttpRequest request, HttpResponse response) {
   
   if (_sessions == null) {
+    
+    print("sessions was null");
     _sessions = new Map<String, Map>();
     sessionGarbageCollect();
   };
   
   var id = getRequestedSessionId(request);
+  
+  print("fetched id: $id");
   
   if (id == null) return new HttpSession.fresh(request, response);
   else if (_sessions[id] == null) return new HttpSession.fresh(request, response);
@@ -112,7 +93,7 @@ Map getCookieParameters(HttpRequest request) {
 void sessionGarbageCollect() {
   print("${new Date.now()} sessionGarbageCollector started");
   void collect(Timer t) {
-    int now = new Date.now();
+    int now = new Date.now().millisecondsSinceEpoch;
     _sessions.forEach((key, value){
       if (key != "" && _sessions[key]["lastAccessedTime"] + _sessions[key]["maxInactiveInterval"] * 1000 < now) {
         _sessions.remove(key);
