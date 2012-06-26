@@ -34,7 +34,7 @@ void main() {
 void GameHandler(gameevent){
   
   if(!first){
-
+  
   ws =  new WebSocket("ws://localhost:8080/bingo");
   
   ws.on.message.add((MessageEvent e) {

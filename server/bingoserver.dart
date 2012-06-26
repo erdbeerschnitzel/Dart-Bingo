@@ -35,11 +35,11 @@ void addWebSocketHandlers(){
   
   wsHandler.onOpen = (WebSocketConnection conn) {
     
-    print("${new Date.now()}: Client connected...");
+    
     conn.send("Hello from Server!");
 
     clients.add(new Client.start(conn, false));
-    
+    print("${new Date.now()}: Client ${clients.length} connected...");
     connections.add(conn);    
     conn.onClosed = (a, b) => removeConnection(conn);
     conn.onError = (_) => removeConnection(conn);
@@ -97,7 +97,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
     if(client.ready) numberReady++;
   });  
   
-  sendMessageToAllClients("Other Players: ${(connections.length - 1)}   Players Ready: $numberReady");
+  sendMessageToAllClients("Number of Players: ${(connections.length)}   Players Ready: $numberReady");
   
   // when all clients are ready start the game
   if(numberReady == clients.length && numberReady > 1) {
@@ -218,5 +218,5 @@ void removeConnection(WebSocketConnection conn) {
     if(!(messageTimer == null))  messageTimer.cancel();
   }
   
-  sendMessageToAllClients("Other Players: ${(connections.length - 1)}");
+  sendMessageToAllClients("Number of Players: ${(connections.length)}");
 }
