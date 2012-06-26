@@ -155,20 +155,20 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
   
   try {
 
-    var session = getSession(req, resp);
+    HttpSession session = getSession(req, resp);
     
     if (session != null){
       
-      if (session.isNew()) session.setMaxInactiveInterval(MaxInactiveInterval);
+      if (session.isNew(getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
     }
 
-    htmlResponse = createHtmlResponse(req, session).toString();
+    htmlResponse = createHtmlResponse(req, session);
     
     //print("response: ${htmlResponse}");
     
   } catch (Exception err) {
     
-    htmlResponse = util.createErrorPage(err.toString()).toString();
+    htmlResponse = util.createErrorPage(err.toString());
   }
   
   resp.headers.add("Content-Type", "text/html; charset=UTF-8");
@@ -183,7 +183,10 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
 // Create HTML response to the request.
 String createHtmlResponse(HttpRequest req, HttpSession session) {
   
-  if (session.isNew() || req.queryString == null) {
+  if (session.isNew(getSessions()) ) {
+
+    if(session.isNew(getSessions())) print("session is really new");
+    //if(req.queryString == null) print("queryString is null");
     
     print("new Session opened");
 
@@ -214,17 +217,18 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
   } else {
     
     if(!path.contains("singleplayer.html")){
+      
+    print("requesting unrelated file");
   
     File file = new File(path);
-    file.exists().then((bool exists) {
-      if (exists) {
-        file.readAsText().then((String text) {
-          return new StringBuffer().add(text);
-        });      
+    
+    if(file.existsSync()){
+
+      return file.readAsTextSync();
+    
       } else {
         return util.createErrorPage("Internal error reading User DB!");
       }
-    });
   
     }
     else {

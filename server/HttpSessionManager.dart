@@ -6,12 +6,22 @@
 #import("dart:io");
 #source('HttpSession.dart');
 
-// *** Top level session table ***
+
 Map<String, Map> _sessions;  // session table
 final int _defaultMaxInactiveInterval = 1800;  // 30 minutes default timeout
 final int _sessionGarbageCollectorTick = 300;  // repeat every 5 minutes
+Map<String, Dynamic> _attributes;
 
-// *** Top level functions ***
+//
+Map<String, Map> getSessions(){
+  
+  if(_sessions != null) return _sessions;
+  else {
+    print("sessions was null in getSessions");
+    return new Map<String, Map>();
+  }
+}
+
 // getSession
 HttpSession getSession(HttpRequest request, HttpResponse response) {
   
@@ -26,13 +36,29 @@ HttpSession getSession(HttpRequest request, HttpResponse response) {
   
   print("fetched id: $id");
   
-  if (id == null) return new HttpSession.fresh(request, response);
-  else if (_sessions[id] == null) return new HttpSession.fresh(request, response);
+  if (id == null) {
+    
+    HttpSession sess = new HttpSession.fresh(request, response);
+    _sessions[sess.getId()] = {"invalidated": false, "isNew": true, "creationTime": new Date.now(),
+                             "lastAccessedTime": new Date.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
+    return sess;
+  }
+  
+  else if (_sessions[id] == null) {
+    
+    print("session not found in sessions");
+    return new HttpSession.fresh(request, response);
+  }
+  
   else if (_sessions[id]["invalidated"] == true) {
+    
     _sessions.remove(id);
     return new HttpSession.fresh(request, response);
   }
+  
   else { // session exist
+    
+    print("found existing session id");
     HttpSession session = new HttpSession();
     session._sessionId = id;
     session._attributes = _sessions[id]["attributes"];
@@ -47,6 +73,7 @@ HttpSession getSession(HttpRequest request, HttpResponse response) {
     
     else if (new Date.now().millisecondsSinceEpoch > lastAccessedTime + maxInactiveInterval * 1000){
       _sessions.remove(id); // session expired
+      print("session $id expired");
       session = new HttpSession.fresh(request, response);
     }
     return session;
@@ -145,41 +172,9 @@ Map<String, String> _splitHeaderString(String cookieString) {
   return result;
 }
 
-// Create a new session ID.
-// Note: This is a sample, don't use in real applications.
-String _createSessionId() {
-  String rndHash = _createHash((Math.random() * 0x100000000 + 0x100000000).toInt());
-  String dateHash = _createHash(Clock.now() & 0xFFFFFFFF);
-  return "${rndHash}${dateHash}";
-}
 
-// Create hash hexa string from int value.
-String _createHash(int iv) {
-  List bytes = [];
-  for (int i = 0; i < 4; i++){
-    bytes.add(iv & 0xff);
-    iv = iv >> 8;
-  }
-  var hexaHash = "";
-  int intHash = _getHash(bytes);
-  for (int i = 0; i < 8; i++){
-    hexaHash = (intHash & 0xf).toRadixString(16).concat(hexaHash);
-    intHash = intHash >> 4;
-  }
-  return hexaHash;
-}
 
-// Fowler/Noll/Vo (FNV) 32-bit hash function.
-int _getHash(List<int> bytes) {
-  int fnv_prime = 0x811C9DC5;
-  int hash = 0;
-  for(int i = 0; i < bytes.length; i++)
-  {
-    hash *= fnv_prime;
-    hash ^= bytes[i];
-  }
-  return hash & 0xFFFFFFFF;
-}
+
 
 // URL decoder decodes url encoded utf-8 bytes.
 // Use this method to decode query string.
@@ -233,7 +228,7 @@ StringBuffer createSessionLog(HttpSession session, HttpRequest request) {
   getCookieParameters : ${getCookieParameters(request)}
   getRequestedSessionId : ${getRequestedSessionId(request)}
   isRequestedSessionIdValid : ${isRequestedSessionIdValid(request)}
-  session.isNew : ${session.isNew()}
+  session.isNew : ${session.isNew(_sessions)}
   session.getId : ${session.getId()}
   session.getCreationTime : ${new Date.fromMillisecondsSinceEpoch(session.getCreationTime(), false)}
   session.getLastAccessedTime : ${new Date.fromMillisecondsSinceEpoch(session.getLastAccessedTime(), false)}
