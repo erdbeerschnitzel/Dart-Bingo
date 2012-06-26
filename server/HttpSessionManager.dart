@@ -58,11 +58,13 @@ HttpSession getSession(HttpRequest request, HttpResponse response) {
     var lastAccessedTime =_sessions[id]["lastAccessedTime"];
     var maxInactiveInterval = _sessions[id]["maxInactiveInterval"];
     _sessions[id].remove("lastAccessedTime");
-    _sessions[id]["lastAccessedTime"] = new Date.now();
+    _sessions[id]["lastAccessedTime"] = new Date.now().millisecondsSinceEpoch;
     _sessions[id].remove("isNew");
     _sessions[id]["isNew"] = false;
+    
     if (maxInactiveInterval < 0) return session;
-    else if (new Date.now()> lastAccessedTime + maxInactiveInterval * 1000){
+    
+    else if (new Date.now().millisecondsSinceEpoch > lastAccessedTime + maxInactiveInterval * 1000){
       _sessions.remove(id); // session expired
       session = new HttpSession.fresh(request, response);
     }

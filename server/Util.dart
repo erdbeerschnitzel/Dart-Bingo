@@ -6,23 +6,18 @@
 
 class Util {
   
-  StringBuffer createLoginPage(){
-    
+  Util();
+  
+  String createLoginPage(){
+
     File file = new File("index.html");
-    file.exists().then((bool exists) {
-      if (exists) {
-        file.readAsText().then((String text) {
-          return new StringBuffer().add(text);
-        });      
-      } else {
-        return createErrorPage("Internal error reading login page!");
-      }
-    });
-   
+    
+    return file.readAsTextSync();
+
   }
   
 // create html for error page
-StringBuffer createErrorPage(String errorMessage) {
+String createErrorPage(String errorMessage) {
   
   return new StringBuffer('''
     <!DOCTYPE html>
@@ -34,7 +29,7 @@ StringBuffer createErrorPage(String errorMessage) {
         <h1> *** An Internal Error occured ***</h1><br>
         <p>Server error occured: ${cleanText(new StringBuffer(errorMessage)).toString()}</p><br>
       </body>
-    </html>''');
+    </html>''').toString();
 }
 
 

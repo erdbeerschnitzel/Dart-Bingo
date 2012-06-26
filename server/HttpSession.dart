@@ -16,7 +16,7 @@ class HttpSession {
     _sessionId = _createSessionId();
     response.headers.add("Set-Cookie", " DSESSIONID = $_sessionId; Path = ${request.path}; HttpOnly");
     _sessions[_sessionId] = {"invalidated": false, "isNew": true, "creationTime": new Date.now(),
-      "lastAccessedTime": new Date.now(), "maxInactiveInterval": _defaultMaxInactiveInterval,
+      "lastAccessedTime": new Date.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval,
       "attributes": _attributes};
   }
 

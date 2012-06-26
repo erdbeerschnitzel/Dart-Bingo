@@ -11,7 +11,7 @@ List<Client> clients;
 List<int> addNumbers;
 WebSocketHandler wsHandler;
 bool gameStarted = false;
-Timer messageTimer;
+var messageTimer;
 final int MaxInactiveInterval = 60; // 
 
 //
@@ -142,14 +142,15 @@ void timeHandler() {
 
 void startTimer(){
 
-  messageTimer = new Timer.repeating(15000, timeHandler);
+  //messageTimer = new Timer.repeating(15000, timeHandler);
   
 }
 
 // serving http requests
 void requestHandler(HttpRequest req, HttpResponse resp) {
   
-  var htmlResponse;
+  String  htmlResponse;
+  
   try {
 
     var session = getSession(req, resp);
@@ -160,6 +161,8 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
     }
 
     htmlResponse = createHtmlResponse(req, session).toString();
+    
+    print("response: ${htmlResponse}");
     
   } catch (Exception err) {
     
@@ -173,14 +176,17 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
 
 }
 
+
+
 // Create HTML response to the request.
-StringBuffer createHtmlResponse(HttpRequest req, HttpSession session) {
+String createHtmlResponse(HttpRequest req, HttpSession session) {
   
   if (session.isNew() || req.queryString == null) {
     
     print("new Session opened");
-    
-    return new  Util().createLoginPage();
+    Util util = new Util();
+    print("w: ${util.createLoginPage()}");
+    return util.createLoginPage();
   }
   
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
@@ -197,10 +203,10 @@ StringBuffer createHtmlResponse(HttpRequest req, HttpSession session) {
             
             File client = new File("./client/singleplayer.html");
             
-            return new StringBuffer().add(client.readAsTextSync());
+            return client.readAsTextSync();
             
           } else {
-            return new StringBuffer().add("login denied");
+            return ("login denied");
           }
     
     
@@ -221,7 +227,7 @@ StringBuffer createHtmlResponse(HttpRequest req, HttpSession session) {
   
     }
     else {
-      return new Util().createErrorPage("Login denied!");
+      return "Login denied!";
     }
   }
   
