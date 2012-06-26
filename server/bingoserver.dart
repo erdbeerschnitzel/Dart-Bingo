@@ -1,7 +1,10 @@
 #import('dart:io');
 #import('dart:isolate');
+#import("HttpSessionManager.dart");
 #source('Client.dart');
 #source('LoginCheck.dart');
+#source('Util.dart');
+
 
 List<WebSocketConnection> connections;
 List<Client> clients;
@@ -9,7 +12,11 @@ List<int> addNumbers;
 WebSocketHandler wsHandler;
 bool gameStarted = false;
 Timer messageTimer;
+final int MaxInactiveInterval = 60; // 
 
+//
+// ## main entry point ##
+//
 void main() {
 
   connections = new List();
@@ -21,7 +28,7 @@ void main() {
 
   HttpServer server = new HttpServer();
   server.addRequestHandler((HttpRequest req) => (req.path == "/bingo"), wsHandler.onRequest);
-  server.addRequestHandler((_) => true, serveFile); 
+  server.addRequestHandler((_) => true, requestHandler); 
 
   server.listen("127.0.0.1", 8080);  
   
@@ -48,7 +55,7 @@ void addWebSocketHandlers(){
   
 }
 
-// check incoming messages
+// check incoming WebSocket messages
 void delegateMessage(String msg, WebSocketConnection originalconnection){
   
   print("${new Date.now()}: Client sent message: $msg");
@@ -140,7 +147,41 @@ void startTimer(){
 }
 
 // serving http requests
-void serveFile(HttpRequest req, HttpResponse resp) {
+void requestHandler(HttpRequest req, HttpResponse resp) {
+  
+  var htmlResponse;
+  try {
+
+    var session = getSession(req, resp);
+    
+    if (session != null){
+      
+      if (session.isNew()) session.setMaxInactiveInterval(MaxInactiveInterval);
+    }
+
+    htmlResponse = createHtmlResponse(req, session).toString();
+    
+  } catch (Exception err) {
+    
+    htmlResponse = new Util().createErrorPage(err.toString()).toString();
+  }
+  
+  resp.headers.add("Content-Type", "text/html; charset=UTF-8");
+  resp.outputStream.writeString(htmlResponse);
+  resp.outputStream.close();
+  
+
+}
+
+// Create HTML response to the request.
+StringBuffer createHtmlResponse(HttpRequest req, HttpSession session) {
+  
+  if (session.isNew() || req.queryString == null) {
+    
+    print("new Session opened");
+    
+    return new  Util().createLoginPage();
+  }
   
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
   print("requested $path");
@@ -156,13 +197,10 @@ void serveFile(HttpRequest req, HttpResponse resp) {
             
             File client = new File("./client/singleplayer.html");
             
-            resp.outputStream.writeString(client.readAsTextSync());
-            resp.outputStream.close();
-
+            return new StringBuffer().add(client.readAsTextSync());
             
           } else {
-            resp.outputStream.writeString("login denied");
-            resp.outputStream.close();
+            return new StringBuffer().add("login denied");
           }
     
     
@@ -174,21 +212,24 @@ void serveFile(HttpRequest req, HttpResponse resp) {
     file.exists().then((bool exists) {
       if (exists) {
         file.readAsText().then((String text) {
-          resp.outputStream.writeString(text);
-          resp.outputStream.close();
+          return new StringBuffer().add(text);
         });      
       } else {
-        resp.outputStream.close();
+        return new Util().createErrorPage("Internal error reading User DB!");
       }
     });
   
     }
     else {
-      resp.outputStream.writeString("login denied");
-      resp.outputStream.close();
+      return new Util().createErrorPage("Login denied!");
     }
   }
+  
 }
+
+
+
+
 
 // get a random number between 1 and 99
 // no duplicates
@@ -202,6 +243,7 @@ int getRandomNumber(){
     
   return a;
 }
+
 
 void removeConnection(WebSocketConnection conn) {
   
