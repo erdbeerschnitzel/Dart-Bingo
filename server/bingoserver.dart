@@ -258,13 +258,11 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
     }
     else {
       
-      return "Login denied!";
+      return util.createErrorPage("Login denied!");
     }
   }
   
 }
-
-
 
 
 

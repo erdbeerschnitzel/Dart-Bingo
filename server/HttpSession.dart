@@ -92,7 +92,6 @@ class HttpSession {
   }
   
 // Create a new session ID.
-// Note: This is a sample, don't use in real applications.
 String createSessionId() {
   String rndHash = _createHash((Math.random() * 0x100000000 + 0x100000000).toInt());
   String dateHash = _createHash(Clock.now() & 0xFFFFFFFF);
