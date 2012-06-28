@@ -171,7 +171,16 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
     htmlResponse = util.createErrorPage(err.toString());
   }
   
-  resp.headers.add("Content-Type", "text/html; charset=UTF-8");
+  
+  if(htmlResponse.contains("#EAEAEA")){
+    
+    resp.headers.add("Content-Type", "text/css; charset=UTF-8");
+  } 
+  else {
+   
+    resp.headers.add("Content-Type", "text/html; charset=UTF-8");
+  }
+
   resp.outputStream.writeString(htmlResponse);
   resp.outputStream.close();
 
@@ -235,6 +244,8 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
     print("requesting unrelated file");
   
     File file = new File(path);
+    
+    print("check file $path");
     
     if(file.existsSync()){
 
