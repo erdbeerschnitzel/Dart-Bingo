@@ -153,7 +153,7 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
   
   String htmlResponse;
   
-  //try {
+  try {
 
     HttpSession session = getSession(req, resp);
     
@@ -166,10 +166,10 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
     
     //print("response: ${htmlResponse}");
     
-  //} catch (Exception err) {
+  } catch (Exception err) {
     
-   // htmlResponse = util.createErrorPage(err.toString());
-  //}
+    htmlResponse = util.createErrorPage(err.toString());
+  }
   
   resp.headers.add("Content-Type", "text/html; charset=UTF-8");
   resp.outputStream.writeString(htmlResponse);
