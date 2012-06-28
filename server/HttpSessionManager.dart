@@ -119,7 +119,7 @@ Map getCookieParameters(HttpRequest request) {
 // Session garbage collection (modify this to run at midnight)
 void sessionGarbageCollect() {
   print("${new Date.now()} sessionGarbageCollector started");
-  void collect(Timer t) {
+  void collect(var t) {
     int now = new Date.now().millisecondsSinceEpoch;
     _sessions.forEach((key, value){
       if (key != "" && _sessions[key]["lastAccessedTime"] + _sessions[key]["maxInactiveInterval"] * 1000 < now) {

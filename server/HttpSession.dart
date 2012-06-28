@@ -22,7 +22,19 @@ class HttpSession {
   }
 
 
-  bool isNew(var _session) => _session[_sessionId]["isNew"];
+  bool isNew(var _session) {
+    
+    print("hello $_sessionId");
+    
+    if(_session[_sessionId] == null){
+      
+      print("NULL!");
+      return false;
+    }
+    
+    if(_session[_sessionId]["isNew"] != null) return _session[_sessionId]["isNew"];
+    else return false;
+  }
 
 
   // invalidate() : this session will be deleted at the next request

@@ -1,8 +1,8 @@
 #import('dart:io');
 #import('dart:isolate');
-#import("HttpSessionManager.dart");
+#import('HttpSessionManager.dart');
+#import('LoginCheck.dart');
 #source('Client.dart');
-#source('LoginCheck.dart');
 #source('Util.dart');
 
 
@@ -153,7 +153,7 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
   
   String htmlResponse;
   
-  try {
+  //try {
 
     HttpSession session = getSession(req, resp);
     
@@ -166,10 +166,10 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
     
     //print("response: ${htmlResponse}");
     
-  } catch (Exception err) {
+  //} catch (Exception err) {
     
-    htmlResponse = util.createErrorPage(err.toString());
-  }
+   // htmlResponse = util.createErrorPage(err.toString());
+  //}
   
   resp.headers.add("Content-Type", "text/html; charset=UTF-8");
   resp.outputStream.writeString(htmlResponse);
@@ -185,31 +185,45 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
   
   if (session.isNew(getSessions()) ) {
 
-    if(session.isNew(getSessions())) print("session is really new");
-    //if(req.queryString == null) print("queryString is null");
-    
     print("new Session opened");
 
     return util.createLoginPage();
   }
   
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
+  
   print("requested $path");
   
   
+  if(req.path.endsWith('/') || req.path.endsWith('8080')){
+    
+    path = 'http:\\\\localhost:8080\client\singleplayer.html';
+  }
+  
+  if(path.contains("singleplayer.html") && check(req)){
+    
+    File client = new File("./client/singleplayer.html");
+    
+    return client.readAsTextSync();
+    
+  }
   
   //login post
   if((path.contains("singleplayer.html") && req.method == "POST") || (path.contains("singleplayer.html") && req.headers.toString().contains("multiplayer.html"))){
     
     print("matched");
-
-          if(LoginCheck.check(req)){
+    
+          if(check(req)){
+            
+            print("we are in");
             
             File client = new File("./client/singleplayer.html");
             
             return client.readAsTextSync();
             
           } else {
+            
+            print("login failed");
             return ("login denied");
           }
     
@@ -232,6 +246,7 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
   
     }
     else {
+      
       return "Login denied!";
     }
   }

@@ -1,8 +1,8 @@
+#library("LoginCheck");
+#import("dart:io");
 
-class LoginCheck {
-  
-  
-  static bool check(HttpRequest req){
+
+  bool check(HttpRequest req){
   
     File file = new File("data.txt");
     
@@ -10,48 +10,65 @@ class LoginCheck {
     
     String heads = req.headers.toString();
     
-    file.exists().then((bool exists) {
+    //print("heads $heads");
+    
+    bool exists = file.existsSync();
+    
       if (exists) {
-        file.readAsLines().then((List<String> lines){
+        
+        //print("pass file exists");
+        
+        List<String> lines = file.readAsLinesSync();
+        
+        print("pass file read");
   
           if(!heads.contains("multiplayer.html")){
             
-            String postmessage = new String.fromCharCodes(req.inputStream.read());
-            
-            postmessage = postmessage.replaceAll("username=", "");
-            postmessage = postmessage.replaceAll("password=", "");
-            
-            if(postmessage.split("&").length > 1){
-              String user = postmessage.split("&")[0];
-              String pass = postmessage.split("&")[1];
+            print("retrieving postmessage");
+             
+            if(req.inputStream.read() != null){
               
-              print("user: $user pass: $pass");
+            
+            
+              String postmessage = new String.fromCharCodes(req.inputStream.read());
               
-              for(String line in lines){
+              print("postmessage $postmessage");
+              
+              postmessage = postmessage.replaceAll("username=", "");
+              postmessage = postmessage.replaceAll("password=", "");
+              
+              if(postmessage.split("&").length > 1){
                 
-                if(line.split("=")[0] == user && line.split("=")[1] == pass){
+                String user = postmessage.split("&")[0];
+                String pass = postmessage.split("&")[1];
+                
+                print("user: $user pass: $pass");
+                
+                for(String line in lines){
                   
-                  print("found login");
-                  valid = true;
-                  
+                  if(line.split("=")[0] == user && line.split("=")[1] == pass){
+                    
+                    print("found login");
+                    valid = true;
+                    
+                  }
                 }
               }
-            }
-            else {
-              
-              print("Error reading POST");
-            }
+              else {
+                
+                print("Error reading POST");
+              }
     
           }
           else {
             valid = true;
           }
     
-      });
       }
       
+      }
+          
       return valid;
       }
-    );
-    }
-}
+
+
