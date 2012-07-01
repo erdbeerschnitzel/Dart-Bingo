@@ -1,7 +1,7 @@
 // import Libs
 #import('dart:io');
 #import('dart:isolate');
-#import('HttpSessionManager.dart');
+#import('HttpSessionManager.dart', prefix:"hs");
 #import('LoginCheck.dart');
 // import normal source files
 #source('Client.dart');
@@ -174,11 +174,11 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
     
     try {
 
-      HttpSession session = getSession(req, resp);
+      hs.HttpSession session = hs.getSession(req, resp);
       
       if (session != null){
         
-        if (session.isNew(getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
+        if (session.isNew(hs.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
       }
 
       
@@ -201,11 +201,11 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
   
   try {
 
-    HttpSession session = getSession(req, resp);
+    hs.HttpSession session = hs.getSession(req, resp);
     
     if (session != null){
       
-      if (session.isNew(getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
+      if (session.isNew(hs.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
     }
 
 
@@ -253,9 +253,9 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
 
 
 // Create HTML response to the request.
-String createHtmlResponse(HttpRequest req, HttpSession session) {
+String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
   
-  if (session.isNew(getSessions()) ) {
+  if (session.isNew(hs.getSessions()) ) {
 
     print("new Session opened");
 
@@ -325,7 +325,6 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
   }
   
 }
-
 
 
 // get a random number between 1 and 99
