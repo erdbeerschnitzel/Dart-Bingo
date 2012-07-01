@@ -1,6 +1,7 @@
-/*
+/**
  * Manages HTTP Sessions
-*/
+ * inspired by www.cresc.co.jp/tech/java/Google_Dart/DartLanguageGuide.pdf (in Japanese)
+ **/
 
 #library("HttpSessionManager");
 #import("dart:utf", prefix:"utf");

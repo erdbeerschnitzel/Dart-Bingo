@@ -1,5 +1,5 @@
-/*
- *** HttpSession class ***
+/**
+ * represents a HTTP Session 
  */
 
 class HttpSession {
