@@ -30,7 +30,7 @@ String createErrorPage(String errorMessage) {
     </html>''').toString();
 }
 
-
+// escaping
 StringBuffer cleanText(StringBuffer text) {
   
   var s = text.toString();

@@ -1,4 +1,5 @@
 /*
+ * Manages HTTP Sessions
 */
 
 #library("HttpSessionManager");
@@ -22,12 +23,8 @@ Map<String, Map> getSessions(){
   }
 }
 
-main(){
-  
-}
 
-
-// getSession
+// get the current Session for client or create a new one
 HttpSession getSession(HttpRequest request, HttpResponse response) {
   
   if (_sessions == null) {
@@ -223,22 +220,3 @@ List<int> _urlEncode(String s) {
   return ol;
 }
 
-// Create session log
-StringBuffer createSessionLog(HttpSession session, HttpRequest request) {
-  var sb = new StringBuffer("");
-  if (session == null) sb.add("HttpSession data : null");
-  else if (session.getId() == null) sb.add("HttpSession data : null");
-  else sb.add('''HttpSession related data:
-  number of existing sessions : ${_sessions.length}
-  getCookieParameters : ${getCookieParameters(request)}
-  getRequestedSessionId : ${getRequestedSessionId(request)}
-  isRequestedSessionIdValid : ${isRequestedSessionIdValid(request)}
-  session.isNew : ${session.isNew(_sessions)}
-  session.getId : ${session.getId()}
-  session.getCreationTime : ${new Date.fromMillisecondsSinceEpoch(session.getCreationTime(), false)}
-  session.getLastAccessedTime : ${new Date.fromMillisecondsSinceEpoch(session.getLastAccessedTime(), false)}
-  session.getMaxInactiveInterval : ${session.getMaxInactiveInterval()} Seconds
-  session.getAttributeNames : ${session.getAttributeNames()}
-''');
-  return sb;
-}

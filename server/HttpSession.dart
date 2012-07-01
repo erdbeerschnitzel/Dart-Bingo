@@ -6,6 +6,8 @@ class HttpSession {
 
   String _sessionId;
   Map<String, Dynamic> _attributes;
+  
+  
 
   // Construct base session object
   HttpSession(){}
