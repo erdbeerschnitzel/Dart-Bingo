@@ -1,21 +1,19 @@
 /**
 *
-* Utility class
+* Utility methods
 *
 **/
 
-class Util {
-  
-  Util();
-  
-  String createLoginPage(){
+
+String createLoginPage(){
 
     File file = new File("index.html");
     
     return file.readAsTextSync();
 
   }
-  
+
+
 // create html for error page
 String createErrorPage(String errorMessage) {
   
@@ -50,6 +48,4 @@ StringBuffer cleanText(StringBuffer text) {
   }
   
   return text;
-}
-  
 }

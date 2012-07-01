@@ -15,7 +15,6 @@ WebSocketHandler wsHandler;
 bool gameStarted = false;
 var messageTimer;
 final int MaxInactiveInterval = 60; // 
-Util util;
 
 //
 // ## main entry point ##
@@ -26,7 +25,6 @@ void main() {
   clients = new List();
   addNumbers = new List();
   wsHandler = new WebSocketHandler();
-  util = new Util();
   addWebSocketHandlers();
   
 
@@ -184,7 +182,7 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
       
       if(readNonTextFile(req.path).length == 0){
         
-        htmlResponse = util.createErrorPage("error reading file: ${req.path}");
+        htmlResponse = createErrorPage("error reading file: ${req.path}");
       }
       htmlResponse = createHtmlResponse(req, session);
       
@@ -192,7 +190,7 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
       
     } catch (Exception err) {
       
-      htmlResponse = util.createErrorPage(err.toString());
+      htmlResponse = createErrorPage(err.toString());
     }
     
     if(readNonTextFile(req.path).length != 0) resp.outputStream.write(readNonTextFile(req.path));
@@ -216,7 +214,7 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
     
   } catch (Exception err) {
     
-    htmlResponse = util.createErrorPage(err.toString());
+    htmlResponse = createErrorPage(err.toString());
   }
   
   
@@ -259,7 +257,7 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
 
     print("new Session opened");
 
-    return util.createLoginPage();
+    return createLoginPage();
   }
   
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
@@ -314,13 +312,13 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
       return file.readAsTextSync();
     
       } else {
-        return util.createErrorPage("Internal error reading User DB!");
+        return createErrorPage("Internal error reading User DB!");
       }
   
     }
     else {
       
-      return util.createErrorPage("Login denied!");
+      return createErrorPage("Login denied!");
     }
   }
   

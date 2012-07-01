@@ -22,6 +22,10 @@ Map<String, Map> getSessions(){
   }
 }
 
+main(){
+  
+}
+
 
 // getSession
 HttpSession getSession(HttpRequest request, HttpResponse response) {
