@@ -1,3 +1,6 @@
+/**
+ * Provides a simple Login check based on access data read from a txt file
+ **/ 
 #library("LoginCheck");
 #import("dart:io");
 

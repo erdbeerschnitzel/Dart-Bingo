@@ -1,7 +1,9 @@
+// import Libs
 #import('dart:io');
 #import('dart:isolate');
 #import('HttpSessionManager.dart');
 #import('LoginCheck.dart');
+// import normal source files
 #source('Client.dart');
 #source('Util.dart');
 
@@ -148,10 +150,54 @@ void startTimer(){
   
 }
 
+List readNonTextFile(String path){
+  
+  File file = new File(path);
+  
+  if(file != null){
+    
+    return file.readAsBytesSync();
+  }
+  else {
+    
+    return new List();
+  }
+  
+}
+
 // serving http requests
 void requestHandler(HttpRequest req, HttpResponse resp) {
   
   String htmlResponse;
+  
+  if(req.path.contains('.png')){
+    
+    try {
+
+      HttpSession session = getSession(req, resp);
+      
+      if (session != null){
+        
+        if (session.isNew(getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
+      }
+
+      
+      if(readNonTextFile(req.path).length == 0){
+        
+        htmlResponse = util.createErrorPage("error reading file: ${req.path}");
+      }
+      htmlResponse = createHtmlResponse(req, session);
+      
+      //print("response: ${htmlResponse}");
+      
+    } catch (Exception err) {
+      
+      htmlResponse = util.createErrorPage(err.toString());
+    }
+    
+    if(readNonTextFile(req.path).length != 0) resp.outputStream.write(readNonTextFile(req.path));
+    
+  } else {
   
   try {
 
@@ -162,6 +208,8 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
       if (session.isNew(getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
     }
 
+
+    
     htmlResponse = createHtmlResponse(req, session);
     
     //print("response: ${htmlResponse}");
@@ -177,14 +225,29 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
     resp.headers.add("Content-Type", "text/css; charset=UTF-8");
   } 
   else {
+    
+    if(req.path.contains('.png')){
+      
+      print("png requested");
+      resp.headers.add("Content-Type", "text/html; charset=UTF-8");
+      //resp.headers.add("Content-Type", "image/png; charset=UTF-8");
+    } 
+    else {
+      
+      resp.headers.add("Content-Type", "text/html; charset=UTF-8");
+    }
    
-    resp.headers.add("Content-Type", "text/html; charset=UTF-8");
+    
   }
 
   resp.outputStream.writeString(htmlResponse);
+  
+  }
+
+  
   resp.outputStream.close();
 
-
+ 
 }
 
 
@@ -212,6 +275,7 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
   if(path.contains("singleplayer.html") && check(req)){
     
     File client = new File("./client/singleplayer.html");
+    
     
     return client.readAsTextSync();
     
@@ -244,9 +308,7 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
     print("requesting unrelated file");
   
     File file = new File(path);
-    
-    print("check file $path");
-    
+  
     if(file.existsSync()){
 
       return file.readAsTextSync();
