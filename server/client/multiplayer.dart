@@ -1,3 +1,8 @@
+/**
+ * client-side of Online-Bingo
+ * multiplayer main
+ **/
+
 #import('dart:html');
 #source('Gamecard.dart');
 
@@ -9,7 +14,12 @@ List<int> addNumbers;
 bool first = true;
 bool gameStarted = false;
 
+/**
+ * main entry point - attaches handlers and inits objects
+ **/
 void main() {
+  
+ 
  
  // init some Objects
  addNumbers = new List<int>();
@@ -30,7 +40,10 @@ void main() {
 // ******************
 
 
-// handle next number
+/**
+ * handle the next-number-event
+ * gameevent is auto-passed by runtime
+ **/
 void GameHandler(gameevent){
   
   if(!first){
@@ -68,7 +81,8 @@ void ReadyHandler(readyevent){
     if(document.query('#startGame').value == "I'm ready!"){
       
       ws.send("client ready");
-      document.query('#startGame').value = "I'm not ready!";
+      //document.query('#startGame').value = "I'm not ready!";
+      (query('#startGame') as ButtonElement).value = "I'm not ready!";
     }
     else {
       

@@ -1,3 +1,7 @@
+/**
+ * client-side of Online-Bingo
+ * singleplayer main
+ **/
 #import('dart:html');
 #source('Gamecard.dart');
 
