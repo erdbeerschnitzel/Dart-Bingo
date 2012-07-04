@@ -81,8 +81,8 @@ void ReadyHandler(readyevent){
     if(document.query('#startGame').value == "I'm ready!"){
       
       ws.send("client ready");
-      //document.query('#startGame').value = "I'm not ready!";
-      (query('#startGame') as ButtonElement).value = "I'm not ready!";
+      document.query('#startGame').value = "I'm not ready!";
+      //(query('#startGame') as ButtonElement).value = "I'm not ready!";
     }
     else {
       

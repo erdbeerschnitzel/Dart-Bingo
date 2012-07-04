@@ -13,10 +13,10 @@
 #source('Client.dart');
 #source('Util.dart');
 
-List<int> addNumbers;
+
 WebSocketHandler wsHandler;
 bool gameStarted = false;
-Timer messageTimer;
+
 final int MaxInactiveInterval = 60; // 
 MessageHandler messageHandler;
 
@@ -25,7 +25,6 @@ MessageHandler messageHandler;
 //
 void main() {
 
-  addNumbers = new List();
   wsHandler = new WebSocketHandler();
   messageHandler = new MessageHandler();
   addWebSocketHandlers();
@@ -221,18 +220,6 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
 }
 
 
-// get a random number between 1 and 99
-// no duplicates
-int getRandomNumber(){
-  
-  int a = (Math.random()*100).toInt();
-  
-  while(a > 99 || a < 1 || (addNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
-  
-  addNumbers.add(a);
-    
-  return a;
-}
 
 
 

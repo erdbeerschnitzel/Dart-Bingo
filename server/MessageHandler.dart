@@ -12,14 +12,17 @@ class MessageHandler{
 
   List<WebSocketConnection> connections;
   List clients;
+  List<int> addNumbers;
+  
   Timer messageTimer;
   bool gameStarted = false;
   
-  
+  // standard constructor
   MessageHandler(){
     
     clients = new List();
     connections = new List<WebSocketConnection>();
+    addNumbers = new List<int>();
   }
   
   void removeConnection(WebSocketConnection conn) {
@@ -122,7 +125,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
 
 void timeHandler(timeevent) {
 
-  //if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
+  if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
 
 }
 
@@ -131,6 +134,20 @@ void startTimer(){
   messageTimer = new Timer.repeating(15000, timeHandler);
   
 }
+
+// get a random number between 1 and 99
+// no duplicates
+int getRandomNumber(){
+  
+  int a = (Math.random()*100).toInt();
+  
+  while(a > 99 || a < 1 || (addNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
+  
+  addNumbers.add(a);
+    
+  return a;
+}
+
 
 // simple logging method printing time and msg
 void log(String msg){
