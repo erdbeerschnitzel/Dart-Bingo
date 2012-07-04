@@ -7,6 +7,7 @@
 #import('dart:isolate');
 #import('HttpSessionManager.dart', prefix:"hs");
 #import('LoginCheck.dart');
+#import('FileManager.dart', prefix:"FileManager");
 // import normal source files
 #source('Client.dart');
 #source('Util.dart');
@@ -152,22 +153,7 @@ void startTimer(){
   
 }
 
-List readNonTextFile(String path){
-  
-  print("requesting non text file $path");
-  
-  File file = new File(".$path");
-  
-  if(file != null){
-    
-    return file.readAsBytesSync();
-  }
-  else {
-    
-    return new List();
-  }
-  
-}
+
 
 // serving http requests
 void requestHandler(HttpRequest req, HttpResponse resp) {
@@ -186,7 +172,7 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
       }
 
       
-      if(readNonTextFile(req.path).length == 0){
+      if(FileManager.readNonTextFile(req.path).length == 0){
         
         htmlResponse = createErrorPage("error reading file: ${req.path}");
       }
@@ -199,7 +185,7 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
       htmlResponse = createErrorPage(err.toString());
     }
     
-    if(readNonTextFile(req.path).length != 0) resp.outputStream.write(readNonTextFile(req.path));
+    if(FileManager.readNonTextFile(req.path).length != 0) resp.outputStream.write(FileManager.readNonTextFile(req.path));
     
   } else {
   
