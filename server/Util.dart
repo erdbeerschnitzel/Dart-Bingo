@@ -49,3 +49,8 @@ StringBuffer cleanText(StringBuffer text) {
   
   return text;
 }
+
+// simple logging method printing time and msg
+void log(String msg){
+  print("${new Date.now()}: $msg");  
+}

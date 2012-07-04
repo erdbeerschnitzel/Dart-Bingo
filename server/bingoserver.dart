@@ -8,31 +8,28 @@
 #import('HttpSessionManager.dart', prefix:"hs");
 #import('LoginCheck.dart');
 #import('FileManager.dart', prefix:"FileManager");
+#import('MessageHandler.dart');
 // import normal source files
 #source('Client.dart');
 #source('Util.dart');
 
-
-List<WebSocketConnection> connections;
-List<Client> clients;
 List<int> addNumbers;
 WebSocketHandler wsHandler;
 bool gameStarted = false;
 Timer messageTimer;
 final int MaxInactiveInterval = 60; // 
+MessageHandler messageHandler;
 
 //
 // ## main entry point ##
 //
 void main() {
 
-  connections = new List();
-  clients = new List();
   addNumbers = new List();
   wsHandler = new WebSocketHandler();
+  messageHandler = new MessageHandler();
   addWebSocketHandlers();
   
-
   HttpServer server = new HttpServer();
   server.addRequestHandler((HttpRequest req) => (req.path == "/bingo"), wsHandler.onRequest);
   server.addRequestHandler((_) => true, requestHandler); 
@@ -49,111 +46,20 @@ void addWebSocketHandlers(){
   
   wsHandler.onOpen = (WebSocketConnection conn) {
     
-    
     conn.send("Hello from Server!");
 
-    clients.add(new Client.start(conn, false));
-    log("Client ${clients.length} connected...");
+    messageHandler.clients.add(new Client.start(conn, false));
     
-    connections.add(conn);    
-    conn.onClosed = (a, b) => removeConnection(conn);
-    conn.onError = (_) => removeConnection(conn);
-    conn.onMessage = (msg) => delegateMessage(msg, conn);
+    log("Client ${messageHandler.clients.length} connected...");
+    
+    messageHandler.connections.add(conn);    
+    
+    conn.onClosed = (a, b) => messageHandler.removeConnection(conn);
+    conn.onError = (_) => messageHandler.removeConnection(conn);
+    conn.onMessage = (msg) => messageHandler.delegateMessage(msg, conn);
   };
   
 }
-
-// check incoming WebSocket messages
-void delegateMessage(String msg, WebSocketConnection originalconnection){
-  
-  log("Client sent message: $msg");
- 
-  // handle client connect
-  if(msg.contains("client hello") && connections.length > 1) sendMessageToAllClients("Other Players: ${(connections.length - 1)}");
-  
-  // handle single client ready 
-  if(msg.contains("client ready") && connections.length == 1){
-    
-    connections[0].send("You need to wait for other players!");
-    clients[0].ready = true;
-  }
-
-  // handle client ready
-  if(msg.contains("client ready") && connections.length > 1){
-    
-    int numberReady = 0;
-    
-    clients.forEach((Client client) {
-      
-      if(client.con == originalconnection) client.ready = true;
-      
-      if(client.ready) numberReady++;
-    });
-  }
-  
-  // handle client not ready
-  if(msg.contains("client notready") && connections.length > 1){
-    
-    clients.forEach((Client client) {
-      
-      if(client.con == originalconnection) {
-        client.ready = false;
-        log("client set status to not ready");
-      }
-
-    });
-  
-  }
-  
-  int numberReady = 0;
-  
-  clients.forEach((Client client) {
-    
-    if(client.ready) numberReady++;
-  });  
-  
-  sendMessageToAllClients("Number of Players: ${(connections.length)}   Players Ready: $numberReady");
-  
-  // when all clients are ready start the game
-  if(numberReady == clients.length && numberReady > 1) {
-    
-    gameStarted = true;
-    startTimer();
-    log("Game started...");
-    sendMessageToAllClients("All players are ready! Starting the Game!");
-  }
-  
-  
-  // handle bingo
-  if(msg.contains("thisisbingo")) {
-    
-    gameStarted = false;
-    messageTimer.cancel();
-    sendMessageToAllClients("Player has Bingo. Game stopped.");
-  }
-  
-}
-
-// send a message to all WebSocket clients
-void sendMessageToAllClients(String msg){
-  
-  connections.forEach((WebSocketConnection conn) {
-    conn.send(msg);
-  });  
-}
-
-void timeHandler(timeevent) {
-
-  if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
-
-}
-
-void startTimer(){
-
-  messageTimer = new Timer.repeating(15000, timeHandler);
-  
-}
-
 
 
 // serving http requests
@@ -329,25 +235,5 @@ int getRandomNumber(){
 }
 
 
-void removeConnection(WebSocketConnection conn) {
-  
-  int index = connections.indexOf(conn);
-  if (index > -1) {
-    connections.removeRange(index, 1);
-    clients.removeRange(index, 1);
-  }
-  
-  if(clients.length < 1) {
-    
-    log("All Clients disconnected. Game stopped.");
-    gameStarted = false;
-    if(!(messageTimer == null))  messageTimer.cancel();
-  }
-  
-  sendMessageToAllClients("Number of Players: ${(connections.length)}");
-}
 
-// simple logging method printing time and msg
-void log(String msg){
-  print("${new Date.now()}: $msg");  
-}
+
