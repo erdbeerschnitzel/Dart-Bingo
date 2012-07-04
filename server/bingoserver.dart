@@ -18,7 +18,7 @@ List<Client> clients;
 List<int> addNumbers;
 WebSocketHandler wsHandler;
 bool gameStarted = false;
-var messageTimer;
+Timer messageTimer;
 final int MaxInactiveInterval = 60; // 
 
 //
@@ -39,7 +39,7 @@ void main() {
 
   server.listen("127.0.0.1", 8080);  
   
-  print("running... ${new Date.now()}");
+  log("Server running...");
 
 }
 
@@ -53,7 +53,8 @@ void addWebSocketHandlers(){
     conn.send("Hello from Server!");
 
     clients.add(new Client.start(conn, false));
-    print("${new Date.now()}: Client ${clients.length} connected...");
+    log("Client ${clients.length} connected...");
+    
     connections.add(conn);    
     conn.onClosed = (a, b) => removeConnection(conn);
     conn.onError = (_) => removeConnection(conn);
@@ -65,7 +66,7 @@ void addWebSocketHandlers(){
 // check incoming WebSocket messages
 void delegateMessage(String msg, WebSocketConnection originalconnection){
   
-  print("${new Date.now()}: Client sent message: $msg");
+  log("Client sent message: $msg");
  
   // handle client connect
   if(msg.contains("client hello") && connections.length > 1) sendMessageToAllClients("Other Players: ${(connections.length - 1)}");
@@ -97,7 +98,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
       
       if(client.con == originalconnection) {
         client.ready = false;
-        print("client set to not ready");
+        log("client set status to not ready");
       }
 
     });
@@ -118,7 +119,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
     
     gameStarted = true;
     startTimer();
-    print("${new Date.now()}: Game started...");
+    log("Game started...");
     sendMessageToAllClients("All players are ready! Starting the Game!");
   }
   
@@ -141,7 +142,7 @@ void sendMessageToAllClients(String msg){
   });  
 }
 
-void timeHandler() {
+void timeHandler(timeevent) {
 
   if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
 
@@ -149,7 +150,7 @@ void timeHandler() {
 
 void startTimer(){
 
-  //messageTimer = new Timer.repeating(15000, timeHandler);
+  messageTimer = new Timer.repeating(15000, timeHandler);
   
 }
 
@@ -220,7 +221,7 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
     
     if(req.path.contains('.png')){
       
-      print("png requested");
+      log("png requested");
       resp.headers.add("Content-Type", "text/html; charset=UTF-8");
       //resp.headers.add("Content-Type", "image/png; charset=UTF-8");
     } 
@@ -249,7 +250,7 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
   
   if (session.isNew(hs.getSessions()) ) {
 
-    print("new Session opened");
+    log("new Session opened");
 
     return createLoginPage();
   }
@@ -258,7 +259,7 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
   
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
   
-  print("requested $path req.path: ${req.path}");
+  log("requested $path req.path: ${req.path}");
   
   
   if(req.path.endsWith('/') || req.path.endsWith('8080')){
@@ -266,23 +267,16 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
     path = 'http:\\\\localhost:8080\client\singleplayer.html';
   }
   
-  if(path.contains("singleplayer.html") && check(req)){
+  if(path.contains("singleplayer.html") && check(req))  return FileManager.readHTMLFile();
     
-    File client = new File("./client/singleplayer.html");
-    
-    
-    return client.readAsTextSync();
-    
-  }
-  
   //login post
   if((path.contains("singleplayer.html") && req.method == "POST") || (path.contains("singleplayer.html") && req.headers.toString().contains("multiplayer.html"))){
     
-    print("matched");
+    log("matched");
     
           if(check(req)){
             
-            print("we are in");
+            log("we are in");
             
             File client = new File("./client/singleplayer.html");
             
@@ -290,7 +284,7 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
             
           } else {
             
-            print("login failed");
+            log("login failed");
             return ("login denied");
           }
     
@@ -299,7 +293,7 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
     
     if(!path.contains("singleplayer.html")){
       
-    print("requesting unrelated file");
+    log("requesting unrelated file");
   
     File file = new File(path);
   
@@ -345,10 +339,15 @@ void removeConnection(WebSocketConnection conn) {
   
   if(clients.length < 1) {
     
-    print("${new Date.now()}: All Clients disconnected. Game stopped.");
+    log("All Clients disconnected. Game stopped.");
     gameStarted = false;
     if(!(messageTimer == null))  messageTimer.cancel();
   }
   
   sendMessageToAllClients("Number of Players: ${(connections.length)}");
+}
+
+// simple logging method printing time and msg
+void log(String msg){
+  print("${new Date.now()}: $msg");  
 }

@@ -22,3 +22,11 @@ List readNonTextFile(String path){
   }
   
 }
+
+String readHTMLFile(){
+  
+  File client = new File("./client/singleplayer.html");
+
+  return client.readAsTextSync();
+}
+

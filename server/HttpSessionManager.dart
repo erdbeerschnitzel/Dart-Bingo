@@ -6,6 +6,7 @@
 #library("HttpSessionManager");
 #import("dart:utf", prefix:"utf");
 #import("dart:io");
+#import('dart:isolate');
 #source('HttpSession.dart');
 
 
@@ -121,8 +122,10 @@ Map getCookieParameters(HttpRequest request) {
 
 // Session garbage collection (modify this to run at midnight)
 void sessionGarbageCollect() {
+  
   print("${new Date.now()} sessionGarbageCollector started");
-  void collect(var t) {
+  
+  void collect(timeevent) {
     int now = new Date.now().millisecondsSinceEpoch;
     _sessions.forEach((key, value){
       if (key != "" && _sessions[key]["lastAccessedTime"] + _sessions[key]["maxInactiveInterval"] * 1000 < now) {
@@ -131,7 +134,8 @@ void sessionGarbageCollect() {
       }
     });
   }
-  //new Timer.repeating(_sessionGarbageCollectorTick * 1000, collect);
+  
+  new Timer.repeating(_sessionGarbageCollectorTick * 1000, collect);
 }
 
 
