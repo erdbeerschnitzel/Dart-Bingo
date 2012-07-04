@@ -154,7 +154,9 @@ void startTimer(){
 
 List readNonTextFile(String path){
   
-  File file = new File(path);
+  print("requesting non text file $path");
+  
+  File file = new File(".$path");
   
   if(file != null){
     
@@ -224,6 +226,8 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
   
   if(htmlResponse.contains("#EAEAEA")){
     
+    //print("requesting css file");
+    
     resp.headers.add("Content-Type", "text/css; charset=UTF-8");
   } 
   else {
@@ -264,9 +268,11 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
     return createLoginPage();
   }
   
+  
+  
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
   
-  print("requested $path");
+  print("requested $path req.path: ${req.path}");
   
   
   if(req.path.endsWith('/') || req.path.endsWith('8080')){
@@ -311,7 +317,7 @@ String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
   
     File file = new File(path);
   
-    if(file.existsSync()){
+    if(file != null){
 
       return file.readAsTextSync();
     

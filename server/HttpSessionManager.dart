@@ -49,7 +49,7 @@ HttpSession getSession(HttpRequest request, HttpResponse response) {
   
   else if (_sessions[id] == null) {
     
-    print("session not found in sessions");
+    //print("session not found in sessions");
     return new HttpSession.fresh(request, response);
   }
   
