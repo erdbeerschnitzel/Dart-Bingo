@@ -9,7 +9,13 @@ String createLoginPage(){
 
     File file = new File("index.html");
     
-    return file.readAsTextSync();
+    if(file != null){
+    
+      return file.readAsTextSync();
+    }
+    else {
+      return  createErrorPage("Error reading file: index.html");
+    }
 
   }
 

@@ -123,36 +123,36 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
 }
   
 
-void timeHandler(timeevent) {
-
-  if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
-
-}
-
-void startTimer(){
-
-  messageTimer = new Timer.repeating(15000, timeHandler);
+  void timeHandler(timeevent) {
   
-}
-
-// get a random number between 1 and 99
-// no duplicates
-int getRandomNumber(){
+    if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
   
-  int a = (Math.random()*100).toInt();
+  }
   
-  while(a > 99 || a < 1 || (addNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
+  void startTimer(){
   
-  addNumbers.add(a);
+    messageTimer = new Timer.repeating(15000, timeHandler);
     
-  return a;
-}
-
-
-// simple logging method printing time and msg
-void log(String msg){
-  print("${new Date.now()}: $msg");  
-}
+  }
+  
+  // get a random number between 1 and 99
+  // no duplicates
+  int getRandomNumber(){
+    
+    int a = (Math.random()*100).toInt();
+    
+    while(a > 99 || a < 1 || (addNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
+    
+    addNumbers.add(a);
+      
+    return a;
+  }
+  
+  
+  // simple logging method printing time and msg
+  void log(String msg){
+    print("${new Date.now()}: $msg");  
+  }
 
 
 }

@@ -1,4 +1,7 @@
-
+/**
+ * Manages standard HTTP requests
+ * 
+ **/
 #library("MessageHandler");
 #import("dart:io");
 #import("dart:isolate");
@@ -11,8 +14,10 @@ class RequestHandler {
   
   final int MaxInactiveInterval = 60; // 
   
+  // standard constructor
   RequestHandler(){ }
   
+  // init constructor
   RequestHandler.createRequestHandler(HttpRequest req, HttpResponse resp){
     
     requestHandler(req, resp);
@@ -39,6 +44,7 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
         
         htmlResponse = createErrorPage("error reading file: ${req.path}");
       }
+      
       htmlResponse = createHtmlResponse(req, session);
       
       //print("response: ${htmlResponse}");
