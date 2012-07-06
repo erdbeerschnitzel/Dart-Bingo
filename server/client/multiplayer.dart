@@ -4,6 +4,8 @@
  **/
 
 #import('dart:html');
+#import('js.dart', prefix: 'js');
+//#import('C:\\code\\dart\\dart-sdk\\lib\\unittest\\unittest.dart');
 #source('Gamecard.dart');
 
 // globals
@@ -14,13 +16,17 @@ List<int> addNumbers;
 bool first = true;
 bool gameStarted = false;
 
+//AJAX request for an XML Document.
+XMLHttpRequest RSSRequestObject;
+
+String rssFeedURL = "http://www.scribegriff.com/studios/index.php?rest/"
+        "blog&f=getPosts&cat_url=Google/Dart&count_only=1";
+
 /**
  * main entry point - attaches handlers and inits objects
  **/
 void main() {
-  
- 
- 
+
  // init some Objects
  addNumbers = new List<int>();
 
@@ -34,7 +40,30 @@ void main() {
  document.query('#Bingo').on.click.add(BingoHandler);
  
  show('Welcome to Bingo');
+ 
+ getRssFeed();
+ 
+ var parser = new DOMParser(); 
+ parser.parseFromString('<foo><bar></bar></foo>', 'text/xml'); 
 }
+
+void getRssFeed() {
+  RSSRequestObject = new XMLHttpRequest();
+  RSSRequestObject.open("GET", rssFeedURL, true);
+  RSSRequestObject.on.readyStateChange.add((e) {
+  reqChange();
+});
+}
+
+void reqChange() {
+  if (RSSRequestObject.readyState == 4 && RSSRequestObject.status == 200) {
+    Document feedDocument = RSSRequestObject.responseXML;
+    show(RSSRequestObject.responseXML.toString());
+  } else { 
+    show(RSSRequestObject.statusText); 
+  }
+}
+  
 
 // **** HANDLERS ****
 // ******************
@@ -75,6 +104,7 @@ void GameHandler(gameevent){
 
 // handles ready button
 void ReadyHandler(readyevent){
+  
   
   if(!gameStarted){
     

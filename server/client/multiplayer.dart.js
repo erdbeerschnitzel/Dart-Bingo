@@ -126,7 +126,7 @@ $$.HashMapImplementation = {"":
   $.setRuntimeTypeInfo(list, ({E: 'V'}));
   t1.list_1 = list;
   t1.i_2 = 0;
-  this.forEach$1(new $.Closure20(t1));
+  this.forEach$1(new $.Closure21(t1));
   return t1.list_1;
  },
  getKeys$0: function() {
@@ -135,7 +135,7 @@ $$.HashMapImplementation = {"":
   $.setRuntimeTypeInfo(list, ({E: 'K'}));
   t1.list_11 = list;
   t1.i_20 = 0;
-  this.forEach$1(new $.Closure25(t1));
+  this.forEach$1(new $.Closure26(t1));
   return t1.list_11;
  },
  forEach$1: function(f) {
@@ -523,16 +523,16 @@ $$.HashSetImplementation = {"":
   var result = $.HashSetImplementation$0();
   $.setRuntimeTypeInfo(result, ({E: 'E'}));
   t1.result_2 = result;
-  $.forEach(this._backingMap, new $.Closure10(t1));
+  $.forEach(this._backingMap, new $.Closure11(t1));
   return t1.result_2;
  },
  forEach$1: function(f) {
   var t1 = ({});
   t1.f_10 = f;
-  $.forEach(this._backingMap, new $.Closure9(t1));
+  $.forEach(this._backingMap, new $.Closure10(t1));
  },
  addAll$1: function(collection) {
-  $.forEach(collection, new $.Closure8(this));
+  $.forEach(collection, new $.Closure9(this));
  },
  remove$1: function(value) {
   var t1 = this._backingMap;
@@ -692,7 +692,7 @@ $$.LinkedHashMapImplementation = {"":
  forEach$1: function(f) {
   var t1 = ({});
   t1.f_12 = f;
-  $.forEach(this._lib0_list, new $.Closure12(t1));
+  $.forEach(this._lib0_list, new $.Closure13(t1));
  },
  getValues$0: function() {
   var t1 = ({});
@@ -700,7 +700,7 @@ $$.LinkedHashMapImplementation = {"":
   $.setRuntimeTypeInfo(list, ({E: 'V'}));
   t1.list_10 = list;
   t1.index_2 = 0;
-  $.forEach(this._lib0_list, new $.Closure21(t1));
+  $.forEach(this._lib0_list, new $.Closure22(t1));
   return t1.list_10;
  },
  getKeys$0: function() {
@@ -709,7 +709,7 @@ $$.LinkedHashMapImplementation = {"":
   $.setRuntimeTypeInfo(list, ({E: 'K'}));
   t1.list_12 = list;
   t1.index_20 = 0;
-  $.forEach(this._lib0_list, new $.Closure26(t1));
+  $.forEach(this._lib0_list, new $.Closure27(t1));
   return t1.list_12;
  },
  remove$1: function(key) {
@@ -867,7 +867,7 @@ $$.DoubleLinkedQueue = {"":
  get$length: function() {
   var t1 = ({});
   t1.counter_1 = 0;
-  this.forEach$1(new $.Closure11(t1));
+  this.forEach$1(new $.Closure12(t1));
   return t1.counter_1;
  },
  lastEntry$0: function() {
@@ -879,7 +879,7 @@ $$.DoubleLinkedQueue = {"":
  first$0: function() {
   return this._sentinel.get$_next().get$element();
  },
- get$first: function() { return new $.Closure29(this, 'first$0'); },
+ get$first: function() { return new $.Closure30(this, 'first$0'); },
  removeFirst$0: function() {
   return this._sentinel.get$_next().remove$0();
  },
@@ -1098,7 +1098,7 @@ $$.StackTrace = {"":
  }
 };
 
-$$.Closure30 = {"":
+$$.Closure31 = {"":
  [],
  super: "Object",
  toString$0: function() {
@@ -1475,6 +1475,10 @@ $$._DedicatedWorkerContextEventsImpl = {"":
 $$._DeprecatedPeerConnectionEventsImpl = {"":
  ["_ptr"],
  super: "_EventsImpl",
+ get$open: function() {
+  return this.operator$index$1('open');
+ },
+ open$3: function(arg0, arg1, arg2) { return this.get$open().$call$3(arg0, arg1, arg2); },
  get$message: function() {
   return this.operator$index$1('message');
  }
@@ -1487,6 +1491,9 @@ $$._DocumentEventsImpl = {"":
   return this.operator$index$1('reset');
  },
  reset$0: function() { return this.get$reset().$call$0(); },
+ get$readyStateChange: function() {
+  return this.operator$index$1('readystatechange');
+ },
  get$click: function() {
   return this.operator$index$1('click');
  }
@@ -1539,7 +1546,7 @@ $$.FilteredElementList = {"":
   $.clear(this._childNodes);
  },
  removeRange$2: function(start, rangeLength) {
-  $.forEach($.getRange(this.get$_filtered(), start, rangeLength), new $.Closure2());
+  $.forEach($.getRange(this.get$_filtered(), start, rangeLength), new $.Closure3());
  },
  addLast$1: function(value) {
   this.add$1(value);
@@ -1550,7 +1557,7 @@ $$.FilteredElementList = {"":
  add$1: function(value) {
   $.add$1(this._childNodes, value);
  },
- get$add: function() { return new $.Closure31(this, 'add$1'); },
+ get$add: function() { return new $.Closure32(this, 'add$1'); },
  set$length: function(newLength) {
   var len = $.get$length(this);
   if ($.geB(newLength, len)) return;
@@ -1572,7 +1579,7 @@ $$.FilteredElementList = {"":
  },
  first$0: function() { return this.get$first().$call$0(); },
  get$_filtered: function() {
-  return $.List$from($.filter(this._childNodes, new $.Closure0()));
+  return $.List$from($.filter(this._childNodes, new $.Closure1()));
  },
  is$List0: function() { return true; },
  is$Collection: function() { return true; }
@@ -1644,7 +1651,7 @@ $$._ChildrenElementList = {"":
   var t1 = ({});
   t1.f_1 = f;
   var output = [];
-  this.forEach$1(new $.Closure1(t1, output));
+  this.forEach$1(new $.Closure2(t1, output));
   return $._FrozenElementList$_wrap$1(output);
  },
  forEach$1: function(f) {
@@ -1857,6 +1864,10 @@ $$._ElementEventsImpl = {"":
 $$._EventSourceEventsImpl = {"":
  ["_ptr"],
  super: "_EventsImpl",
+ get$open: function() {
+  return this.operator$index$1('open');
+ },
+ open$3: function(arg0, arg1, arg2) { return this.get$open().$call$3(arg0, arg1, arg2); },
  get$message: function() {
   return this.operator$index$1('message');
  }
@@ -2129,7 +2140,11 @@ $$._NotificationEventsImpl = {"":
 
 $$._PeerConnection00EventsImpl = {"":
  ["_ptr"],
- super: "_EventsImpl"
+ super: "_EventsImpl",
+ get$open: function() {
+  return this.operator$index$1('open');
+ },
+ open$3: function(arg0, arg1, arg2) { return this.get$open().$call$3(arg0, arg1, arg2); }
 };
 
 $$._SVGElementInstanceEventsImpl = {"":
@@ -2172,6 +2187,10 @@ $$._TextTrackListEventsImpl = {"":
 $$._WebSocketEventsImpl = {"":
  ["_ptr"],
  super: "_EventsImpl",
+ get$open: function() {
+  return this.operator$index$1('open');
+ },
+ open$3: function(arg0, arg1, arg2) { return this.get$open().$call$3(arg0, arg1, arg2); },
  get$message: function() {
   return this.operator$index$1('message');
  }
@@ -2207,12 +2226,20 @@ $$._WorkerContextEventsImpl = {"":
 
 $$._XMLHttpRequestEventsImpl = {"":
  ["_ptr"],
- super: "_EventsImpl"
+ super: "_EventsImpl",
+ get$readyStateChange: function() {
+  return this.operator$index$1('readystatechange');
+ }
 };
 
 $$._XMLHttpRequestUploadEventsImpl = {"":
  ["_ptr"],
  super: "_EventsImpl"
+};
+
+$$._DOMWindowCrossFrameImpl = {"":
+ ["_window"],
+ super: "Object"
 };
 
 $$._IDBOpenDBRequestEventsImpl = {"":
@@ -2370,7 +2397,7 @@ $$._Copier = {"":
   if (!(t3 == null)) return t3;
   t1.copy_1 = $.HashMapImplementation$0();
   $.indexSet(t2, map, t1.copy_1);
-  $.forEach(map, new $.Closure27(this, t1));
+  $.forEach(map, new $.Closure28(this, t1));
   return t1.copy_1;
  },
  visitList$1: function(list) {
@@ -2656,7 +2683,7 @@ $$._EventLoop = {"":
  },
  _runHelper$0: function() {
   var t1 = $._window();
-  if (!(t1 == null)) new $.Closure28(this).$call$0();
+  if (!(t1 == null)) new $.Closure29(this).$call$0();
   else {
     for (; this.runIteration$0() === true; ) {
     }
@@ -2726,7 +2753,7 @@ $$._NativeJsSendPort = {"":
   var t1 = ({});
   t1.replyTo_5 = replyTo;
   t1.message_4 = message;
-  $._waitForPendingPorts([t1.message_4, t1.replyTo_5], new $.Closure22(this, t1));
+  $._waitForPendingPorts([t1.message_4, t1.replyTo_5], new $.Closure23(this, t1));
  },
  send$1: function(message) {
   return this.send$2(message,null)
@@ -2748,7 +2775,7 @@ $$._WorkerSendPort = {"":
   var t1 = ({});
   t1.replyTo_2 = replyTo;
   t1.message_1 = message;
-  $._waitForPendingPorts([t1.message_1, t1.replyTo_2], new $.Closure13(this, t1));
+  $._waitForPendingPorts([t1.message_1, t1.replyTo_2], new $.Closure14(this, t1));
  },
  send$1: function(message) {
   return this.send$2(message,null)
@@ -2772,14 +2799,14 @@ $$._PendingSendPortFinder = {"":
   var seen = $.index(t1, map);
   if (!(seen == null)) return;
   $.indexSet(t1, map, true);
-  $.forEach(map.getValues$0(), new $.Closure18(this));
+  $.forEach(map.getValues$0(), new $.Closure19(this));
  },
  visitList$1: function(list) {
   var t1 = this._visited;
   var seen = $.index(t1, list);
   if (!(seen == null)) return;
   $.indexSet(t1, list, true);
-  $.forEach(list, new $.Closure17(this));
+  $.forEach(list, new $.Closure18(this));
  },
  visitPrimitive$1: function(x) {
  },
@@ -2895,8 +2922,16 @@ $$._JsVisitedMap = {"":
 };
 
 $$.Closure = {"":
+ [],
+ super: "Closure31",
+ $call$1: function(e) {
+  $.reqChange();
+ }
+};
+
+$$.Closure0 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$2: function(k, v) {
   var t1 = this.box_0;
   t1.first_3 !== true && $.add$1(t1.result_1, ', ');
@@ -2909,33 +2944,33 @@ $$.Closure = {"":
  }
 };
 
-$$.Closure0 = {"":
+$$.Closure1 = {"":
  [],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(n) {
   return typeof n === 'object' && n !== null && n.is$Element();
  }
 };
 
-$$.Closure1 = {"":
+$$.Closure2 = {"":
  ["box_0", "output_2"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(element) {
   this.box_0.f_1.$call$1(element) === true && $.add$1(this.output_2, element);
  }
 };
 
-$$.Closure2 = {"":
+$$.Closure3 = {"":
  [],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(el) {
   return el.remove$0();
  }
 };
 
-$$.Closure3 = {"":
+$$.Closure4 = {"":
  [],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(e) {
   var t1 = $.S(e.get$data());
   $.document().query$1('#status').set$innerHTML(t1);
@@ -2943,35 +2978,35 @@ $$.Closure3 = {"":
  }
 };
 
-$$.Closure4 = {"":
+$$.Closure5 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$0: function() {
   return this.box_0.closure_1.$call$0();
  }
 };
 
-$$.Closure5 = {"":
+$$.Closure6 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$0: function() {
   var t1 = this.box_0;
   return t1.closure_1.$call$1(t1.arg1_2);
  }
 };
 
-$$.Closure6 = {"":
+$$.Closure7 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$0: function() {
   var t1 = this.box_0;
   return t1.closure_1.$call$2(t1.arg1_2, t1.arg2_3);
  }
 };
 
-$$.Closure7 = {"":
+$$.Closure8 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(event2) {
   if ($.eqB($.toString($.currentNumber), $.toString(this.box_0.el_1.get$innerHTML()))) {
     this.box_0.el_1.get$style().set$textDecoration('underline');
@@ -2980,50 +3015,50 @@ $$.Closure7 = {"":
  }
 };
 
-$$.Closure8 = {"":
+$$.Closure9 = {"":
  ["this_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(value) {
   this.this_0.add$1(value);
  }
 };
 
-$$.Closure9 = {"":
+$$.Closure10 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$2: function(key, value) {
   this.box_0.f_10.$call$1(key);
  }
 };
 
-$$.Closure10 = {"":
+$$.Closure11 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$2: function(key, value) {
   this.box_0.f_11.$call$1(key) === true && $.add$1(this.box_0.result_2, key);
  }
 };
 
-$$.Closure11 = {"":
+$$.Closure12 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(element) {
   var counter = $.add(this.box_0.counter_1, 1);
   this.box_0.counter_1 = counter;
  }
 };
 
-$$.Closure12 = {"":
+$$.Closure13 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(entry) {
   this.box_0.f_12.$call$2(entry.get$key(), entry.get$value());
  }
 };
 
-$$.Closure13 = {"":
+$$.Closure14 = {"":
  ["this_3", "box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$0: function() {
   this.this_3._checkReplyTo$1(this.box_0.replyTo_2);
   var t1 = this.this_3;
@@ -3034,17 +3069,17 @@ $$.Closure13 = {"":
  }
 };
 
-$$.Closure14 = {"":
+$$.Closure15 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(_) {
   return this.box_0.callback_1.$call$0();
  }
 };
 
-$$.Closure15 = {"":
+$$.Closure16 = {"":
  ["box_3", "box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(value) {
   $.indexSet(this.box_3.values_7, this.box_0.pos_1, value);
   var remaining = $.sub(this.box_3.remaining_6, 1);
@@ -3056,42 +3091,42 @@ $$.Closure15 = {"":
  }
 };
 
-$$.Closure16 = {"":
+$$.Closure17 = {"":
  ["box_3", "box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(exception) {
   this.box_3.result_5.get$isComplete() !== true && this.box_3.completer_4.completeException$2(exception, this.box_0.future_2.get$stackTrace());
   return true;
  }
 };
 
-$$.Closure17 = {"":
- ["this_0"],
- super: "Closure30",
- $call$1: function(e) {
-  return this.this_0._dispatch$1(e);
- }
-};
-
 $$.Closure18 = {"":
  ["this_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(e) {
   return this.this_0._dispatch$1(e);
  }
 };
 
 $$.Closure19 = {"":
+ ["this_0"],
+ super: "Closure31",
+ $call$1: function(e) {
+  return this.this_0._dispatch$1(e);
+ }
+};
+
+$$.Closure20 = {"":
  ["values_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$2: function(k, v) {
   return $.add$1(this.values_0, v);
  }
 };
 
-$$.Closure20 = {"":
+$$.Closure21 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$2: function(key, value) {
   var t1 = this.box_0;
   var t2 = t1.list_1;
@@ -3102,9 +3137,9 @@ $$.Closure20 = {"":
  }
 };
 
-$$.Closure21 = {"":
+$$.Closure22 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(entry) {
   var t1 = this.box_0;
   var t2 = t1.list_10;
@@ -3115,9 +3150,9 @@ $$.Closure21 = {"":
  }
 };
 
-$$.Closure22 = {"":
+$$.Closure23 = {"":
  ["this_6", "box_3"],
- super: "Closure30",
+ super: "Closure31",
  $call$0: function() {
   var t1 = ({});
   this.this_6._checkReplyTo$1(this.box_3.replyTo_5);
@@ -3133,13 +3168,13 @@ $$.Closure22 = {"":
     t1.msg_1 = $._serializeMessage(t1.msg_1);
     t1.reply_2 = $._serializeMessage(t1.reply_2);
   }
-  $._globalState().get$topEventLoop().enqueue$3(isolate, new $.Closure23(this.this_6, t1, shouldSerialize), 'receive ' + $.S(this.box_3.message_4));
+  $._globalState().get$topEventLoop().enqueue$3(isolate, new $.Closure24(this.this_6, t1, shouldSerialize), 'receive ' + $.S(this.box_3.message_4));
  }
 };
 
-$$.Closure23 = {"":
+$$.Closure24 = {"":
  ["this_8", "box_0", "shouldSerialize_7"],
- super: "Closure30",
+ super: "Closure31",
  $call$0: function() {
   var t1 = this.this_8.get$_receivePort().get$_callback();
   if (!(t1 == null)) {
@@ -3156,17 +3191,17 @@ $$.Closure23 = {"":
  }
 };
 
-$$.Closure24 = {"":
+$$.Closure25 = {"":
  ["keys_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$2: function(k, v) {
   return $.add$1(this.keys_0, k);
  }
 };
 
-$$.Closure25 = {"":
+$$.Closure26 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$2: function(key, value) {
   var t1 = this.box_0;
   var t2 = t1.list_11;
@@ -3177,9 +3212,9 @@ $$.Closure25 = {"":
  }
 };
 
-$$.Closure26 = {"":
+$$.Closure27 = {"":
  ["box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$1: function(entry) {
   var t1 = this.box_0;
   var t2 = t1.list_12;
@@ -3190,24 +3225,24 @@ $$.Closure26 = {"":
  }
 };
 
-$$.Closure27 = {"":
+$$.Closure28 = {"":
  ["this_2", "box_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$2: function(key, val) {
   $.indexSet(this.box_0.copy_1, this.this_2._dispatch$1(key), this.this_2._dispatch$1(val));
  }
 };
 
-$$.Closure28 = {"":
+$$.Closure29 = {"":
  ["this_0"],
- super: "Closure30",
+ super: "Closure31",
  $call$0: function() {
   if (this.this_0.runIteration$0() !== true) return;
   $._window().setTimeout$2(this, 0);
  }
 };
 
-$$.Closure30 = {"":
+$$.Closure31 = {"":
  [],
  super: "Object",
  toString$0: function() {
@@ -3215,10 +3250,10 @@ $$.Closure30 = {"":
  }
 };
 
-Isolate.$defineClass('Closure29', 'Closure30', ['self', 'target'], {
+Isolate.$defineClass('Closure30', 'Closure31', ['self', 'target'], {
 $call$0: function() { return this.self[this.target](); }
 });
-Isolate.$defineClass('Closure31', 'Closure30', ['self', 'target'], {
+Isolate.$defineClass('Closure32', 'Closure31', ['self', 'target'], {
 $call$1: function(p0) { return this.self[this.target](p0); }
 });
 $.mul$slow = function(a, b) {
@@ -3253,6 +3288,21 @@ $._AudioContextEventsImpl$1 = function(_ptr) {
 $.floor = function(receiver) {
   if (!(typeof receiver === 'number')) return receiver.floor$0();
   return Math.floor(receiver);
+};
+
+$.indexOf = function(a, element, startIndex, endIndex) {
+  if (typeof a !== 'string' && (typeof a !== 'object' || a === null || (a.constructor !== Array && !a.is$JavaScriptIndexingBehavior()))) return $.indexOf$bailout(1, a, element, startIndex, endIndex);
+  if (typeof endIndex !== 'number') return $.indexOf$bailout(1, a, element, startIndex, endIndex);
+  if ($.geB(startIndex, a.length)) return -1;
+  if ($.ltB(startIndex, 0)) startIndex = 0;
+  if (typeof startIndex !== 'number') return $.indexOf$bailout(2, a, element, startIndex, endIndex);
+  for (var i = startIndex; i < endIndex; ++i) {
+    if (i !== (i | 0)) throw $.iae(i);
+    var t1 = a.length;
+    if (i < 0 || i >= t1) throw $.ioore(i);
+    if ($.eqB(a[i], element)) return i;
+  }
+  return -1;
 };
 
 $.eqB = function(a, b) {
@@ -3307,7 +3357,7 @@ $.allMatches = function(receiver, str) {
 $.GameHandler = function(gameevent) {
   if ($.first !== true) {
     $.ws = $.WebSocket('ws://localhost:8080/bingo');
-    $.add$1($.ws.get$on().get$message(), new $.Closure3());
+    $.add$1($.ws.get$on().get$message(), new $.Closure4());
     $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
     $.document().query$1('#startGame').get$on().get$click().remove$1($.GameHandler);
     $.document().query$1('#startGame').set$value('I\'m ready!');
@@ -3337,6 +3387,14 @@ $.FutureImpl$immediate = function(value) {
   var res = $.FutureImpl$0();
   res._setValue$1(value);
   return res;
+};
+
+$.reqChange = function() {
+  var t1 = $.eqB($.RSSRequestObject.get$readyState(), 4) && $.eqB($.RSSRequestObject.get$status(), 200);
+  if (t1) {
+    $.RSSRequestObject.get$responseXML();
+    $.show($.toString($.RSSRequestObject.get$responseXML()));
+  } else $.show($.RSSRequestObject.get$statusText());
 };
 
 $._IDBOpenDBRequestEventsImpl$1 = function(_ptr) {
@@ -3501,9 +3559,9 @@ $.invokeClosure = function(closure, isolate, numberOfArguments, arg1, arg2) {
   t1.arg2_3 = arg2;
   t1.arg1_2 = arg1;
   t1.closure_1 = closure;
-  if ($.eqB(numberOfArguments, 0)) return $._callInIsolate(isolate, new $.Closure4(t1));
-  if ($.eqB(numberOfArguments, 1)) return $._callInIsolate(isolate, new $.Closure5(t1));
-  if ($.eqB(numberOfArguments, 2)) return $._callInIsolate(isolate, new $.Closure6(t1));
+  if ($.eqB(numberOfArguments, 0)) return $._callInIsolate(isolate, new $.Closure5(t1));
+  if ($.eqB(numberOfArguments, 1)) return $._callInIsolate(isolate, new $.Closure6(t1));
+  if ($.eqB(numberOfArguments, 2)) return $._callInIsolate(isolate, new $.Closure7(t1));
   throw $.captureStackTrace($.ExceptionImplementation$1('Unsupported number of arguments for wrapped closure'));
 };
 
@@ -3555,11 +3613,6 @@ $._NotificationEventsImpl$1 = function(_ptr) {
   return new $._NotificationEventsImpl(_ptr);
 };
 
-$.last = function(receiver) {
-  if ($.isJsArray(receiver) !== true) return receiver.last$0();
-  return $.index(receiver, $.sub($.get$length(receiver), 1));
-};
-
 $._browserPrefix = function() {
   var t1 = $._cachedBrowserPrefix;
   if (t1 == null) {
@@ -3567,6 +3620,11 @@ $._browserPrefix = function() {
     else $._cachedBrowserPrefix = '-webkit-';
   }
   return $._cachedBrowserPrefix;
+};
+
+$.last = function(receiver) {
+  if ($.isJsArray(receiver) !== true) return receiver.last$0();
+  return $.index(receiver, $.sub($.get$length(receiver), 1));
 };
 
 $.isPrimitive0 = function(x) {
@@ -3604,6 +3662,11 @@ $.toStringWrapper = function() {
   return $.toString((this.dartException));
 };
 
+$.filter = function(receiver, predicate) {
+  if ($.isJsArray(receiver) !== true) return receiver.filter$1(predicate);
+  return $.filter0(receiver, [], predicate);
+};
+
 $._PeerConnection00EventsImpl$1 = function(_ptr) {
   return new $._PeerConnection00EventsImpl(_ptr);
 };
@@ -3616,16 +3679,19 @@ $._WorkerContextEventsImpl$1 = function(_ptr) {
   return new $._WorkerContextEventsImpl(_ptr);
 };
 
-$.filter = function(receiver, predicate) {
-  if ($.isJsArray(receiver) !== true) return receiver.filter$1(predicate);
-  return $.filter0(receiver, [], predicate);
+$.filter0 = function(source, destination, f) {
+  for (var t1 = $.iterator(source); t1.hasNext$0() === true; ) {
+    var t2 = t1.next$0();
+    f.$call$1(t2) === true && $.add$1(destination, t2);
+  }
+  return destination;
 };
 
 $._DocumentEventsImpl$1 = function(_ptr) {
   return new $._DocumentEventsImpl(_ptr);
 };
 
-$.filter0 = function(source, destination, f) {
+$.filter1 = function(source, destination, f) {
   for (var t1 = $.iterator(source); t1.hasNext$0() === true; ) {
     var t2 = t1.next$0();
     f.$call$1(t2) === true && $.add$1(destination, t2);
@@ -3639,14 +3705,6 @@ $.regExpTest = function(regExp, str) {
 
 $.WebSocket = function(url) {
   return new WebSocket(url);;
-};
-
-$.filter1 = function(source, destination, f) {
-  for (var t1 = $.iterator(source); t1.hasNext$0() === true; ) {
-    var t2 = t1.next$0();
-    f.$call$1(t2) === true && $.add$1(destination, t2);
-  }
-  return destination;
 };
 
 $._EventsImpl$1 = function(_ptr) {
@@ -3703,8 +3761,8 @@ $.wait = function(futures) {
     var t4 = futures.length;
     if (t3 < 0 || t3 >= t4) throw $.ioore(t3);
     t2.future_2 = futures[t3];
-    t2.future_2.then$1(new $.Closure15(t1, t2));
-    t2.future_2.handleException$1(new $.Closure16(t1, t2));
+    t2.future_2.then$1(new $.Closure16(t1, t2));
+    t2.future_2.handleException$1(new $.Closure17(t1, t2));
   }
   return t1.result_5;
 };
@@ -3771,7 +3829,7 @@ $.addCellClickHandlers = function() {
       var t2 = ({});
       if (!(t1 && x === 2)) {
         t2.el_1 = $.document().query$1('#p' + $.S(i) + $.S(x));
-        $.add$1(t2.el_1.get$on().get$click(), new $.Closure7(t2));
+        $.add$1(t2.el_1.get$on().get$click(), new $.Closure8(t2));
       }
     }
   }
@@ -3809,6 +3867,10 @@ $.BingoHandler = function(bingoevent) {
     if ($.checkBingo($.playercard) === true) $.ws.send$1('thisisbingo');
     else $.show('You don\'t have a Bingo!');
   }
+};
+
+$._DOMWindowCrossFrameImpl$1 = function(_window) {
+  return new $._DOMWindowCrossFrameImpl(_window);
 };
 
 $.regExpMakeNative = function(regExp, global) {
@@ -3881,14 +3943,9 @@ $._emitMap = function(m, result, visiting) {
   $.add$1(t1.visiting_2, m);
   $.add$1(t1.result_1, '{');
   t1.first_3 = true;
-  $.forEach(m, new $.Closure(t1));
+  $.forEach(m, new $.Closure0(t1));
   $.add$1(t1.result_1, '}');
   $.removeLast(t1.visiting_2);
-};
-
-$.isEmpty = function(receiver) {
-  if (typeof receiver === 'string' || $.isJsArray(receiver) === true) return receiver.length === 0;
-  return receiver.isEmpty$0();
 };
 
 $._IDBDatabaseEventsImpl$1 = function(_ptr) {
@@ -3913,6 +3970,11 @@ $.stringReplaceJS = function(receiver, replacer, to) {
 
 $.UnsupportedOperationException$1 = function(_message) {
   return new $.UnsupportedOperationException(_message);
+};
+
+$.isEmpty = function(receiver) {
+  if (typeof receiver === 'string' || $.isJsArray(receiver) === true) return receiver.length === 0;
+  return receiver.isEmpty$0();
 };
 
 $.indexOf$2 = function(receiver, element, start) {
@@ -4006,6 +4068,8 @@ $.main = function() {
   $.add$1($.document().query$1('#startGame').get$on().get$click(), $.GameHandler);
   $.add$1($.document().query$1('#Bingo').get$on().get$click(), $.BingoHandler);
   $.show('Welcome to Bingo');
+  $.getRssFeed();
+  $.DOMParser();
 };
 
 $._AbstractWorkerEventsImpl$1 = function(_ptr) {
@@ -4121,6 +4185,10 @@ $.endsWith = function(receiver, other) {
 
 $.ListIterator$1 = function(list) {
   return new $.ListIterator(list, 0);
+};
+
+$.XMLHttpRequest = function() {
+  return new XMLHttpRequest();;
 };
 
 $.checkNum = function(value) {
@@ -4327,6 +4395,10 @@ $._fillStatics = function(context) {
     $globals = context.isolateStatics;
   $static_init();
 ;
+};
+
+$.DOMParser = function() {
+  return new DOMParser();;
 };
 
 $._WindowEventsImpl$1 = function(_ptr) {
@@ -4572,21 +4644,6 @@ $.objectToString = function(object) {
   return 'Instance of \'' + $.S($.objectTypeName(object)) + '\'';
 };
 
-$.indexOf = function(a, element, startIndex, endIndex) {
-  if (typeof a !== 'string' && (typeof a !== 'object' || a === null || (a.constructor !== Array && !a.is$JavaScriptIndexingBehavior()))) return $.indexOf$bailout(1, a, element, startIndex, endIndex);
-  if (typeof endIndex !== 'number') return $.indexOf$bailout(1, a, element, startIndex, endIndex);
-  if ($.geB(startIndex, a.length)) return -1;
-  if ($.ltB(startIndex, 0)) startIndex = 0;
-  if (typeof startIndex !== 'number') return $.indexOf$bailout(2, a, element, startIndex, endIndex);
-  for (var i = startIndex; i < endIndex; ++i) {
-    if (i !== (i | 0)) throw $.iae(i);
-    var t1 = a.length;
-    if (i < 0 || i >= t1) throw $.ioore(i);
-    if ($.eqB(a[i], element)) return i;
-  }
-  return -1;
-};
-
 $._firstProbe = function(hashCode, length$) {
   return $.and(hashCode, $.sub(length$, 1));
 };
@@ -4630,6 +4687,12 @@ $.show = function(message) {
   $.document().query$1('#status').set$innerHTML(message);
 };
 
+$.forEach1 = function(iterable, f) {
+  for (var t1 = $.iterator(iterable); t1.hasNext$0() === true; ) {
+    f.$call$1(t1.next$0());
+  }
+};
+
 $.hashCode = function(receiver) {
   if (typeof receiver === 'number') return receiver & 0x1FFFFFFF;
   if (!(typeof receiver === 'string')) return receiver.hashCode$0();
@@ -4658,29 +4721,6 @@ $.makeLiteralMap = function(keyValuePairs) {
   return result;
 };
 
-$.forEach1 = function(iterable, f) {
-  for (var t1 = $.iterator(iterable); t1.hasNext$0() === true; ) {
-    f.$call$1(t1.next$0());
-  }
-};
-
-$.startsWith = function(receiver, other) {
-  if (!(typeof receiver === 'string')) return receiver.startsWith$1(other);
-  $.checkString(other);
-  var length$ = $.get$length(other);
-  if ($.gtB(length$, receiver.length)) return false;
-  return other == receiver.substring(0, length$);
-};
-
-$.toStringForNativeObject = function(obj) {
-  return 'Instance of ' + $.S($.getTypeNameOf(obj));
-};
-
-$.forEach = function(receiver, f) {
-  if ($.isJsArray(receiver) !== true) return receiver.forEach$1(f);
-  return $.forEach0(receiver, f);
-};
-
 $.indexOf0 = function(a, element, startIndex, endIndex) {
   if (typeof a !== 'string' && (typeof a !== 'object' || a === null || (a.constructor !== Array && !a.is$JavaScriptIndexingBehavior()))) return $.indexOf0$bailout(1, a, element, startIndex, endIndex);
   if (typeof endIndex !== 'number') return $.indexOf0$bailout(1, a, element, startIndex, endIndex);
@@ -4694,6 +4734,23 @@ $.indexOf0 = function(a, element, startIndex, endIndex) {
     if ($.eqB(a[i], element)) return i;
   }
   return -1;
+};
+
+$.startsWith = function(receiver, other) {
+  if (!(typeof receiver === 'string')) return receiver.startsWith$1(other);
+  $.checkString(other);
+  var length$ = $.get$length(other);
+  if ($.gtB(length$, receiver.length)) return false;
+  return other == receiver.substring(0, length$);
+};
+
+$.forEach = function(receiver, f) {
+  if ($.isJsArray(receiver) !== true) return receiver.forEach$1(f);
+  return $.forEach0(receiver, f);
+};
+
+$.toStringForNativeObject = function(obj) {
+  return 'Instance of ' + $.S($.getTypeNameOf(obj));
 };
 
 $.forEach0 = function(iterable, f) {
@@ -4755,7 +4812,7 @@ $._waitForPendingPorts = function(message, callback) {
   t1.callback_1 = callback;
   var finder = $._PendingSendPortFinder$0();
   finder.traverse$1(message);
-  $.wait(finder.ports).then$1(new $.Closure14(t1));
+  $.wait(finder.ports).then$1(new $.Closure15(t1));
 };
 
 $.index = function(a, index) {
@@ -4777,6 +4834,12 @@ $._ElementEventsImpl$1 = function(_ptr) {
 
 $.List = function(length$) {
   return $.newList(length$);
+};
+
+$._createSafe = function(w) {
+  var t1 = $.window();
+  if (w == null ? t1 == null : w === t1) return w;
+  return $._DOMWindowCrossFrameImpl$1(w);
 };
 
 $._XMLHttpRequestUploadEventsImpl$1 = function(_ptr) {
@@ -4885,6 +4948,12 @@ $.shl = function(a, b) {
     return (a << b) >>> 0;
   }
   return a.operator$shl$1(b);
+};
+
+$.getRssFeed = function() {
+  $.RSSRequestObject = $.XMLHttpRequest();
+  $.RSSRequestObject.open$3('GET', $.rssFeedURL, true);
+  $.add$1($.RSSRequestObject.get$on().get$readyStateChange(), new $.Closure());
 };
 
 $.document = function() {
@@ -5157,8 +5226,8 @@ $.wait$bailout = function(state, futures, t1) {
     var t2 = ({});
     t2.pos_1 = i;
     t2.future_2 = $.index(futures, t2.pos_1);
-    t2.future_2.then$1(new $.Closure15(t1, t2));
-    t2.future_2.handleException$1(new $.Closure16(t1, t2));
+    t2.future_2.then$1(new $.Closure16(t1, t2));
+    t2.future_2.handleException$1(new $.Closure17(t1, t2));
   }
   return t1.result_5;
 };
@@ -5213,6 +5282,8 @@ $._cachedBrowserPrefix = null;
 $.addNumbers = null;
 $.currentNumber = 22;
 $.ws = null;
+$.RSSRequestObject = null;
+$.rssFeedURL = 'http://www.scribegriff.com/studios/index.php?rest/blog&f=getPosts&cat_url=Google/Dart&count_only=1';
 var $ = null;
 Isolate.$finishClasses($$);
 $$ = {};
@@ -5406,7 +5477,7 @@ $.$defineNativeClass('HTMLDListElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('DOMApplicationCache', [], {
+$.$defineNativeClass('DOMApplicationCache', ["status?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
@@ -5533,7 +5604,7 @@ $.$defineNativeClass('DedicatedWorkerContext', [], {
  }
 });
 
-$.$defineNativeClass('DeprecatedPeerConnection', [], {
+$.$defineNativeClass('DeprecatedPeerConnection', ["readyState?"], {
  send$1: function(text) {
   return this.send(text);
  },
@@ -5549,6 +5620,7 @@ $.$defineNativeClass('DeprecatedPeerConnection', [], {
 });
 
 $.$defineNativeClass('HTMLDetailsElement', [], {
+ open$3: function(arg0, arg1, arg2) { return this.open.$call$3(arg0, arg1, arg2); },
  is$Element: function() { return true; }
 });
 
@@ -5560,7 +5632,7 @@ $.$defineNativeClass('HTMLDivElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLDocument', [], {
+$.$defineNativeClass('HTMLDocument', ["readyState?"], {
  query$1: function(selectors) {
   if ($.CTC5.hasMatch$1(selectors) === true) return this.$dom_getElementById$1($.substring$1(selectors, 1));
   return this.$dom_querySelector$1(selectors);
@@ -5586,7 +5658,7 @@ $.$defineNativeClass('DocumentFragment', [], {
  },
  click$0: function() {
  },
- get$click: function() { return new $.Closure29(this, 'click$0'); },
+ get$click: function() { return new $.Closure30(this, 'click$0'); },
  get$style: function() {
   return $.Element$tag('div').get$style();
  },
@@ -5646,7 +5718,7 @@ $.$defineNativeClass('Element', ["style?", "innerHTML=", "id?"], {
  click$0: function() {
   return this.click();
  },
- get$click: function() { return new $.Closure29(this, 'click$0'); },
+ get$click: function() { return new $.Closure30(this, 'click$0'); },
  get$$$dom_children: function() {
   return this.children;;
  },
@@ -5714,7 +5786,7 @@ $.$defineNativeClass('EventException', ["message?"], {
  }
 });
 
-$.$defineNativeClass('EventSource', [], {
+$.$defineNativeClass('EventSource', ["readyState?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
@@ -5815,7 +5887,7 @@ $.$defineNativeClass('FileList', ["length?"], {
  is$Collection: function() { return true; }
 });
 
-$.$defineNativeClass('FileReader', [], {
+$.$defineNativeClass('FileReader', ["readyState?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
@@ -5827,7 +5899,7 @@ $.$defineNativeClass('FileReader', [], {
  }
 });
 
-$.$defineNativeClass('FileWriter', ["length?"], {
+$.$defineNativeClass('FileWriter', ["readyState?", "length?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
@@ -6085,7 +6157,7 @@ $.$defineNativeClass('IDBObjectStore', [], {
 }
 });
 
-$.$defineNativeClass('IDBRequest', [], {
+$.$defineNativeClass('IDBRequest', ["readyState?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   if (Object.getPrototypeOf(this).hasOwnProperty('$dom_removeEventListener$3')) {
     return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
@@ -6366,7 +6438,7 @@ $.$defineNativeClass('MediaController', [], {
  }
 });
 
-$.$defineNativeClass('HTMLMediaElement', [], {
+$.$defineNativeClass('HTMLMediaElement', ["readyState?"], {
  get$on: function() {
   return $._MediaElementEventsImpl$1(this);
  },
@@ -6425,7 +6497,7 @@ $.$defineNativeClass('MediaList', ["length?"], {
  is$Collection: function() { return true; }
 });
 
-$.$defineNativeClass('MediaStream', [], {
+$.$defineNativeClass('MediaStream', ["readyState?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   if (Object.getPrototypeOf(this).hasOwnProperty('$dom_removeEventListener$3')) {
     return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
@@ -6698,7 +6770,7 @@ $.$defineNativeClass('HTMLParamElement', ["value="], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('PeerConnection00', [], {
+$.$defineNativeClass('PeerConnection00', ["readyState?"], {
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
@@ -7275,12 +7347,12 @@ $.$defineNativeClass('Storage', [], {
  },
  getValues$0: function() {
   var values = [];
-  this.forEach$1(new $.Closure19(values));
+  this.forEach$1(new $.Closure20(values));
   return values;
  },
  getKeys$0: function() {
   var keys = [];
-  this.forEach$1(new $.Closure24(keys));
+  this.forEach$1(new $.Closure25(keys));
   return keys;
  },
  forEach$1: function(f) {
@@ -7493,7 +7565,7 @@ $.$defineNativeClass('TouchList', ["length?"], {
  is$Collection: function() { return true; }
 });
 
-$.$defineNativeClass('HTMLTrackElement', [], {
+$.$defineNativeClass('HTMLTrackElement', ["readyState?"], {
  is$Element: function() { return true; }
 });
 
@@ -7668,7 +7740,7 @@ $.$defineNativeClass('HTMLVideoElement', [], {
  is$Element: function() { return true; }
 });
 
-$.$defineNativeClass('WebSocket', [], {
+$.$defineNativeClass('WebSocket', ["readyState?"], {
  send$1: function(data) {
   return this.send(data);
  },
@@ -7683,7 +7755,7 @@ $.$defineNativeClass('WebSocket', [], {
  }
 });
 
-$.$defineNativeClass('DOMWindow', ["navigator?", "length?"], {
+$.$defineNativeClass('DOMWindow', ["status?", "navigator?", "length?"], {
  setTimeout$2: function(handler, timeout) {
   return this.setTimeout($.convertDartClosureToJS(handler, 0),timeout);
  },
@@ -7695,6 +7767,16 @@ $.$defineNativeClass('DOMWindow', ["navigator?", "length?"], {
  },
  get$on: function() {
   return $._WindowEventsImpl$1(this);
+ },
+ open$3: function(url, name$, options) {
+  if (options == null) return $._createSafe(this._open2$2(url, name$));
+  return $._createSafe(this._open3$3(url, name$, options));
+ },
+ _open3$3: function(url, name, options) {
+  return this.open(url, name, options);;
+ },
+ _open2$2: function(url, name) {
+  return this.open(url, name);;
  }
 });
 
@@ -7738,13 +7820,19 @@ $.$defineNativeClass('WorkerLocation', [], {
 $.$defineNativeClass('WorkerNavigator', ["userAgent?"], {
 });
 
-$.$defineNativeClass('XMLHttpRequest', [], {
+$.$defineNativeClass('XMLHttpRequest', ["statusText?", "status?", "responseXML?", "readyState?"], {
  send$1: function(data) {
   return this.send(data);
  },
  $dom_removeEventListener$3: function(type, listener, useCapture) {
   return this.removeEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },
+ open$5: function(method, url, async, user, password) {
+  return this.open(method,url,async,user,password);
+ },
+ open$3: function(method,url,async) {
+  return this.open(method,url,async);
+},
  $dom_addEventListener$3: function(type, listener, useCapture) {
   return this.addEventListener(type,$.convertDartClosureToJS(listener, 1),useCapture);
  },

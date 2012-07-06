@@ -42,3 +42,21 @@ BUTTON{ font-size:9pt;  }
 	background-color:yellow;
 	color:black;
 }
+
+ 
+#poweredBy {
+  clear: both;
+  font-style: italic;
+}
+#poweredBy .dartClass {
+  font-weight: bold;
+}
+#poweredBy a {
+  font-size: 100%;
+  font-weight: normal;
+  color: #556270;
+}
+#poweredBy a:hover {
+  text-decoration: none;
+  color: #000;
+}

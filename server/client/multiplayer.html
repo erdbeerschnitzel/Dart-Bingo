@@ -5,7 +5,7 @@
     <link rel=StyleSheet href="./style.css" type="text/css">
     <title>client</title>
   </head>
-  <body style="background:grey">
+  <body style="background:white">
     <div id="controls" align="center">
 	    <h1>Play against other players</h1>
 	    <h2 id="status">dart is not running</h2>
@@ -38,6 +38,11 @@
 		<a href="/client/singleplayer.html">Go to Singleplayer</a>
 	</div>
 	
-    <script type="application/javascript" src="multiplayer.dart.js"></script>
+	<div id="poweredBy" align="center" style="padding:10px">
+		<a href='http://www.dartlang.org/'> powered by <span class='dartClass'>Dart</span></a>
+	</div>
+	
+    <script type="application/dart" src="multiplayer.dart"></script>
+    <script src="http://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
   </body>
 </html>
