@@ -21,13 +21,21 @@ MessageHandler messageHandler;
 RequestHandler requestHandler;
 
 
+
+
 //
 // ## main entry point ##
 //
 void main() {
+
+  try{
+
+  }
+  catch(String x){
+    
+    print("caught: $x");
+  }
   
-
-
   websocketHandler = new WebSocketHandler();
   messageHandler = new MessageHandler();
   requestHandler = new RequestHandler();

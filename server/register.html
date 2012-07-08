@@ -2,12 +2,13 @@
 
 	<head>
 		<!-- --><link href="css/default.css" rel="stylesheet" type="text/css" />
-		<title>Online-Bingo - Login</title>
+		<title>Online-Bingo - Create a new Account</title>
 	</head>
 
 	<body>
-
-		<h1 id="login">Online-Bingo</h1>
+		<div style="text-align: center;">
+			<h1 id="login">Create a new Account</h1>
+		</div>
 
 		<div class="dark-box">
 			<form action="/client/singleplayer.html" method="post">
@@ -21,8 +22,20 @@
 						<td><input type="password" name="password"/></td>
 					</tr>
 					<tr>
+						<td>Repeat Password</td>
+						<td><input type="password" name="repeatpassword"/></td>
+					</tr>
+					<tr>
+						<td>Your Age</td>
+						<td><input type="number" name="age"/></td>
+					</tr>					
+					<tr>
+						<td>E-Mail</td>
+						<td><input type="email" name="email"/></td>
+					</tr>										
+					<tr>
 						<td></td>
-						<td align="right"><input type="submit" value="Login"></input></td>
+						<td align="right"><input type="submit" value="Create Account"></input></td>
 					</tr>
 				</table>
 			</form>
