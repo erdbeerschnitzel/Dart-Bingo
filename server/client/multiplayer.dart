@@ -4,8 +4,9 @@
  **/
 
 #import('dart:html');
+#import('dart:json');
 #import('js.dart', prefix: 'js');
-//#import('C:\\code\\dart\\dart-sdk\\lib\\unittest\\unittest.dart');
+//#import('C:\\code\\dart\\dart-sdk\\lib\\i18n\\date_format.dart');
 #source('Gamecard.dart');
 
 // globals
@@ -32,6 +33,19 @@ void main() {
 
  playercard = new Gamecard();
  
+ try{
+   
+   //throw "summ!";
+   
+ }catch(Exception x){
+   
+   show("ex caught: $x");
+ }
+ 
+ String listAsJson = '["Dart",0.8]'; // input List of data
+ List parsedList = JSON.parse(listAsJson);
+
+ 
  // attach handlers
  document.query('#getGamecard').on.click.add(GamecardHandler);
  
@@ -39,12 +53,16 @@ void main() {
  
  document.query('#Bingo').on.click.add(BingoHandler);
  
- show('Welcome to Bingo');
- 
+ //show('Welcome to Bingo');
+ //show(parsedList[1]);
+
  getRssFeed();
  
  var parser = new DOMParser(); 
- parser.parseFromString('<foo><bar></bar></foo>', 'text/xml'); 
+ //document = parser.parseFromString('<foo><bar></bar></foo>', 'text/xml'); 
+ 
+ 
+ 
 }
 
 void getRssFeed() {
