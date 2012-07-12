@@ -79,7 +79,7 @@ void addWebSocketHandlers(){
 // delegate Request to RequestHandler
 void delegateRequestHandler(HttpRequest req, HttpResponse resp) {
  
-  requestHandler.requestHandler(req, resp);
+  requestHandler.handleRequest(req, resp);
 }
 
 

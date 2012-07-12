@@ -22,14 +22,9 @@ class RequestHandler {
     sessionManager = new HttpSessionManager();
   }
   
-  // init constructor
-  RequestHandler.createRequestHandler(HttpRequest req, HttpResponse resp){
-    
-    requestHandler(req, resp);
-  }
-  
+ 
 // serving http requests
-void requestHandler(HttpRequest req, HttpResponse resp) {
+void handleRequest(HttpRequest req, HttpResponse resp) {
   
   String htmlResponse;
   
@@ -164,7 +159,7 @@ String createHtmlResponse(HttpRequest req, HttpSession session) {
     
     if(!path.contains("singleplayer.html")){
       
-    log("requesting unrelated file");
+    //log("requesting unrelated file");
   
     File file = new File(path);
   
