@@ -5,7 +5,7 @@
 #library("MessageHandler");
 #import("dart:io");
 #import("dart:isolate");
-#import('HttpSessionManager.dart', prefix:"hs");
+#import('HttpSessionManager.dart');
 #import('FileManager.dart', prefix:"FileManager");
 #import('LoginCheck.dart');
 #source('Util.dart');
@@ -13,9 +13,14 @@
 class RequestHandler {
   
   final int MaxInactiveInterval = 60; // 
+  HttpSessionManager sessionManager;
   
   // standard constructor
-  RequestHandler(){ }
+  RequestHandler(){ 
+    
+    log("creating new request handler and sessionmanager");
+    sessionManager = new HttpSessionManager();
+  }
   
   // init constructor
   RequestHandler.createRequestHandler(HttpRequest req, HttpResponse resp){
@@ -32,11 +37,11 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
     
     try {
 
-      hs.HttpSession session = hs.getSession(req, resp);
+      HttpSession session = sessionManager.getSession(req, resp);
       
       if (session != null){
         
-        if (session.isNew(hs.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
+        if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
       }
 
       
@@ -60,11 +65,11 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
   
   try {
 
-    hs.HttpSession session = hs.getSession(req, resp);
+    HttpSession session = sessionManager.getSession(req, resp);
     
     if (session != null){
       
-      if (session.isNew(hs.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
+      if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
     }
 
 
@@ -112,9 +117,9 @@ void requestHandler(HttpRequest req, HttpResponse resp) {
 }
 
 // Create HTML response to the request.
-String createHtmlResponse(HttpRequest req, hs.HttpSession session) {
+String createHtmlResponse(HttpRequest req, HttpSession session) {
   
-  if (session.isNew(hs.getSessions()) ) {
+  if (session.isNew(sessionManager.getSessions()) ) {
 
     log("new Session opened");
 

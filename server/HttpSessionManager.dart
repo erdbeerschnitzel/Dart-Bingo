@@ -9,11 +9,18 @@
 #import('dart:isolate');
 #source('HttpSession.dart');
 
+class HttpSessionManager{
 
 Map<String, Map> _sessions;  // session table
 final int _defaultMaxInactiveInterval = 1800;  // 30 minutes default timeout
 final int _sessionGarbageCollectorTick = 300;  // repeat every 5 minutes
 Map<String, Dynamic> _attributes;
+
+// init constructor
+HttpSessionManager(){
+  
+  _sessions = new Map<String, Map>();
+}
 
 //
 Map<String, Map> getSessions(){
@@ -225,3 +232,4 @@ List<int> _urlEncode(String s) {
   return ol;
 }
 
+}
