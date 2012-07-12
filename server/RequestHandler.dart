@@ -28,7 +28,7 @@ class RequestHandler {
 // serving http requests
 void handleRequest(HttpRequest req, HttpResponse resp) {
   
-  try {
+  //try {
 
     session = sessionManager.getSession(req, resp);
     
@@ -37,23 +37,33 @@ void handleRequest(HttpRequest req, HttpResponse resp) {
       if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
     }
     
-    
-    if(req.path.contains('.png')){
-      
-      handleOtherFile(req, resp);
-      
-    } else {
-    
-      handleTextFile(req, resp);
-    
+    if (session.isNew(sessionManager.getSessions()) ) {
+
+      log("new Session opened");
+
+      htmlResponse =  createLoginPage();
     }
-   
-  } catch (Exception err) {
+    else {
+      
+      if(req.path.contains('.png')){
+        
+        handleOtherFile(req, resp);
+        
+      } else {
+      
+        handleTextFile(req, resp);
+      
+      }
+      
+    }
     
-    htmlResponse = createErrorPage(err.toString());
-  }
+  //} catch (Exception err) {
+    
+   // htmlResponse = createErrorPage(err.toString());
+  //}
   
-  resp.outputStream.writeString(htmlResponse);
+  if(htmlResponse != "!File!")  resp.outputStream.writeString(htmlResponse);
+  
   resp.outputStream.close();
 
 }
@@ -61,8 +71,7 @@ void handleRequest(HttpRequest req, HttpResponse resp) {
 void handleTextFile(HttpRequest req, HttpResponse resp){
   
   htmlResponse = createHtmlResponse(req);
-  
-  
+ 
   if(htmlResponse.contains("#EAEAEA")){
     
     //print("requesting css file");
@@ -71,38 +80,23 @@ void handleTextFile(HttpRequest req, HttpResponse resp){
   } 
   else {
       
-      resp.headers.add("Content-Type", "text/html; charset=UTF-8");
+    resp.headers.add("Content-Type", "text/html; charset=UTF-8");
   }
   
 }
 
 void handleOtherFile(HttpRequest req, HttpResponse resp){
   
- 
-  try {
-
-    session = sessionManager.getSession(req, resp);
-    
-    if (session != null){
-      
-      if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
-    }
-   
-    //print("response: ${htmlResponse}");
-    
-  } catch (Exception err) {
-    
-    htmlResponse = createErrorPage(err.toString());
-  }
   
   if(FileManager.readNonTextFile(req.path).length == 0){
     
     htmlResponse = createErrorPage("error reading file: ${req.path}");
   }
-  
-  htmlResponse = createHtmlResponse(req);
-  
-  if(FileManager.readNonTextFile(req.path).length != 0) resp.outputStream.write(FileManager.readNonTextFile(req.path));
+  else {
+    
+    htmlResponse = "!File!";
+    resp.outputStream.write(FileManager.readNonTextFile(req.path));
+  }
 }
 
 
@@ -110,15 +104,7 @@ void handleOtherFile(HttpRequest req, HttpResponse resp){
 // Create HTML response to the request.
 String createHtmlResponse(HttpRequest req) {
   
-  if (session.isNew(sessionManager.getSessions()) ) {
-
-    log("new Session opened");
-
-    return createLoginPage();
-  }
-  
-  
-  
+ 
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
   
   log("requested $path req.path: ${req.path}");
@@ -126,33 +112,12 @@ String createHtmlResponse(HttpRequest req) {
   
   if(req.path.endsWith('/') || req.path.endsWith('8080')){
     
-    path = 'http:\\\\localhost:8080\client\singleplayer.html';
+    path = 'http:\\\\localhost:8080\\main.html';
   }
   
   if(path.contains("singleplayer.html") && check(req))  return FileManager.readHTMLFile();
     
-  //login post
-  if((path.contains("singleplayer.html") && req.method == "POST") || (path.contains("singleplayer.html") && req.headers.toString().contains("multiplayer.html"))){
-    
-    log("matched");
-    
-          if(check(req)){
-            
-            log("we are in");
-            
-            File client = new File("./client/singleplayer.html");
-            
-            return client.readAsTextSync();
-            
-          } else {
-            
-            log("login failed");
-            return ("login denied");
-          }
-    
-    
-  } else {
-    
+  
     if(!path.contains("singleplayer.html")){
       
     //log("requesting unrelated file");
@@ -170,10 +135,10 @@ String createHtmlResponse(HttpRequest req) {
     }
     else {
       
-      return createErrorPage("Login denied!");
+      return createLoginErrorPage();
     }
   }
   
-}
+
   
 }

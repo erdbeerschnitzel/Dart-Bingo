@@ -36,6 +36,22 @@ String createErrorPage(String errorMessage) {
     </html>''').toString();
 }
 
+// create html for error page
+String createLoginErrorPage() {
+  
+  return new StringBuffer('''
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Error Page</title>
+      </head>
+      <body>
+        <h1> *** You are not logged in or your session expired! ***</h1><br>
+        <div><a href='/index.html'>Go to Login Page</a></div>
+      </body>
+    </html>''').toString();
+}
+
 // escaping
 StringBuffer cleanText(StringBuffer text) {
   
