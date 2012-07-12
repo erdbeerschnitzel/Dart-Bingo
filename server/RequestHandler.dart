@@ -14,6 +14,8 @@ class RequestHandler {
   
   final int MaxInactiveInterval = 60; // 
   HttpSessionManager sessionManager;
+  String htmlResponse;
+  HttpSession session;
   
   // standard constructor
   RequestHandler(){ 
@@ -26,57 +28,39 @@ class RequestHandler {
 // serving http requests
 void handleRequest(HttpRequest req, HttpResponse resp) {
   
-  String htmlResponse;
-  
-  if(req.path.contains('.png')){
-    
-    try {
-
-      HttpSession session = sessionManager.getSession(req, resp);
-      
-      if (session != null){
-        
-        if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
-      }
-
-      
-      if(FileManager.readNonTextFile(req.path).length == 0){
-        
-        htmlResponse = createErrorPage("error reading file: ${req.path}");
-      }
-      
-      htmlResponse = createHtmlResponse(req, session);
-      
-      //print("response: ${htmlResponse}");
-      
-    } catch (Exception err) {
-      
-      htmlResponse = createErrorPage(err.toString());
-    }
-    
-    if(FileManager.readNonTextFile(req.path).length != 0) resp.outputStream.write(FileManager.readNonTextFile(req.path));
-    
-  } else {
-  
   try {
 
-    HttpSession session = sessionManager.getSession(req, resp);
+    session = sessionManager.getSession(req, resp);
     
     if (session != null){
       
       if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
     }
-
-
     
-    htmlResponse = createHtmlResponse(req, session);
     
-    //print("response: ${htmlResponse}");
+    if(req.path.contains('.png')){
+      
+      handleOtherFile(req, resp);
+      
+    } else {
     
+      handleTextFile(req, resp);
+    
+    }
+   
   } catch (Exception err) {
     
     htmlResponse = createErrorPage(err.toString());
   }
+  
+  resp.outputStream.writeString(htmlResponse);
+  resp.outputStream.close();
+
+}
+
+void handleTextFile(HttpRequest req, HttpResponse resp){
+  
+  htmlResponse = createHtmlResponse(req);
   
   
   if(htmlResponse.contains("#EAEAEA")){
@@ -86,33 +70,45 @@ void handleRequest(HttpRequest req, HttpResponse resp) {
     resp.headers.add("Content-Type", "text/css; charset=UTF-8");
   } 
   else {
-    
-    if(req.path.contains('.png')){
-      
-      log("png requested");
-      resp.headers.add("Content-Type", "text/html; charset=UTF-8");
-      //resp.headers.add("Content-Type", "image/png; charset=UTF-8");
-    } 
-    else {
       
       resp.headers.add("Content-Type", "text/html; charset=UTF-8");
-    }
-   
-    
   }
-
-  resp.outputStream.writeString(htmlResponse);
   
-  }
-
-  
-  resp.outputStream.close();
-
- 
 }
 
+void handleOtherFile(HttpRequest req, HttpResponse resp){
+  
+ 
+  try {
+
+    session = sessionManager.getSession(req, resp);
+    
+    if (session != null){
+      
+      if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
+    }
+   
+    //print("response: ${htmlResponse}");
+    
+  } catch (Exception err) {
+    
+    htmlResponse = createErrorPage(err.toString());
+  }
+  
+  if(FileManager.readNonTextFile(req.path).length == 0){
+    
+    htmlResponse = createErrorPage("error reading file: ${req.path}");
+  }
+  
+  htmlResponse = createHtmlResponse(req);
+  
+  if(FileManager.readNonTextFile(req.path).length != 0) resp.outputStream.write(FileManager.readNonTextFile(req.path));
+}
+
+
+
 // Create HTML response to the request.
-String createHtmlResponse(HttpRequest req, HttpSession session) {
+String createHtmlResponse(HttpRequest req) {
   
   if (session.isNew(sessionManager.getSessions()) ) {
 

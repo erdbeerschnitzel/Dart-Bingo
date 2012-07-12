@@ -31,9 +31,7 @@
             print("retrieving postmessage");
              
             if(req.inputStream.read() != null){
-              
-            
-            
+                    
               String postmessage = new String.fromCharCodes(req.inputStream.read());
               
               print("postmessage $postmessage");
