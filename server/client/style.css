@@ -1,48 +1,85 @@
-
-BODY { background-color:white }
-BODY,TABLE{ font-size:12pt; font-family:Arial, Tahoma, Roman; }
-BUTTON{ font-size:9pt;  }
-
-.boardcell{
-	background-color:#FFC6A5;
-	width:30px;
-	color:red;
-	font-weight:bold;
-}
-.boardheader{
-	background-color:#FF7B29;
-	width:60px;
-}
-.top{
-	background-color:white;
-	width:30px;
-}
-.submitbut{
-	width:150px
+body {
+	background-image: url("../img/bg.png");
+	background-repeat: repeat-x;
+	background-color: #EAEAEA;
+	color: black;
+	margin: 0px;
+	padding: 0px;
+	font-size: 1em;
 }
 
-.showncard1{
-	background-color:darkgreen;
-	color:white;
-}
-.showncard2{
-	background-color:darkblue;
-	color:white;
-}
-.closecard1{
-	background-color:lightgreen;
-	color:black;
-}
-.closecard2{
-	background-color:lightblue;
-	color:black;
+h1 {
+	font-size: 2em;	
+	font-style: italic;
 }
 
-.wincard{
-	background-color:yellow;
-	color:black;
+a {
+	color: black;
 }
 
+textarea {
+	width: 100%;
+}
+
+.ui-datatable th, .ui-datatable tfoot td {
+    padding: 0px 0px;
+    text-align: center;
+    white-space: nowrap;
+}
+.ui-widget, 
+.ui-widget .ui-widget {
+	font-size: 12px;
+}
+
+.ui-panel {
+	margin-bottom: 20px;
+}
+
+.dark-box {
+	background-color: #333333;
+}
+
+.dark-box-top {
+	background-color: #333333;
+	border: 1px solid #333333;
+}
+
+.pos-right {
+	float: right;
+}
+
+.inner-Panel {
+	margin: 0px;
+}
+
+#content {
+	width: 80%;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;		
+}
+
+#footer {
+	font-size: 0.7em;
+	text-align: center;	
+	color: black;
+}
+
+#stovemgmt-label-login {
+	margin-left: 40px;  
+	margin-top: 100px;	
+}
+
+#stovemgmt-label {
+	margin-left: 100px;  
+	font-size: 1.5em;
+	font-style: italic;	
+}
+
+#account-panel {	
+	margin-right: 5px;
+	font-size: 0.8em;
+}
  
 #poweredBy {
   clear: both;

@@ -218,6 +218,7 @@ bool checkBingo(Gamecard card){
   
   for(int i = 0; i < 5; i++){
     
+    result = true;
     
     for(int x = 0; x < 5; x++){
       
@@ -226,19 +227,24 @@ bool checkBingo(Gamecard card){
       else 
       {
       
-        if(card.fields[i][x] > 0) result = false;
+        if(card.fields[i][x] > 0){
+          
+          debug("false: ${card.fields[i][x]}");
+          result = false;
+        }
         
-        //deb = deb + "$i$x: " + card.fields[i][x] + " ";
+        deb = "$deb$i$x: ${card.fields[i][x]} ";
       }
     }
       
-    if(result) return true;    
+    if(result) break; 
+ 
     
   }
   
-  //debug("the current number is $currentNumber and the result is $deb");
+  //debug(deb);
   
-  return false;
+  return result;
 }
 
 // get a random number between 1 and 99
