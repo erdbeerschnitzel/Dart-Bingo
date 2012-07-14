@@ -101,7 +101,10 @@ void BingoHandler(bingoevent){
   }
   else {
     
-    
+    if(checkBingo(playercard)){
+      active = false;
+      show("You have a Bingo! Congratulations!");
+    }
   }
   
 }
@@ -216,6 +219,7 @@ bool checkBingo(Gamecard card){
   
   String deb = "";
   
+// horizontal check
   for(int i = 0; i < 5; i++){
     
     result = true;
@@ -229,7 +233,7 @@ bool checkBingo(Gamecard card){
       
         if(card.fields[i][x] > 0){
           
-          debug("false: ${card.fields[i][x]}");
+          //debug("false: ${card.fields[i][x]}");
           result = false;
         }
         
@@ -237,10 +241,37 @@ bool checkBingo(Gamecard card){
       }
     }
       
-    if(result) break; 
+    if(result) return result; 
  
     
   }
+  
+  // vertical check
+  for(int i = 0; i < 5; i++){
+    
+    result = true;
+    
+    for(int x = 0; x < 5; x++){
+      
+      if(i == 2 && x == 2){
+      }
+      else 
+      {
+      
+        if(card.fields[x][i] > 0){
+          
+          //debug("false: ${card.fields[i][x]}");
+          result = false;
+        }
+        
+        deb = "$deb$i$x: ${card.fields[i][x]} ";
+      }
+    }
+      
+    if(result) return result; 
+ 
+    
+  }  
   
   //debug(deb);
   
