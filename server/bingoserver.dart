@@ -51,6 +51,7 @@ void main() {
   server.listen("127.0.0.1", 8080);  
   
   log("Server running...");
+  logToFile("Server running...");
 
 }
 
@@ -65,6 +66,7 @@ void addWebSocketHandlers(){
     messageHandler.clients.add(new Client.start(conn, false));
     
     log("Client ${messageHandler.clients.length} connected...");
+    logToFile("Client ${messageHandler.clients.length} connected...");
     
     messageHandler.connections.add(conn);    
     

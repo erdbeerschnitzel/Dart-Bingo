@@ -24,6 +24,8 @@
         
         List<String> lines = file.readAsLinesSync();
         
+        
+        
         print("pass file read");
   
           if(!heads.contains("multiplayer.html")){
@@ -63,7 +65,7 @@
     
           }
           else {
-            valid = true;
+            valid = false;
           }
     
       }

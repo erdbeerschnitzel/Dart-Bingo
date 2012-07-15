@@ -131,7 +131,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
   
   void startTimer(){
   
-    messageTimer = new Timer.repeating(15000, timeHandler);
+    messageTimer = new Timer.repeating(10000, timeHandler);
     
   }
   
@@ -153,6 +153,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
   void log(String msg){
     print("${new Date.now()}: $msg");  
   }
+
 
 
 }

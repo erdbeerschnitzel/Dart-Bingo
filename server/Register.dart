@@ -8,4 +8,5 @@ main(){
 void registerHandler(registerevent){
   
   document.query('#registerdiv').style.visibility = "visible";
+  document.query('#login').style.visibility = "hidden";
 }

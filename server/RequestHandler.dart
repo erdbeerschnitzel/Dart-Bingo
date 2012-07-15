@@ -28,7 +28,26 @@ class RequestHandler {
 // serving http requests
 void handleRequest(HttpRequest req, HttpResponse resp) {
   
-  //try {
+  if(req.method == "POST"){
+
+    handlePOSTRequest(req, resp);
+  }
+  else {
+    
+    handleGETRequest(req, resp);
+  }
+  
+
+  
+  if(htmlResponse != "!File!")  resp.outputStream.writeString(htmlResponse);
+  
+  resp.outputStream.close();
+
+}
+
+void handleGETRequest(HttpRequest req, HttpResponse resp){
+  
+  try {
 
     session = sessionManager.getSession(req, resp);
     
@@ -57,15 +76,30 @@ void handleRequest(HttpRequest req, HttpResponse resp) {
       
     }
     
-  //} catch (Exception err) {
+  } catch (Exception err) {
     
-   // htmlResponse = createErrorPage(err.toString());
-  //}
-  
-  if(htmlResponse != "!File!")  resp.outputStream.writeString(htmlResponse);
-  
-  resp.outputStream.close();
+    htmlResponse = createErrorPage(err.toString());
+  }
+}
 
+void handlePOSTRequest(HttpRequest req, HttpResponse resp){
+  
+  session = sessionManager.getSession(req, resp);
+  
+  if (session != null){
+    
+    if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
+  }
+  
+  if(req.inputStream.read() != null){
+    
+    String postmessage = new String.fromCharCodes(req.inputStream.read());
+    
+    print("postmessage $postmessage");
+  }
+  else {
+    print("error reading POST");
+  }
 }
 
 void handleTextFile(HttpRequest req, HttpResponse resp){

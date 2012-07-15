@@ -2573,6 +2573,7 @@ $.add = function(a, b) {
 
 $.registerHandler = function(registerevent) {
   $.document().query$1('#registerdiv').get$style().set$visibility('visible');
+  $.document().query$1('#login').get$style().set$visibility('hidden');
 };
 
 $.dynamicFunction = function(name$) {

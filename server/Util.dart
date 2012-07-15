@@ -76,3 +76,21 @@ StringBuffer cleanText(StringBuffer text) {
 void log(String msg){
   print("${new Date.now()}: $msg");  
 }
+
+void logToFile(String msg){
+  
+  print("saving $msg");
+  
+  File file = new File('server.log');
+  OutputStream out = file.openOutputStream(FileMode.APPEND);
+  
+  StringBuffer sb = new StringBuffer();
+  
+  sb.add("\n");
+  sb.add("${new Date.now()}: ");
+  sb.add(msg);
+  
+  out.writeString(sb.toString());
+  out.close();
+  
+}
