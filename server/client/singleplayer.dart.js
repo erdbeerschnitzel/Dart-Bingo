@@ -1096,6 +1096,258 @@ $$.Gamecard = {"":
       return a;
   }
  },
+ checkBingo$0: function() {
+  for (var t1 = this.fields, i = 0, deb = '', result = true; i < 5; ++i) {
+    for (var t2 = i === 2, x = 0, result = true; x < 5; ++x) {
+      if (!(t2 && x === 2)) {
+        var t3 = t1.length;
+        if (i < 0 || i >= t3) throw $.ioore(i);
+        var t4 = t1[i];
+        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(1, t2, deb, t1, i, result, x, t4);
+        var t5 = t4.length;
+        if (x < 0 || x >= t5) throw $.ioore(x);
+        t4 = t4[x];
+        if (typeof t4 !== 'number') return this.checkBingo$0$bailout(2, t2, deb, t1, i, result, x, t4);
+        if (t4 > 0) result = false;
+        t3 = deb + $.S(i) + $.S(x) + ': ';
+        t4 = t1.length;
+        if (i < 0 || i >= t4) throw $.ioore(i);
+        t5 = t1[i];
+        if (typeof t5 !== 'string' && (typeof t5 !== 'object' || t5 === null || (t5.constructor !== Array && !t5.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(3, t2, t3, x, t1, t5, i, result);
+        var t6 = t5.length;
+        if (x < 0 || x >= t6) throw $.ioore(x);
+        var deb0 = t3 + $.S(t5[x]) + ' ';
+        deb = deb0;
+      }
+    }
+    if (result) return result;
+  }
+  for (i = 0; i < 5; ++i) {
+    for (t2 = i === 2, result = true, x = 0; x < 5; ++x) {
+      if (!(t2 && x === 2)) {
+        t3 = t1.length;
+        if (x < 0 || x >= t3) throw $.ioore(x);
+        t4 = t1[x];
+        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(4, t4, result, deb, t1, i, t2, x);
+        t5 = t4.length;
+        if (i < 0 || i >= t5) throw $.ioore(i);
+        t4 = t4[i];
+        if (typeof t4 !== 'number') return this.checkBingo$0$bailout(5, x, t1, result, deb, t2, i, t4);
+        if (t4 > 0) result = false;
+        t3 = deb + $.S(i) + $.S(x) + ': ';
+        t4 = t1.length;
+        if (i < 0 || i >= t4) throw $.ioore(i);
+        t5 = t1[i];
+        if (typeof t5 !== 'string' && (typeof t5 !== 'object' || t5 === null || (t5.constructor !== Array && !t5.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(6, t3, t1, x, t5, t2, i, result);
+        t6 = t5.length;
+        if (x < 0 || x >= t6) throw $.ioore(x);
+        deb0 = t3 + $.S(t5[x]) + ' ';
+        deb = deb0;
+      }
+    }
+    if (result) return result;
+  }
+  return result;
+ },
+ checkBingo$0$bailout: function(state, env0, env1, env2, env3, env4, env5, env6) {
+  switch (state) {
+    case 1:
+      t2 = env0;
+      deb = env1;
+      t1 = env2;
+      i = env3;
+      result = env4;
+      x = env5;
+      t4 = env6;
+      break;
+    case 2:
+      t2 = env0;
+      deb = env1;
+      t1 = env2;
+      i = env3;
+      result = env4;
+      x = env5;
+      t4 = env6;
+      break;
+    case 3:
+      t2 = env0;
+      t3 = env1;
+      x = env2;
+      t1 = env3;
+      t5 = env4;
+      i = env5;
+      result = env6;
+      break;
+    case 4:
+      t4 = env0;
+      result = env1;
+      deb = env2;
+      t1 = env3;
+      i = env4;
+      t2 = env5;
+      x = env6;
+      break;
+    case 5:
+      x = env0;
+      t1 = env1;
+      result = env2;
+      deb = env3;
+      t2 = env4;
+      i = env5;
+      t4 = env6;
+      break;
+    case 6:
+      t3 = env0;
+      t1 = env1;
+      x = env2;
+      t5 = env3;
+      t2 = env4;
+      i = env5;
+      result = env6;
+      break;
+  }
+  switch (state) {
+    case 0:
+      var t1 = this.fields;
+      var i = 0;
+      var deb = '';
+      var result = true;
+    case 1:
+    case 2:
+    case 3:
+      L0: while (true) {
+        switch (state) {
+          case 0:
+            if (!(i < 5)) break L0;
+            var t2 = i === 2;
+            var x = 0;
+            result = true;
+          case 1:
+          case 2:
+          case 3:
+            L1: while (true) {
+              switch (state) {
+                case 0:
+                  if (!(x < 5)) break L1;
+                case 1:
+                case 2:
+                case 3:
+                  if ((state == 0 && (t2 && x === 2))) {
+                  } else {
+                    switch (state) {
+                      case 0:
+                        var t3 = t1.length;
+                        if (i < 0 || i >= t3) throw $.ioore(i);
+                        var t4 = t1[i];
+                      case 1:
+                        state = 0;
+                        t4 = $.index(t4, x);
+                      case 2:
+                        state = 0;
+                        if ($.gtB(t4, 0)) result = false;
+                        t3 = deb + $.S(i) + $.S(x) + ': ';
+                        t4 = t1.length;
+                        if (i < 0 || i >= t4) throw $.ioore(i);
+                        var t5 = t1[i];
+                      case 3:
+                        state = 0;
+                        var deb0 = t3 + $.S($.index(t5, x)) + ' ';
+                        deb = deb0;
+                    }
+                  }
+                  ++x;
+              }
+            }
+            if (result) return result;
+            ++i;
+        }
+      }
+      i = 0;
+    case 4:
+    case 5:
+    case 6:
+      L2: while (true) {
+        switch (state) {
+          case 0:
+            if (!(i < 5)) break L2;
+            t2 = i === 2;
+            result = true;
+            x = 0;
+          case 4:
+          case 5:
+          case 6:
+            L3: while (true) {
+              switch (state) {
+                case 0:
+                  if (!(x < 5)) break L3;
+                case 4:
+                case 5:
+                case 6:
+                  if ((state == 0 && (t2 && x === 2))) {
+                  } else {
+                    switch (state) {
+                      case 0:
+                        t3 = t1.length;
+                        if (x < 0 || x >= t3) throw $.ioore(x);
+                        t4 = t1[x];
+                      case 4:
+                        state = 0;
+                        t4 = $.index(t4, i);
+                      case 5:
+                        state = 0;
+                        if ($.gtB(t4, 0)) result = false;
+                        t3 = deb + $.S(i) + $.S(x) + ': ';
+                        t4 = t1.length;
+                        if (i < 0 || i >= t4) throw $.ioore(i);
+                        t5 = t1[i];
+                      case 6:
+                        state = 0;
+                        deb0 = t3 + $.S($.index(t5, x)) + ' ';
+                        deb = deb0;
+                    }
+                  }
+                  ++x;
+              }
+            }
+            if (result) return result;
+            ++i;
+        }
+      }
+      return result;
+  }
+ },
+ createCardHTML$1: function(forComputer) {
+  var cardstring = $.StringBufferImpl$('');
+  for (var t1 = this.fields, t2 = $.iterator(t1), t3 = forComputer === true, x = 0, i = 0; t2.hasNext$0() === true; ) {
+    var t4 = t2.next$0();
+    cardstring.add$1('<tr>');
+    for (t4 = $.iterator(t4), t5 = i < 5; t4.hasNext$0() === true; ) {
+      t4.next$0();
+      if (t3) {
+        if (x < 5 && t5) {
+          var t6 = '<td id="c' + $.S(i) + $.S(x) + '"class=top>';
+          var t7 = t1.length;
+          if (i < 0 || i >= t7) throw $.ioore(i);
+          cardstring.add$1(t6 + $.S($.index(t1[i], x)) + '</td>');
+        }
+      } else {
+        if (x < 5 && t5) {
+          t6 = '<td id="p' + $.S(i) + $.S(x) + '"class=top>';
+          t7 = t1.length;
+          if (i < 0 || i >= t7) throw $.ioore(i);
+          cardstring.add$1(t6 + $.S($.index(t1[i], x)) + '</td>');
+        }
+      }
+      if (x === 4) {
+        cardstring.add$1('</tr>');
+        x = 0;
+      } else ++x;
+    }
+    i = i === 4 ? 0 : i + 1;
+  }
+  return cardstring.toString$0();
+  var t5;
+ },
  Gamecard$0: function() {
   var t1 = $.ListFactory_List(null);
   $.setRuntimeTypeInfo(t1, ({E: 'List'}));
@@ -2392,12 +2644,13 @@ $$.invokeClosure_anon1 = {"":
 };
 
 $$.addCellClickHandlers_anon = {"":
- ["el_0"],
+ ["el_4", "box_0", "box_2"],
  super: "Closure",
  $call$1: function(event2) {
-  if ($.eqB($.toString($.currentNumber), $.toString(this.el_0.get$innerHTML()))) {
-    this.el_0.get$style().set$textDecoration('underline');
-    this.el_0.get$style().set$backgroundColor('red');
+  if ($.eqB($.toString($.currentNumber), $.toString(this.el_4.get$innerHTML()))) {
+    this.el_4.get$style().set$textDecoration('underline');
+    this.el_4.get$style().set$backgroundColor('red');
+    $.indexSet($.index($.playercard.get$fields(), this.box_2.i_3), this.box_0.x_1, 0);
   }
  }
 };
@@ -2628,7 +2881,7 @@ $.GameHandler = function(gameevent) {
           $.document().query$1('#c' + $.S(i) + $.S(x)).get$style().set$textDecoration('underline');
           $.document().query$1('#c' + $.S(i) + $.S(x)).get$style().set$backgroundColor('red');
           $.indexSet($.index($.computercard.get$fields(), i), x, 0);
-          $.checkBingo($.computercard) === true && $.endGame();
+          $.computercard.checkBingo$0() === true && $.endGame();
         }
       }
     }
@@ -2993,14 +3246,17 @@ $.stringContainsUnchecked = function(receiver, other, startIndex) {
 };
 
 $.addCellClickHandlers = function() {
-  for (var i = 0; i < 5; ++i) {
-    for (var t1 = i === 2, x = 0; x < 5; ++x) {
-      if (!(t1 && x === 2)) {
-        var el = $.document().query$1('#p' + $.S(i) + $.S(x));
-        $.add$1(el.get$on().get$click(), new $.addCellClickHandlers_anon(el));
+  var box_2 = ({});
+  for (box_2.i_3 = 0; $.ltB(box_2.i_3, 5); box_20 = ({}), box_20.i_3 = box_2.i_3, box_20.i_3 = $.add(box_20.i_3, 1), box_2 = box_20) {
+    var box_0 = ({});
+    for (box_0.x_1 = 0; $.ltB(box_0.x_1, 5); box_00 = ({}), box_00.x_1 = box_0.x_1, box_00.x_1 = $.add(box_00.x_1, 1), box_0 = box_00) {
+      if (!($.eqB(box_2.i_3, 2) && $.eqB(box_0.x_1, 2))) {
+        var el = $.document().query$1('#p' + $.S(box_2.i_3) + $.S(box_0.x_1));
+        $.add$1(el.get$on().get$click(), new $.addCellClickHandlers_anon(el, box_0, box_2));
       }
     }
   }
+  var box_20, box_00;
 };
 
 $.ObjectNotClosureException$ = function() {
@@ -3031,7 +3287,7 @@ $.regExpAttachGlobalNative = function(regExp) {
 $.BingoHandler = function(bingoevent) {
   if ($.active !== true) $.show('You need to start the Game!');
   else {
-    if ($.checkBingo($.playercard) === true) {
+    if ($.playercard.checkBingo$0() === true) {
       $.active = false;
       $.show('You have a Bingo! Congratulations!');
     }
@@ -3492,29 +3748,6 @@ $.StackTrace$ = function(stack) {
   return new $.StackTrace(stack);
 };
 
-$.createCard = function(card, forComputer) {
-  var cardstring = $.StringBufferImpl$('');
-  for (var t1 = $.iterator(card.get$fields()), t2 = forComputer === true, x = 0, i = 0; t1.hasNext$0() === true; ) {
-    var t3 = t1.next$0();
-    cardstring.add$1('<tr>');
-    for (t3 = $.iterator(t3), t4 = i < 5; t3.hasNext$0() === true; ) {
-      t3.next$0();
-      if (t2) {
-        x < 5 && t4 && cardstring.add$1('<td id="c' + $.S(i) + $.S(x) + '"class=top>' + $.S($.index($.index(card.get$fields(), i), x)) + '</td>');
-      } else {
-        x < 5 && t4 && cardstring.add$1('<td id="p' + $.S(i) + $.S(x) + '"class=top>' + $.S($.index($.index(card.get$fields(), i), x)) + '</td>');
-      }
-      if (x === 4) {
-        cardstring.add$1('</tr>');
-        x = 0;
-      } else ++x;
-    }
-    i = i === 4 ? 0 : i + 1;
-  }
-  return cardstring.toString$0();
-  var t4;
-};
-
 $._EventListenerListImpl$ = function(_ptr, _type) {
   return new $._EventListenerListImpl(_type, _ptr);
 };
@@ -3587,10 +3820,10 @@ $._globalState0 = function(val) {
 $.GamecardHandler = function(gamecardevent) {
   $.computercard = $.Gamecard$();
   $.playercard = $.Gamecard$();
-  var t1 = $.createCard($.playercard, false);
+  var t1 = $.playercard.createCardHTML$1(false);
   $.document().query$1('#playertable').set$innerHTML(t1);
   $.addCellClickHandlers();
-  t1 = $.createCard($.computercard, true);
+  t1 = $.computercard.createCardHTML$1(true);
   $.document().query$1('#computertable').set$innerHTML(t1);
   $.show('Gamecards created!');
   $.first = false;
@@ -3756,30 +3989,6 @@ $.addAll = function(receiver, collection) {
   for (; iterator.hasNext$0() === true; ) {
     $.add$1(receiver, iterator.next$0());
   }
-};
-
-$.checkBingo = function(card) {
-  for (var result = true, deb = '', i = 0; i < 5; ++i) {
-    for (var t1 = i === 2, result = true, x = 0; x < 5; ++x) {
-      if (!(t1 && x === 2)) {
-        if ($.gtB($.index($.index(card.get$fields(), i), x), 0)) result = false;
-        var deb0 = deb + $.S(i) + $.S(x) + ': ' + $.S($.index($.index(card.get$fields(), i), x)) + ' ';
-        deb = deb0;
-      }
-    }
-    if (result) return result;
-  }
-  for (i = 0; i < 5; ++i) {
-    for (t1 = i === 2, result = true, x = 0; x < 5; ++x) {
-      if (!(t1 && x === 2)) {
-        if ($.gtB($.index($.index(card.get$fields(), x), i), 0)) result = false;
-        deb0 = deb + $.S(i) + $.S(x) + ': ' + $.S($.index($.index(card.get$fields(), i), x)) + ' ';
-        deb = deb0;
-      }
-    }
-    if (result) return result;
-  }
-  return result;
 };
 
 $.Primitives_objectToString = function(object) {

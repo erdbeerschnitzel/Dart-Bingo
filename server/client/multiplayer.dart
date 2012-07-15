@@ -145,7 +145,7 @@ void GamecardHandler(gamecardevent){
 
     playercard = new Gamecard();
   
-    document.query('#playertable').innerHTML = createCard(playercard);
+    document.query('#playertable').innerHTML = playercard.createCardHTML(false);
     
     addCellClickHandlers();
 
@@ -164,7 +164,7 @@ void BingoHandler(bingoevent){
   }
   else {
     
-    if(checkBingo(playercard)) {
+    if(playercard.checkBingo()) {
       
       ws.send("thisisbingo");
     }
@@ -223,46 +223,7 @@ void show(String message) {
   
 }
 
-// very static
-// TODO: improve card creating algo
-String createCard(Gamecard card){
-  
-  StringBuffer cardstring = new StringBuffer();
-  
-  int i = 0;
-  int x = 0;
-  
-  for(List liste in card.fields){
-    
-    cardstring.add('<tr>');
-    
-    for(var value in liste){
-      
-        // this adds a td element with specific class and specific value
-        if(x < 5 && i < 5)  cardstring.add('<td id="p$i$x"class=top>${card.fields[i][x]}</td>');
 
-        // close the tr element
-        if(x == 4){ 
-          
-          cardstring.add('</tr>');
-          x = 0;
-        
-        } else {
-          x++;
-        }
-      }
-
-    
-    if(i == 4){
-      i = 0;
-    } else {
-      i++;
-    }
-
-  }
-  
-  return cardstring.toString();
-}
 
 // add CellClickHandlers to playercard
 void addCellClickHandlers(){
@@ -285,6 +246,7 @@ void addCellClickHandlers(){
             
             el.style.textDecoration = 'underline';
             el.style.backgroundColor = 'red';
+            playercard.fields[i][x] = 0;
           }
 
         });         
@@ -302,32 +264,7 @@ void endGame(){
   document.query('#startGame').on.click.remove(GameHandler);
 }
 
-//
-bool checkBingo(Gamecard card){
-  
-  bool result = true;
-  
-  for(int i = 0; i < 5; i++){
-    
-    
-    for(int x = 0; x < 5; x++){
-      
-      if(i == 2 && x == 2){
-      }
-      else 
-      {
-      
-        if(card.fields[i][x] > 0) result = false;
 
-      }
-    }
-      
-    if(result) return true;    
-    
-  }
-  
-  return false;
-}
 
 // get a random number between 1 and 99
 // no duplicates

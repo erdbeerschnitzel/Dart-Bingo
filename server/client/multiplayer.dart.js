@@ -533,7 +533,7 @@ $$.HashSetIterator = {"":
   do {
     var t2 = this._nextValidIndex + 1;
     this._nextValidIndex = t2;
-    if ($.geB(t2, length$)) break;
+    if (t2 >= length$) break;
     t2 = this._nextValidIndex;
     if (t2 !== (t2 | 0)) throw $.iae(t2);
     var t3 = t1.length;
@@ -545,7 +545,7 @@ $$.HashSetIterator = {"":
   var length$ = $.get$length(t1);
   var entry = null;
   do {
-    var t2 = $.add(this._nextValidIndex, 1);
+    var t2 = this._nextValidIndex + 1;
     this._nextValidIndex = t2;
     if ($.geB(t2, length$)) break;
     entry = $.index(t1, this._nextValidIndex);
@@ -570,47 +570,19 @@ $$.HashSetIterator = {"":
  },
  hasNext$0: function() {
   var t1 = this._nextValidIndex;
-  if (typeof t1 !== 'number') return this.hasNext$0$bailout(1, t1, 0);
   var t2 = this._entries;
-  if (typeof t2 !== 'string' && (typeof t2 !== 'object' || t2 === null || (t2.constructor !== Array && !t2.is$JavaScriptIndexingBehavior()))) return this.hasNext$0$bailout(2, t1, t2);
+  if (typeof t2 !== 'string' && (typeof t2 !== 'object' || t2 === null || (t2.constructor !== Array && !t2.is$JavaScriptIndexingBehavior()))) return this.hasNext$0$bailout(1, t1, t2);
   var t3 = t2.length;
   if (t1 >= t3) return false;
   if (t1 !== (t1 | 0)) throw $.iae(t1);
   if (t1 < 0 || t1 >= t3) throw $.ioore(t1);
   t2[t1] === $.CTC7 && this._advance$0();
-  t1 = this._nextValidIndex;
-  if (typeof t1 !== 'number') return this.hasNext$0$bailout(3, t1, t2);
-  return t1 < t2.length;
+  return this._nextValidIndex < t2.length;
  },
- hasNext$0$bailout: function(state, env0, env1) {
-  switch (state) {
-    case 1:
-      t1 = env0;
-      break;
-    case 2:
-      t1 = env0;
-      t2 = env1;
-      break;
-    case 3:
-      t1 = env0;
-      t2 = env1;
-      break;
-  }
-  switch (state) {
-    case 0:
-      var t1 = this._nextValidIndex;
-    case 1:
-      state = 0;
-      var t2 = this._entries;
-    case 2:
-      state = 0;
-      if ($.geB(t1, $.get$length(t2))) return false;
-      $.index(t2, this._nextValidIndex) === $.CTC7 && this._advance$0();
-      t1 = this._nextValidIndex;
-    case 3:
-      state = 0;
-      return $.lt(t1, $.get$length(t2));
-  }
+ hasNext$0$bailout: function(state, t1, t2) {
+  if ($.geB(t1, $.get$length(t2))) return false;
+  $.index(t2, this._nextValidIndex) === $.CTC7 && this._advance$0();
+  return $.lt(this._nextValidIndex, $.get$length(t2));
  },
  HashSetIterator$1: function(set_) {
   this._advance$0();
@@ -1260,10 +1232,12 @@ $$.Gamecard = {"":
   if (typeof a !== 'number') return this.getRandomNumber$0$bailout(2, a, 0, 0);
   t1 = this.addedNumbers;
   while (true) {
-    if (!(a > 99 || a < 1)) {
-      var t2 = $.indexOf$1(t1, a);
-      if (typeof t2 !== 'number') return this.getRandomNumber$0$bailout(3, t1, a, t2);
-      t2 = t2 >= 0;
+    if (!(a > 99)) {
+      if (!(a < 1)) {
+        var t2 = $.indexOf$1(t1, a);
+        if (typeof t2 !== 'number') return this.getRandomNumber$0$bailout(3, t1, a, t2);
+        t2 = t2 >= 0;
+      } else t2 = true;
     } else t2 = true;
     if (!t2) break;
     t2 = $.Math_random();
@@ -1311,13 +1285,21 @@ $$.Gamecard = {"":
         switch (state) {
           case 0:
           case 3:
-            if (state == 3 || (state == 0 && !($.gtB(a, 99) || $.ltB(a, 1)))) {
+            if (state == 3 || (state == 0 && !$.gtB(a, 99))) {
               switch (state) {
                 case 0:
-                  var t2 = $.indexOf$1(t1, a);
                 case 3:
-                  state = 0;
-                  t2 = $.geB(t2, 0);
+                  if (state == 3 || (state == 0 && !$.ltB(a, 1))) {
+                    switch (state) {
+                      case 0:
+                        var t2 = $.indexOf$1(t1, a);
+                      case 3:
+                        state = 0;
+                        t2 = $.geB(t2, 0);
+                    }
+                  } else {
+                    t2 = true;
+                  }
               }
             } else {
               t2 = true;
@@ -1333,6 +1315,71 @@ $$.Gamecard = {"":
       }
       return a;
   }
+ },
+ checkBingo$0: function() {
+  for (var t1 = this.fields, i = 0, deb = '', result = true; i < 5; ++i) {
+    for (var t2 = i === 2, x = 0, result = true; x < 5; ++x) {
+      if (!(t2 && x === 2)) {
+        var t3 = t1.length;
+        if (i < 0 || i >= t3) throw $.ioore(i);
+        if ($.gtB($.index(t1[i], x), 0)) result = false;
+        t3 = deb + $.S(i) + $.S(x) + ': ';
+        var t4 = t1.length;
+        if (i < 0 || i >= t4) throw $.ioore(i);
+        var deb0 = t3 + $.S($.index(t1[i], x)) + ' ';
+        deb = deb0;
+      }
+    }
+    if (result) return result;
+  }
+  for (i = 0; i < 5; ++i) {
+    for (t2 = i === 2, result = true, x = 0; x < 5; ++x) {
+      if (!(t2 && x === 2)) {
+        t3 = t1.length;
+        if (x < 0 || x >= t3) throw $.ioore(x);
+        if ($.gtB($.index(t1[x], i), 0)) result = false;
+        t3 = deb + $.S(i) + $.S(x) + ': ';
+        t4 = t1.length;
+        if (i < 0 || i >= t4) throw $.ioore(i);
+        deb0 = t3 + $.S($.index(t1[i], x)) + ' ';
+        deb = deb0;
+      }
+    }
+    if (result) return result;
+  }
+  return result;
+ },
+ createCardHTML$1: function(forComputer) {
+  var cardstring = $.StringBufferImpl$('');
+  for (var t1 = this.fields, t2 = $.iterator(t1), t3 = forComputer === true, x = 0, i = 0; t2.hasNext$0() === true; ) {
+    var t4 = t2.next$0();
+    cardstring.add$1('<tr>');
+    for (t4 = $.iterator(t4), t5 = i < 5; t4.hasNext$0() === true; ) {
+      t4.next$0();
+      if (t3) {
+        if (x < 5 && t5) {
+          var t6 = '<td id="c' + $.S(i) + $.S(x) + '"class=top>';
+          var t7 = t1.length;
+          if (i < 0 || i >= t7) throw $.ioore(i);
+          cardstring.add$1(t6 + $.S($.index(t1[i], x)) + '</td>');
+        }
+      } else {
+        if (x < 5 && t5) {
+          t6 = '<td id="p' + $.S(i) + $.S(x) + '"class=top>';
+          t7 = t1.length;
+          if (i < 0 || i >= t7) throw $.ioore(i);
+          cardstring.add$1(t6 + $.S($.index(t1[i], x)) + '</td>');
+        }
+      }
+      if (x === 4) {
+        cardstring.add$1('</tr>');
+        x = 0;
+      } else ++x;
+    }
+    i = i === 4 ? 0 : i + 1;
+  }
+  return cardstring.toString$0();
+  var t5;
  },
  Gamecard$0: function() {
   var t1 = $.ListFactory_List(null);
@@ -2367,7 +2414,7 @@ $$._Serializer = {"":
   var copyId = $.index(t1, map);
   if (!(copyId == null)) return ['ref', copyId];
   var id = this._nextFreeRefId;
-  this._nextFreeRefId = $.add(id, 1);
+  this._nextFreeRefId = id + 1;
   $.indexSet(t1, map, id);
   return ['map', id, this._serializeList$1(map.getKeys$0()), this._serializeList$1(map.getValues$0())];
  },
@@ -2376,7 +2423,7 @@ $$._Serializer = {"":
   var copyId = $.index(t1, list);
   if (!(copyId == null)) return ['ref', copyId];
   var id = this._nextFreeRefId;
-  this._nextFreeRefId = $.add(id, 1);
+  this._nextFreeRefId = id + 1;
   $.indexSet(t1, list, id);
   return ['list', id, this._serializeList$1(list)];
  },
@@ -2589,7 +2636,7 @@ $$._EventLoop = {"":
   if (event$ == null) {
     if ($._globalState().get$isWorker() === true) $._globalState().maybeCloseWorker$0();
     else {
-      if (!($._globalState().get$rootContext() == null) && $._globalState().get$isolates().containsKey$1($._globalState().get$rootContext().get$id()) === true && $._globalState().get$fromCommandLine() === true && $.isEmpty($._globalState().get$rootContext().get$ports()) === true) throw $.captureStackTrace($.ExceptionImplementation$('Program exited with open ReceivePorts.'));
+      if (!($._globalState().get$rootContext() == null) && ($._globalState().get$isolates().containsKey$1($._globalState().get$rootContext().get$id()) === true && ($._globalState().get$fromCommandLine() === true && $.isEmpty($._globalState().get$rootContext().get$ports()) === true))) throw $.captureStackTrace($.ExceptionImplementation$('Program exited with open ReceivePorts.'));
     }
     return false;
   }
@@ -2629,7 +2676,7 @@ $$._BaseSendPort = {"":
  ["_isolateId?"],
  super: "Object",
  _checkReplyTo$1: function(replyTo) {
-  if (!(replyTo == null) && !((typeof replyTo === 'object' && replyTo !== null) && !!replyTo.is$_NativeJsSendPort) && !((typeof replyTo === 'object' && replyTo !== null) && !!replyTo.is$_WorkerSendPort) && !((typeof replyTo === 'object' && replyTo !== null) && !!replyTo.is$_BufferingSendPort)) throw $.captureStackTrace($.ExceptionImplementation$('SendPort.send: Illegal replyTo port type'));
+  if (!(replyTo == null) && (!((typeof replyTo === 'object' && replyTo !== null) && !!replyTo.is$_NativeJsSendPort) && (!((typeof replyTo === 'object' && replyTo !== null) && !!replyTo.is$_WorkerSendPort) && !((typeof replyTo === 'object' && replyTo !== null) && !!replyTo.is$_BufferingSendPort)))) throw $.captureStackTrace($.ExceptionImplementation$('SendPort.send: Illegal replyTo port type'));
  },
  is$SendPort: true
 };
@@ -2660,7 +2707,10 @@ $$._WorkerSendPort = {"":
   return $.xor($.xor($.shl(this._workerId, 16), $.shl(this._isolateId, 8)), this._receivePortId);
  },
  operator$eq$1: function(other) {
-  return typeof other === 'object' && other !== null && !!other.is$_WorkerSendPort && $.eqB(this._workerId, other._workerId) && $.eqB(this._isolateId, other.get$_isolateId()) && $.eqB(this._receivePortId, other.get$_receivePortId());
+  if (typeof other === 'object' && other !== null && !!other.is$_WorkerSendPort) {
+    var t1 = $.eqB(this._workerId, other._workerId) && ($.eqB(this._isolateId, other._isolateId) && $.eqB(this._receivePortId, other._receivePortId));
+  } else t1 = false;
+  return t1;
  },
  send$2: function(message, replyTo) {
   $._waitForPendingPorts([message, replyTo], new $._WorkerSendPort_send_anon(message, this, replyTo));
@@ -2944,18 +2994,18 @@ $$._JsonParser = {"":
  },
  _parseString$0: function() {
   this._isToken$1(34) !== true && this._error$1('Expected string literal');
-  this.position = this.position + 1;
+  this.position = $.add(this.position, 1);
   var charCodes = $.ListFactory_List(null);
   $.setRuntimeTypeInfo(charCodes, ({E: 'int'}));
   for (var t1 = this.json; true; ) {
     var c = this._char$0();
     if ($.eqB(c, 34)) {
-      this.position = this.position + 1;
+      this.position = $.add(this.position, 1);
       break;
     }
     if ($.eqB(c, 92)) {
-      this.position = this.position + 1;
-      this.position === $.get$length(this) && this._error$1('\\ at the end of input');
+      this.position = $.add(this.position, 1);
+      $.eqB(this.position, $.get$length(this)) && this._error$1('\\ at the end of input');
       switch (this._char$0()) {
         case 34:
           c = 34;
@@ -2982,22 +3032,22 @@ $$._JsonParser = {"":
           c = 9;
           break;
         case 117:
-          $.gtB(this.position + 5, $.get$length(this)) && this._error$1('Invalid unicode esacape sequence');
-          var codeString = $.substring$2(t1, this.position + 1, this.position + 5);
+          $.gtB($.add(this.position, 5), $.get$length(this)) && this._error$1('Invalid unicode esacape sequence');
+          var codeString = $.substring$2(t1, $.add(this.position, 1), $.add(this.position, 5));
           try {
             c = $.Math_parseInt('0x' + $.S(codeString));
           } catch (exception) {
             $.unwrapException(exception);
             this._error$1('Invalid unicode esacape sequence');
           }
-          this.position = this.position + 4;
+          this.position = $.add(this.position, 4);
           break;
         default:
           this._error$1('Invalid esacape sequence in string literal');
       }
     }
     charCodes.push(c);
-    this.position = this.position + 1;
+    this.position = $.add(this.position, 1);
   }
   return $.Strings_String$fromCharCodes(charCodes);
  },
@@ -3018,23 +3068,23 @@ $$._JsonParser = {"":
  _parseObject$0: function() {
   var object = $.makeLiteralMap([]);
   if (typeof object !== 'object' || object === null || ((object.constructor !== Array || !!object.immutable$list) && !object.is$JavaScriptIndexingBehavior())) return this._parseObject$0$bailout(1, object);
-  this.position = this.position + 1;
+  this.position = $.add(this.position, 1);
   if (this._isToken$1(125) !== true) {
     for (; true; ) {
       var key = this._parseString$0();
       this._isToken$1(58) !== true && this._error$1('Expected \':\' when parsing object');
-      this.position = this.position + 1;
+      this.position = $.add(this.position, 1);
       var t1 = this._parseValue$0();
       if (key !== (key | 0)) throw $.iae(key);
       var t2 = object.length;
       if (key < 0 || key >= t2) throw $.ioore(key);
       object[key] = t1;
       if (this._isToken$1(44) !== true) break;
-      this.position = this.position + 1;
+      this.position = $.add(this.position, 1);
     }
     this._isToken$1(125) !== true && this._error$1('Expected \'}\' at end of object');
   }
-  this.position = this.position + 1;
+  this.position = $.add(this.position, 1);
   return object;
  },
  _parseObject$0$bailout: function(state, object) {
@@ -3199,12 +3249,13 @@ $$.invokeClosure_anon1 = {"":
 };
 
 $$.addCellClickHandlers_anon = {"":
- ["el_0"],
+ ["el_4", "box_0", "box_2"],
  super: "Closure",
  $call$1: function(event2) {
-  if ($.eqB($.toString($.currentNumber), $.toString(this.el_0.get$innerHTML()))) {
-    this.el_0.get$style().set$textDecoration('underline');
-    this.el_0.get$style().set$backgroundColor('red');
+  if ($.eqB($.toString($.currentNumber), $.toString(this.el_4.get$innerHTML()))) {
+    this.el_4.get$style().set$textDecoration('underline');
+    this.el_4.get$style().set$backgroundColor('red');
+    $.indexSet($.index($.playercard.get$fields(), this.box_2.i_3), this.box_0.x_1, 0);
   }
  }
 };
@@ -3585,7 +3636,7 @@ $.constructorNameFallback = function(obj) {
   var constructor$ = (obj.constructor);
   if ((typeof(constructor$)) === 'function') {
     var name$ = (constructor$.name);
-    if ((typeof(name$)) === 'string' && $.isEmpty(name$) !== true && !(name$ === 'Object')) return name$;
+    if ((typeof(name$)) === 'string' && ($.isEmpty(name$) !== true && !(name$ === 'Object'))) return name$;
   }
   var string = (Object.prototype.toString.call(obj));
   return $.substring$2(string, 8, string.length - 1);
@@ -3811,11 +3862,11 @@ $.last = function(receiver) {
 };
 
 $._Deserializer_isPrimitive = function(x) {
-  return x == null || typeof x === 'string' || typeof x === 'number' || typeof x === 'boolean';
+  return x == null || (typeof x === 'string' || (typeof x === 'number' || typeof x === 'boolean'));
 };
 
 $._MessageTraverser_isPrimitive = function(x) {
-  return x == null || typeof x === 'string' || typeof x === 'number' || typeof x === 'boolean';
+  return x == null || (typeof x === 'string' || (typeof x === 'number' || typeof x === 'boolean'));
 };
 
 $.Collections__emitCollection = function(c, result, visiting) {
@@ -4000,14 +4051,17 @@ $.stringContainsUnchecked = function(receiver, other, startIndex) {
 };
 
 $.addCellClickHandlers = function() {
-  for (var i = 0; i < 5; ++i) {
-    for (var t1 = i === 2, x = 0; x < 5; ++x) {
-      if (!(t1 && x === 2)) {
-        var el = $.document().query$1('#p' + $.S(i) + $.S(x));
-        $.add$1(el.get$on().get$click(), new $.addCellClickHandlers_anon(el));
+  var box_2 = ({});
+  for (box_2.i_3 = 0; $.ltB(box_2.i_3, 5); box_20 = ({}), box_20.i_3 = box_2.i_3, box_20.i_3 = $.add(box_20.i_3, 1), box_2 = box_20) {
+    var box_0 = ({});
+    for (box_0.x_1 = 0; $.ltB(box_0.x_1, 5); box_00 = ({}), box_00.x_1 = box_0.x_1, box_00.x_1 = $.add(box_00.x_1, 1), box_0 = box_00) {
+      if (!($.eqB(box_2.i_3, 2) && $.eqB(box_0.x_1, 2))) {
+        var el = $.document().query$1('#p' + $.S(box_2.i_3) + $.S(box_0.x_1));
+        $.add$1(el.get$on().get$click(), new $.addCellClickHandlers_anon(el, box_0, box_2));
       }
     }
   }
+  var box_20, box_00;
 };
 
 $.ObjectNotClosureException$ = function() {
@@ -4042,7 +4096,7 @@ $.leB = function(a, b) {
 $.BingoHandler = function(bingoevent) {
   if ($.gameStarted !== true) $.show('The Game hasn\'t started yet or already ended!');
   else {
-    if ($.checkBingo($.playercard) === true) $.ws.send$1('thisisbingo');
+    if ($.playercard.checkBingo$0() === true) $.ws.send$1('thisisbingo');
     else $.show('You don\'t have a Bingo!');
   }
 };
@@ -4559,25 +4613,6 @@ $.StackTrace$ = function(stack) {
   return new $.StackTrace(stack);
 };
 
-$.createCard = function(card) {
-  var cardstring = $.StringBufferImpl$('');
-  for (var t1 = $.iterator(card.get$fields()), x = 0, i = 0; t1.hasNext$0() === true; ) {
-    var t2 = t1.next$0();
-    cardstring.add$1('<tr>');
-    for (t2 = $.iterator(t2), t3 = i < 5; t2.hasNext$0() === true; ) {
-      t2.next$0();
-      x < 5 && t3 && cardstring.add$1('<td id="p' + $.S(i) + $.S(x) + '"class=top>' + $.S($.index($.index(card.get$fields(), i), x)) + '</td>');
-      if (x === 4) {
-        cardstring.add$1('</tr>');
-        x = 0;
-      } else ++x;
-    }
-    i = i === 4 ? 0 : i + 1;
-  }
-  return cardstring.toString$0();
-  var t3;
-};
-
 $._EventListenerListImpl$ = function(_ptr, _type) {
   return new $._EventListenerListImpl(_type, _ptr);
 };
@@ -4653,7 +4688,7 @@ $._globalState0 = function(val) {
 
 $.GamecardHandler = function(gamecardevent) {
   $.playercard = $.Gamecard$();
-  var t1 = $.createCard($.playercard);
+  var t1 = $.playercard.createCardHTML$1(false);
   $.document().query$1('#playertable').set$innerHTML(t1);
   $.addCellClickHandlers();
   $.show('Gamecard created!');
@@ -4820,18 +4855,6 @@ $.addAll = function(receiver, collection) {
   for (; iterator.hasNext$0() === true; ) {
     $.add$1(receiver, iterator.next$0());
   }
-};
-
-$.checkBingo = function(card) {
-  for (var result = true, i = 0; i < 5; ++i) {
-    for (var t1 = i === 2, x = 0; x < 5; ++x) {
-      if (!(t1 && x === 2)) {
-        if ($.gtB($.index($.index(card.get$fields(), i), x), 0)) result = false;
-      }
-    }
-    if (result) return true;
-  }
-  return false;
 };
 
 $.Primitives_stringFromCharCodes = function(charCodes) {
@@ -5066,7 +5089,7 @@ $.MathNatives_parseDouble = function(str) {
     var t1 = $.startsWith(str, '0x') === true || $.startsWith(str, '0X') === true;
   } else t1 = false;
   if (t1) ret = (parseInt(str));
-  if ($.isNaN(ret) === true && !$.eqB(str, 'NaN') && !$.eqB(str, '-NaN')) throw $.captureStackTrace($.BadNumberFormatException$(str));
+  if ($.isNaN(ret) === true && (!$.eqB(str, 'NaN') && !$.eqB(str, '-NaN'))) throw $.captureStackTrace($.BadNumberFormatException$(str));
   return ret;
 };
 
@@ -5215,7 +5238,7 @@ $.unwrapException = function(ex) {
   if (ex instanceof TypeError) {
     var type = (ex.type);
     var name$ = (ex.arguments ? ex.arguments[0] : "");
-    if ($.eqB(type, 'property_not_function') || $.eqB(type, 'called_non_callable') || $.eqB(type, 'non_object_property_call') || $.eqB(type, 'non_object_property_load')) {
+    if ($.eqB(type, 'property_not_function') || ($.eqB(type, 'called_non_callable') || ($.eqB(type, 'non_object_property_call') || $.eqB(type, 'non_object_property_load')))) {
       if (typeof name$ === 'string' && $.startsWith(name$, '$call$') === true) return $.ObjectNotClosureException$();
       return $.NullPointerException$(null, $.CTC);
     }
@@ -5224,7 +5247,7 @@ $.unwrapException = function(ex) {
       return $.NoSuchMethodException$('', name$, [], null);
     }
     if (typeof message === 'string') {
-      if ($.endsWith(message, 'is null') === true || $.endsWith(message, 'is undefined') === true || $.endsWith(message, 'is null or undefined') === true) return $.NullPointerException$(null, $.CTC);
+      if ($.endsWith(message, 'is null') === true || ($.endsWith(message, 'is undefined') === true || $.endsWith(message, 'is null or undefined') === true)) return $.NullPointerException$(null, $.CTC);
       if ($.endsWith(message, 'is not a function') === true) return $.NoSuchMethodException$('', '<unknown>', [], null);
     }
     return $.ExceptionImplementation$(typeof message === 'string' ? message : '');
