@@ -105,7 +105,7 @@ void handlePOSTRequest(HttpRequest req, HttpResponse resp){
 void handleTextFile(HttpRequest req, HttpResponse resp){
   
   htmlResponse = createHtmlResponse(req);
- 
+  
   if(htmlResponse.contains("#EAEAEA") || htmlResponse.contains('#FFC6A5')){
     
     //print("requesting css file");

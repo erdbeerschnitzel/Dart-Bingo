@@ -74,8 +74,14 @@ class MessageHandler{
     if(msg.contains("getGamecard")){
       
       Gamecard gamecard = new Gamecard();
-      
+ 
       originalconnection.send(gamecard.toWSMessage());
+      
+      clients.forEach((var client) {
+        
+        if(client.con == originalconnection) client.gamecard = gamecard;
+
+      });
     }
     
     
@@ -125,13 +131,62 @@ class MessageHandler{
     
     
     // handle bingo
-    if(msg.contains("thisisbingo")) {
+    if(msg.contains("THISISBINGO:")) {
       
-      gameStarted = false;
-      stopTimer();
-      sendMessageToAllClients("Player has Bingo. Game stopped.");
-    }
-    
+      log("Client signalized Bingo!");
+      
+      msg = msg.replaceFirst("THISISBINGO:", "");
+      
+      msg = msg.replaceFirst("GAMECARD:", "");
+      
+      List values = msg.split(",");
+      
+      if(values.length > 2){
+        
+        log("Bingo msg seems ok");
+           
+        
+        log("Searching client...");
+        
+        clients.forEach((var client) {
+          
+          if(client.con == originalconnection){
+            
+            log("client found");
+            
+            List originalvalues = client.gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
+            
+            log("originalvalues  has ${originalvalues.length} elements");
+            
+           
+            for(int i = 0; i < values.length; i++){
+              
+              if(values[i] == 0){
+                
+                if(addedNumbers.indexOf(originalvalues[i]) >= 0){
+                  
+                  log("number was in original values");
+                  client.gamecard.updateField(originalvalues[i]);
+                }
+              }
+            }
+            
+            if(client.gamecard.checkBingo()){
+              
+              gameStarted = false;
+              stopTimer();
+              sendMessageToAllClients("Player has Bingo. Game stopped.");
+            }
+          }
+
+        });
+        
+      }
+      else {
+        
+        log("Something is wrong with the client msg");   
+      }               
+    }    
   }
     
   
@@ -150,7 +205,7 @@ class MessageHandler{
     
     void startTimer(){
     
-      if(messageTimer == null) messageTimer = new Timer.repeating(10000, timeHandler);
+      if(messageTimer == null) messageTimer = new Timer.repeating(5000, timeHandler);
       
     }
     

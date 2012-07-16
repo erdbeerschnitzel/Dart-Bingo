@@ -47,7 +47,7 @@ void main() {
  
  ws.on.message.add((MessageEvent e) {
    
-   document.query('#status').innerHTML = "${e.data}";
+   if(!e.data.toString().contains("CHAT:")) document.query('#status').innerHTML = "${e.data}";
    
    if(MessageHandler(e.data) != ""){
      
@@ -121,7 +121,7 @@ void BingoHandler(bingoevent){
     
     if(playercard.checkBingo()) {
       
-      ws.send("thisisbingo");
+     ws.send("THISISBINGO:${playercard.toWSMessage()}");
     }
     else {
       
@@ -131,6 +131,7 @@ void BingoHandler(bingoevent){
   
 }
 
+// TODO: refactor to own file
 String MessageHandler(String msg){
   
   
@@ -178,6 +179,34 @@ String MessageHandler(String msg){
   if(msg.contains('Number')) {
     
     currentNumber = msg.replaceAll("Number: ", "");
+    
+    // debug help
+    
+    for(int i = 0; i < 5; i++){
+      
+      for(int x = 0; x < 5; x++){
+        
+        if(i == 2 && x == 2){
+          
+        }
+        else {
+          
+          TableCellElement el = document.query('#p$i$x');
+  
+            if(currentNumber.toString() == el.innerHTML.toString()){
+              
+              //el.style.textDecoration = 'underline';
+              el.style.backgroundColor = 'red';
+              playercard.fields[i][x] = 0;
+            }
+
+       
+        }
+      }    
+    }
+    
+    //
+    
 
     return "";
   }
@@ -247,8 +276,7 @@ void addMessageToMessageWindow(String msg){
 void addCellClickHandlers(){
   
   for(int i = 0; i < 5; i++){
-    
-    
+ 
     for(int x = 0; x < 5; x++){
       
       if(i == 2 && x == 2){
@@ -260,7 +288,7 @@ void addCellClickHandlers(){
         
         el.on.click.add((event2) {
           
-          if(currentNumber.toString() == el.innerHTML.toString()){
+          if(currentNumber.toString() == el.innerHTML){
             
             el.style.textDecoration = 'underline';
             el.style.backgroundColor = 'red';

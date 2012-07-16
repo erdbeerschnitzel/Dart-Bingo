@@ -1281,6 +1281,113 @@ $$.FutureAlreadyCompleteException = {"":
 $$.Gamecard = {"":
  ["addedNumbers", "fields?"],
  super: "Object",
+ toWSMessage$0: function() {
+  var sb = $.StringBufferImpl$('');
+  sb.add$1('GAMECARD:');
+  var t1 = this.fields;
+  if (typeof t1 !== 'string' && (typeof t1 !== 'object' || t1 === null || (t1.constructor !== Array && !t1.is$JavaScriptIndexingBehavior()))) return this.toWSMessage$0$bailout(1, t1, sb, 0, 0, 0, 0, 0);
+  var i = 0;
+  for (; i < 5; ++i) {
+    for (var t2 = i === 0, t3 = !(i === 2), x = 0; x < 5; ++x) {
+      if (t2 && x === 0) {
+        var t4 = t1.length;
+        if (x < 0 || x >= t4) throw $.ioore(x);
+        var t5 = t1[x];
+        if (typeof t5 !== 'string' && (typeof t5 !== 'object' || t5 === null || (t5.constructor !== Array && !t5.is$JavaScriptIndexingBehavior()))) return this.toWSMessage$0$bailout(2, t3, sb, t5, t2, x, t1, i);
+        var t6 = t5.length;
+        if (i < 0 || i >= t6) throw $.ioore(i);
+        sb.add$1($.S(t5[i]));
+      }
+      if (t3 && !(x === 2)) {
+        t4 = t1.length;
+        if (x < 0 || x >= t4) throw $.ioore(x);
+        t5 = t1[x];
+        if (typeof t5 !== 'string' && (typeof t5 !== 'object' || t5 === null || (t5.constructor !== Array && !t5.is$JavaScriptIndexingBehavior()))) return this.toWSMessage$0$bailout(3, t3, sb, t5, t2, x, t1, i);
+        t6 = t5.length;
+        if (i < 0 || i >= t6) throw $.ioore(i);
+        sb.add$1(',' + $.S(t5[i]));
+      }
+    }
+  }
+  return sb.toString$0();
+ },
+ toWSMessage$0$bailout: function(state, env0, env1, env2, env3, env4, env5, env6) {
+  switch (state) {
+    case 1:
+      t1 = env0;
+      sb = env1;
+      break;
+    case 2:
+      t3 = env0;
+      sb = env1;
+      t4 = env2;
+      t2 = env3;
+      x = env4;
+      t1 = env5;
+      i = env6;
+      break;
+    case 3:
+      t3 = env0;
+      sb = env1;
+      t4 = env2;
+      t2 = env3;
+      x = env4;
+      t1 = env5;
+      i = env6;
+      break;
+  }
+  switch (state) {
+    case 0:
+      var sb = $.StringBufferImpl$('');
+      sb.add$1('GAMECARD:');
+      var t1 = this.fields;
+    case 1:
+      state = 0;
+      var i = 0;
+    case 2:
+    case 3:
+      L0: while (true) {
+        switch (state) {
+          case 0:
+            if (!(i < 5)) break L0;
+            var t2 = i === 0;
+            var t3 = !(i === 2);
+            var x = 0;
+          case 2:
+          case 3:
+            L1: while (true) {
+              switch (state) {
+                case 0:
+                  if (!(x < 5)) break L1;
+                case 2:
+                  if (state == 2 || (state == 0 && (t2 && x === 0))) {
+                    switch (state) {
+                      case 0:
+                        var t4 = $.index(t1, x);
+                      case 2:
+                        state = 0;
+                        sb.add$1($.S($.index(t4, i)));
+                    }
+                  }
+                case 3:
+                  if (state == 3 || (state == 0 && (t3 && !(x === 2)))) {
+                    switch (state) {
+                      case 0:
+                        t4 = $.index(t1, x);
+                      case 3:
+                        state = 0;
+                        sb.add$1(',' + $.S($.index(t4, i)));
+                    }
+                  }
+                  ++x;
+              }
+            }
+            ++i;
+        }
+      }
+      return sb.toString$0();
+  }
+ },
  getRandomNumber$0: function() {
   var t1 = $.Math_random();
   if (typeof t1 !== 'number') return this.getRandomNumber$0$bailout(1, t1, 0, 0);
@@ -3417,8 +3524,10 @@ $$.main_anon = {"":
  [],
  super: "Closure",
  $call$1: function(e) {
-  var t1 = $.S(e.get$data());
-  $.document().query$1('#status').set$innerHTML(t1);
+  if ($.contains$1($.toString(e.get$data()), 'CHAT:') !== true) {
+    var t1 = $.S(e.get$data());
+    $.document().query$1('#status').set$innerHTML(t1);
+  }
   !$.eqB($.MessageHandler(e.get$data()), '') && $.ws.send$1($.MessageHandler(e.get$data()));
  }
 };
@@ -3540,7 +3649,7 @@ $$.addCellClickHandlers_anon = {"":
  ["el_4", "box_0", "box_2"],
  super: "Closure",
  $call$1: function(event2) {
-  if ($.eqB($.toString($.currentNumber), $.toString(this.el_4.get$innerHTML()))) {
+  if ($.eqB($.toString($.currentNumber), this.el_4.get$innerHTML())) {
     this.el_4.get$style().set$textDecoration('underline');
     this.el_4.get$style().set$backgroundColor('red');
     $.indexSet($.index($.playercard.get$fields(), this.box_2.i_3), this.box_0.x_1, 0);
@@ -4318,6 +4427,12 @@ $.Primitives_getMonth = function(receiver) {
   return receiver.get$isUtc() === true ? ($.Primitives_lazyAsJsDate(receiver).getUTCMonth()) + 1 : ($.Primitives_lazyAsJsDate(receiver).getMonth()) + 1;
 };
 
+$.DoubleLinkedQueueEntry$ = function(e) {
+  var t1 = new $.DoubleLinkedQueueEntry(null, null, null);
+  t1.DoubleLinkedQueueEntry$1(e);
+  return t1;
+};
+
 $.stringContainsUnchecked = function(receiver, other, startIndex) {
   if (typeof other === 'string') return !($.indexOf$2(receiver, other, startIndex) === -1);
   if (typeof other === 'object' && other !== null && !!other.is$JSSyntaxRegExp) return other.hasMatch$1($.substring$1(receiver, startIndex));
@@ -4371,7 +4486,7 @@ $.regExpAttachGlobalNative = function(regExp) {
 $.BingoHandler = function(bingoevent) {
   if ($.gameStarted !== true) $.show('The Game hasn\'t started yet or already ended!');
   else {
-    if ($.playercard.checkBingo$0() === true) $.ws.send$1('thisisbingo');
+    if ($.playercard.checkBingo$0() === true) $.ws.send$1('THISISBINGO:' + $.S($.playercard.toWSMessage$0()));
     else $.show('You don\'t have a Bingo!');
   }
 };
@@ -4473,12 +4588,6 @@ $.isEmpty = function(receiver) {
 
 $._TextTrackCueEventsImpl$ = function(_ptr) {
   return new $._TextTrackCueEventsImpl(_ptr);
-};
-
-$.DoubleLinkedQueueEntry$ = function(e) {
-  var t1 = new $.DoubleLinkedQueueEntry(null, null, null);
-  t1.DoubleLinkedQueueEntry$1(e);
-  return t1;
 };
 
 $.MatchImplementation$ = function(pattern, str, _start, _end, _groups) {
@@ -5446,6 +5555,17 @@ $.MessageHandler = function(msg) {
   }
   if ($.contains$1(msg, 'Number') === true) {
     $.currentNumber = $.replaceAll(msg, 'Number: ', '');
+    for (var i = 0; i < 5; ++i) {
+      for (t1 = i === 2, x = 0; x < 5; ++x) {
+        if (!(t1 && x === 2)) {
+          var el = $.document().query$1('#p' + $.S(i) + $.S(x));
+          if ($.eqB($.toString($.currentNumber), $.toString(el.get$innerHTML()))) {
+            el.get$style().set$backgroundColor('red');
+            $.indexSet($.index($.playercard.get$fields(), i), x, 0);
+          }
+        }
+      }
+    }
     return '';
   }
   if ($.contains$1(msg, 'Player has Bingo. Game stopped.') === true) {
@@ -5453,6 +5573,7 @@ $.MessageHandler = function(msg) {
     return '';
   }
   return '';
+  var x;
 };
 
 $.setRuntimeTypeInfo = function(target, typeInfo) {

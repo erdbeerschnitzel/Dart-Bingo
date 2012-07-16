@@ -212,4 +212,44 @@ bool checkBingo(){
     return sb.toString();
   }
   
+ 
+  String toClientWSMessage(){
+    
+    StringBuffer sb = new StringBuffer();
+
+    sb.add("GAMECARD:");
+    
+    for(int i = 0; i < 5; i++){
+      
+      for(int x = 0; x < 5; x++){
+        
+        if(i == 0 && x == 0) sb.add("${document.query('#p$i$x').innerHTML}");
+        
+        if(i != 2 && x != 2) sb.add(",${document.query('#p$i$x').innerHTML}");
+      }
+    
+    }
+
+    sb.add(toWSMessage().replaceFirst("GAMECARD:", "MARKED:"));
+    
+    return sb.toString();
+  }
+  
+  void updateField(int a){
+    
+    for(int x = 0; x < 5; x++){
+      
+      for(int i = 0; i < 5; i++){
+        
+        if(x != 2 && i != 2){
+          
+          if(fields[x][i] == a){
+            fields[x][i] = 0;
+            print("field $a updated");
+          }
+        }
+      }
+    }  
+  }
+  
 }

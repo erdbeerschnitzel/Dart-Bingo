@@ -3,7 +3,8 @@
 class Client {
   
   bool ready = false;
-  WebSocketConnection con; 
+  WebSocketConnection con;
+  Gamecard gamecard;
   
   Client();
   
