@@ -15,6 +15,9 @@ WebSocket ws;
 String currentNumber = "22";
 bool first = true;
 bool gameStarted = false;
+InputElement _messageInput;
+InputElement _nicknameInput;
+InputElement _messageWindow;
 
 
 /**
@@ -32,6 +35,10 @@ void main() {
  
  document.query('#Bingo').on.click.add(BingoHandler);
  
+ _messageWindow = document.query("#messagewindow");
+ 
+ _messageWindow.value = "";
+ 
  //show('Welcome to Bingo');
 
 
@@ -48,6 +55,8 @@ void main() {
    }
    
  });
+ 
+ addChatEventHandlers();
  
 }
 
@@ -146,6 +155,15 @@ String MessageHandler(String msg){
     return "";
   }
   
+  if(msg.contains('CHAT:')) {
+    
+    msg = msg.replaceFirst("CHAT:", "");
+    
+    addMessageToMessageWindow(msg);
+        
+    return "";
+  }
+  
   if(msg.contains('Starting the Game')) {
     
     gameStarted = true;
@@ -183,7 +201,47 @@ void show(String message) {
   
 }
 
+void addChatEventHandlers() {
+  
+  _messageInput = document.query("#message");
+  _nicknameInput = document.query("#nickname");
+  InputElement messagewindow = document.query("#messagewindow");
+  
+  _messageInput.on.keyPress.add((event) {
+    if (event.keyCode == 13) { 
+      
+      ws.send("CHAT: <${_nicknameInput.value}> ${_messageInput.value}");
+  
+      addMessageToMessageWindow("<${_nicknameInput.value}> ${_messageInput.value}");
+        
+      _messageInput.value = "";
+    }      
+  });
+  
+  
+  _nicknameInput.on.keyPress.add((event) {
+    if (event.keyCode == 13) { 
+      //ws.send(_nicknameInput.value);
+    }  
+  });
+}
 
+
+void addMessageToMessageWindow(String msg){
+  
+  String time = "${new Date.now()}";
+  time = time.substring(time.indexOf(" ") + 1);
+  time = time.split(".")[0];
+  
+  
+  if(_messageWindow.value == ""){
+    
+    _messageWindow.value = "[$time]$msg";
+    
+  }else {
+    _messageWindow.value = "${_messageWindow.value}\n[$time]$msg";
+  }
+}
 
 // add CellClickHandlers to playercard
 void addCellClickHandlers(){

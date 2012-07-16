@@ -77,6 +77,16 @@ class MessageHandler{
       
       originalconnection.send(gamecard.toWSMessage());
     }
+    
+    
+    // handle chat
+    if(msg.contains("CHAT:")){
+      
+      connections.forEach((WebSocketConnection conn) {
+        
+        if(conn != originalconnection) conn.send(msg);
+      });  
+    }
   
     // handle client ready
     if(msg.contains("client ready") && connections.length > 1){
@@ -110,7 +120,7 @@ class MessageHandler{
     sendMessageToAllClients("Number of Players: ${(connections.length)}   Players Ready: ${getNumberOfReadyClients()}");
     
     // when all clients are ready start the game
-    if(getNumberOfReadyClients() == clients.length && getNumberOfReadyClients() > 1) {
+    if(getNumberOfReadyClients() == clients.length && getNumberOfReadyClients() > 1 && !gameStarted) {
       
       gameStarted = true;
       startTimer();
