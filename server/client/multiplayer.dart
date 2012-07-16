@@ -25,9 +25,6 @@ InputElement _messageWindow;
  **/
 void main() {
 
- playercard = new Gamecard();
-
- 
  // attach handlers
  document.query('#getGamecard').on.click.add(GamecardHandler);
  
@@ -140,6 +137,7 @@ String MessageHandler(String msg){
   
   if(msg.contains("GAMECARD:")){
 
+    print("received: $msg");
     playercard = new Gamecard.fromServer(msg);
     document.query('#playertable').innerHTML = playercard.createCardHTML(false);
     
@@ -198,7 +196,7 @@ String MessageHandler(String msg){
               
               //el.style.textDecoration = 'underline';
               el.style.backgroundColor = 'red';
-              playercard.fields[i][x] = 0;
+              playercard.fields[i][x] = "0";
             }
 
        

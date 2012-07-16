@@ -6,7 +6,7 @@ class Gamecard {
   
   Gamecard(){
   
-    fields = new List<List>();
+    fields = new List<List<String>>();
     addedNumbersGamecard = new List<int>();
     
     initFields();
@@ -15,7 +15,7 @@ class Gamecard {
   
   Gamecard.fromServer(String msg){
     
-    fields = new List<List>();
+    fields = new List<List<String>>();
     addedNumbersGamecard = new List<int>();  
     initFields();
     
@@ -32,7 +32,10 @@ class Gamecard {
         
         for(int i = 0; i < 5; i++){
           
-          if(x != 2 && i != 2){
+          if(x == 2 && i == 2){
+
+          }
+          else {
             
             fields[x][i] = liste[count];
             count++;
@@ -46,7 +49,7 @@ class Gamecard {
     
     for(int i = 0; i < 5; i++){
       
-      fields.add(new List());      
+      fields.add(new List<String>());      
             
       for(int x = 0; x < 5; x++){
         
@@ -139,7 +142,7 @@ bool checkBingo(){
       {
         
   
-        if(fields[i][x] != 0){
+        if(fields[i][x] != "0"){
 
           result = false;
           
@@ -167,7 +170,7 @@ bool checkBingo(){
       else 
       {
       
-        if(fields[x][i] != 0){
+        if(fields[x][i] != "0"){
           
           //debug("false: ${card.fields[i][x]}");
           result = false;
@@ -223,27 +226,6 @@ bool checkBingo(){
   }
   
  
-  String toClientWSMessage(){
-    
-    StringBuffer sb = new StringBuffer();
-
-    sb.add("GAMECARD:");
-    
-    for(int i = 0; i < 5; i++){
-      
-      for(int x = 0; x < 5; x++){
-        
-        //if(i == 0 && x == 0) sb.add("${document.query('#p$i$x').innerHTML}");
-        
-        //if(i != 2 && x != 2) sb.add(",${document.query('#p$i$x').innerHTML}");
-      }
-    
-    }
-
-    sb.add(toWSMessage().replaceFirst("GAMECARD:", "MARKED:"));
-    
-    return sb.toString();
-  }
   
   void updateField(String a){
     

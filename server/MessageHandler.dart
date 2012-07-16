@@ -79,11 +79,13 @@ class MessageHandler{
       
       List elems = gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
       
-      log("returning gamecard with ${elems.length} elements");
+      log("returning gamecard with ${elems.length} elements: ${gamecard.toWSMessage()}");
       
       clients.forEach((var client) {
         
         if(client.con == originalconnection) client.gamecard = gamecard;
+        
+        log("gamecard saved for client");
 
       });
     }
@@ -157,7 +159,7 @@ class MessageHandler{
           if(client.con == originalconnection){
             
             log("client found");
-            
+            log("client ws msg: ${client.gamecard.toWSMessage()}");
             List<String> originalvalues = client.gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
             
             log("originalvalues  has ${originalvalues.length} elements");
@@ -169,8 +171,8 @@ class MessageHandler{
               
        
                 addedNumbers.forEach((var number) {
-                  print("${values[i]} vs $number");
-                  if(values[i] == "$number"){
+                  //print("${originalvalues[i]} vs $number");
+                  if(originalvalues[i] == "$number"){
                     
                     log("number was in original values");
                     client.gamecard.updateField(originalvalues[i]);
