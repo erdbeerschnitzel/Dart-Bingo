@@ -17,11 +17,6 @@ List<int> addNumbers;
 bool first = true;
 bool gameStarted = false;
 
-//AJAX request for an XML Document.
-XMLHttpRequest RSSRequestObject;
-
-String rssFeedURL = "http://www.scribegriff.com/studios/index.php?rest/"
-        "blog&f=getPosts&cat_url=Google/Dart&count_only=1";
 
 /**
  * main entry point - attaches handlers and inits objects
@@ -32,18 +27,6 @@ void main() {
  addNumbers = new List<int>();
 
  playercard = new Gamecard();
- 
- try{
-   
-   //throw "summ!";
-   
- }catch(Exception x){
-   
-   show("ex caught: $x");
- }
- 
- String listAsJson = '["Dart",0.8]'; // input List of data
- List parsedList = JSON.parse(listAsJson);
 
  
  // attach handlers
@@ -54,33 +37,24 @@ void main() {
  document.query('#Bingo').on.click.add(BingoHandler);
  
  //show('Welcome to Bingo');
- //show(parsedList[1]);
 
- getRssFeed();
+
  
- var parser = new DOMParser(); 
- //document = parser.parseFromString('<foo><bar></bar></foo>', 'text/xml'); 
+ ws =  new WebSocket("ws://localhost:8080/bingo");
  
- 
+ ws.on.message.add((MessageEvent e) {
+   document.query('#status').innerHTML = "${e.data}";
+   
+   if(MessageHandler(e.data) != ""){
+     
+     ws.send(MessageHandler(e.data));
+   }
+   
+ });
  
 }
 
-void getRssFeed() {
-  RSSRequestObject = new XMLHttpRequest();
-  RSSRequestObject.open("GET", rssFeedURL, true);
-  RSSRequestObject.on.readyStateChange.add((e) {
-  reqChange();
-});
-}
 
-void reqChange() {
-  if (RSSRequestObject.readyState == 4 && RSSRequestObject.status == 200) {
-    Document feedDocument = RSSRequestObject.responseXML;
-    show(RSSRequestObject.responseXML.toString());
-  } else { 
-    show(RSSRequestObject.statusText); 
-  }
-}
   
 
 // **** HANDLERS ****
@@ -95,17 +69,7 @@ void GameHandler(gameevent){
   
   if(!first){
   
-  ws =  new WebSocket("ws://localhost:8080/bingo");
-  
-  ws.on.message.add((MessageEvent e) {
-    document.query('#status').innerHTML = "${e.data}";
-    
-    if(MessageHandler(e.data) != ""){
-      
-      ws.send(MessageHandler(e.data));
-    }
-    
-  });
+
 
     document.query('#getGamecard').on.click.remove(GamecardHandler);
     document.query('#startGame').on.click.remove(GameHandler);
@@ -130,7 +94,6 @@ void ReadyHandler(readyevent){
       
       ws.send("client ready");
       document.query('#startGame').value = "I'm not ready!";
-      //(query('#startGame') as ButtonElement).value = "I'm not ready!";
     }
     else {
       
@@ -145,13 +108,11 @@ void GamecardHandler(gamecardevent){
 
     playercard = new Gamecard();
   
-    document.query('#playertable').innerHTML = playercard.createCardHTML(false);
+    ws.send("getGamecard");
     
-    addCellClickHandlers();
-
-    show("Gamecard created!");
+    //document.query('#playertable').innerHTML = playercard.createCardHTML(false);
     
-    first = false;
+    
 }
 
 
@@ -178,7 +139,21 @@ void BingoHandler(bingoevent){
 
 String MessageHandler(String msg){
   
+  
   if(msg == "Hello from Server!") return "client hello!";
+  
+  if(msg.contains("GAMECARD:")){
+    show(msg);
+    playercard = new Gamecard.fromServer(msg);
+    document.query('#playertable').innerHTML = playercard.createCardHTML(false);
+    
+    //addCellClickHandlers();
+
+    //show("Gamecard created!");
+    
+    first = false;
+  }
+    
   
   if(msg.contains('Other Players:')) {
     
@@ -263,21 +238,4 @@ void endGame(){
   
   document.query('#startGame').on.click.remove(GameHandler);
 }
-
-
-
-// get a random number between 1 and 99
-// no duplicates
-int getRandomNumber(){
-  
-  int a = (Math.random()*100).toInt();
-  
-  while(a > 99 || a < 1 || (addNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
-  
-  addNumbers.add(a);
-    
-  return a;
-}
-
-
 

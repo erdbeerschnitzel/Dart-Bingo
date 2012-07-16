@@ -34,6 +34,34 @@ class Gamecard {
   
   }
   
+  Gamecard.fromServer(String msg){
+    
+    fields = new List<List>();
+    addedNumbers = new List<int>();  
+    
+    msg = msg.replaceFirst("GAMECARD:", "");
+    
+    List<String> liste = msg.split(",");
+    
+    // if not something is wrong with the msg
+    if(liste.length >= 24){
+      
+      int count = 0;
+      
+      for(int x = 0; x < 5; x++){
+        
+        for(int i = 0; i < 5; i++){
+          
+          if(x != 2 && i != 2){
+            
+            fields[x][i] = liste[count];
+            count++;
+          }
+        }
+      }        
+    }    
+  }
+  
 // very static
 // TODO: improve card creating algo
 String createCardHTML(bool forComputer){
@@ -155,6 +183,26 @@ bool checkBingo(){
     while(a > 99 || a < 1 || (addedNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
       
     return a;
+  }
+  
+  String toWSMessage(){
+    
+    StringBuffer sb = new StringBuffer();
+    
+    sb.add("GAMECARD:");
+    
+    for(int i = 0; i < 5; i++){
+      
+      for(int x = 0; x < 5; x++){
+        
+        if(i == 0 && x == 0) sb.add("${fields[x][i]}");
+        
+        if(i != 2 && x != 2) sb.add(",${fields[x][i]}");
+      }
+    
+    }
+    
+    return sb.toString();
   }
   
 }
