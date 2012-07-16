@@ -3429,7 +3429,7 @@ $$.addChatEventHandlers_anon = {"":
  $call$1: function(event$) {
   if ($.eqB(event$.get$keyCode(), 13)) {
     $.ws.send$1('CHAT: <' + $.S($._nicknameInput.get$value()) + '> ' + $.S($._messageInput.get$value()));
-    $.addMessageToMessageWindow('<' + $.S($._nicknameInput.get$value()) + '> ' + $.S($._messageInput.get$value()));
+    $.addMessageToMessageWindow(' <' + $.S($._nicknameInput.get$value()) + '> ' + $.S($._messageInput.get$value()));
     $._messageInput.set$value('');
   }
  }

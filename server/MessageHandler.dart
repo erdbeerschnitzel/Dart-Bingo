@@ -37,7 +37,7 @@ class MessageHandler{
     
     if(clients.length < 2) {
       
-      log("All Clients disconnected.");
+      log("Only one client left...");
 
       stopTimer();
 
@@ -91,14 +91,13 @@ class MessageHandler{
     // handle client ready
     if(msg.contains("client ready") && connections.length > 1){
       
-      int numberReady = 0;
-      
       clients.forEach((var client) {
         
         if(client.con == originalconnection) client.ready = true;
-        
-        if(client.ready) numberReady++;
+
       });
+      
+      sendMessageToAllClients("Number of Players: ${(connections.length)}   Players Ready: ${getNumberOfReadyClients()}");
     }
     
     // handle client not ready
@@ -114,11 +113,7 @@ class MessageHandler{
       });
     
     }
-    
-  
-    
-    sendMessageToAllClients("Number of Players: ${(connections.length)}   Players Ready: ${getNumberOfReadyClients()}");
-    
+
     // when all clients are ready start the game
     if(getNumberOfReadyClients() == clients.length && getNumberOfReadyClients() > 1 && !gameStarted) {
       
@@ -155,7 +150,7 @@ class MessageHandler{
     
     void startTimer(){
     
-      messageTimer = new Timer.repeating(10000, timeHandler);
+      if(messageTimer == null) messageTimer = new Timer.repeating(10000, timeHandler);
       
     }
     
@@ -163,12 +158,16 @@ class MessageHandler{
       
       if(messageTimer != null) messageTimer.cancel();
       
-      log("Game stopped.");
-      
-      gameStarted = false;
-      
-      // clear list for new game
-      addedNumbers = new List<int>();
+      if(gameStarted){
+        
+        log("Game stopped.");
+        
+        gameStarted = false;
+        
+        // clear list for new game
+        addedNumbers = new List<int>();
+      }
+
     }
   
     

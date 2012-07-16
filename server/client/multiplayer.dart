@@ -212,7 +212,7 @@ void addChatEventHandlers() {
       
       ws.send("CHAT: <${_nicknameInput.value}> ${_messageInput.value}");
   
-      addMessageToMessageWindow("<${_nicknameInput.value}> ${_messageInput.value}");
+      addMessageToMessageWindow(" <${_nicknameInput.value}> ${_messageInput.value}");
         
       _messageInput.value = "";
     }      
