@@ -1,13 +1,13 @@
 class Gamecard {
   
-  List<List> fields;
+  List<List<String>> fields;
   
-  List<int> addedNumbers;
+  List<int> addedNumbersGamecard;
   
   Gamecard(){
   
     fields = new List<List>();
-    addedNumbers = new List<int>();
+    addedNumbersGamecard = new List<int>();
     
     initFields();
   
@@ -16,7 +16,7 @@ class Gamecard {
   Gamecard.fromServer(String msg){
     
     fields = new List<List>();
-    addedNumbers = new List<int>();  
+    addedNumbersGamecard = new List<int>();  
     initFields();
     
     msg = msg.replaceFirst("GAMECARD:", "");
@@ -51,7 +51,7 @@ class Gamecard {
       for(int x = 0; x < 5; x++){
         
         //create field in list
-        fields[i].add(0);
+        fields[i].add("0");
         
         // middle of gamecard
         if(x == 2 && i == 2){
@@ -60,9 +60,10 @@ class Gamecard {
         }
         else {
           
-          fields[i][x] = getRandomNumber();
+          int temp = getRandomNumber();
+          fields[i][x] = temp.toString();
           
-          addedNumbers.add(fields[i][x]);
+          addedNumbersGamecard.add(temp);
         }
       }
     }
@@ -124,28 +125,31 @@ bool checkBingo(){
   bool result = true;
   
   String deb = "";
-  
-// horizontal check
+   
+  // horizontal check
   for(int i = 0; i < 5; i++){
     
     result = true;
     
     for(int x = 0; x < 5; x++){
-      
+   
       if(i == 2 && x == 2){
       }
       else 
       {
-      
-        if(fields[i][x] > 0){
+        
+  
+        if(fields[i][x] != 0){
 
           result = false;
+          
         }
         
         deb = "$deb$i$x: ${fields[i][x]} ";
+
       }
     }
-      
+    
     if(result) return result; 
  
     
@@ -163,7 +167,7 @@ bool checkBingo(){
       else 
       {
       
-        if(fields[x][i] > 0){
+        if(fields[x][i] != 0){
           
           //debug("false: ${card.fields[i][x]}");
           result = false;
@@ -172,7 +176,7 @@ bool checkBingo(){
         deb = "$deb$i$x: ${fields[i][x]} ";
       }
     }
-      
+
     if(result) return result; 
  
     
@@ -187,7 +191,7 @@ bool checkBingo(){
     
     int a = (Math.random()*100).toInt();
     
-    while(a > 99 || a < 1 || (addedNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
+    while(a > 99 || a < 1 || (addedNumbersGamecard.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
       
     return a;
   }
@@ -202,11 +206,17 @@ bool checkBingo(){
       
       for(int x = 0; x < 5; x++){
         
-        if(i == 0 && x == 0) sb.add("${fields[x][i]}");
-        
-        if(i != 2 && x != 2) sb.add(",${fields[x][i]}");
-      }
-    
+        if(i == 0 && x == 0){
+          sb.add("${fields[i][x]}");
+        }
+        else {
+          if(i == 2 && x == 2){            
+          }
+          else {
+            sb.add(",${fields[i][x]}");
+          }
+        }
+        }  
     }
     
     return sb.toString();
@@ -223,9 +233,9 @@ bool checkBingo(){
       
       for(int x = 0; x < 5; x++){
         
-        if(i == 0 && x == 0) sb.add("${document.query('#p$i$x').innerHTML}");
+        //if(i == 0 && x == 0) sb.add("${document.query('#p$i$x').innerHTML}");
         
-        if(i != 2 && x != 2) sb.add(",${document.query('#p$i$x').innerHTML}");
+        //if(i != 2 && x != 2) sb.add(",${document.query('#p$i$x').innerHTML}");
       }
     
     }
@@ -235,7 +245,7 @@ bool checkBingo(){
     return sb.toString();
   }
   
-  void updateField(int a){
+  void updateField(String a){
     
     for(int x = 0; x < 5; x++){
       
@@ -244,7 +254,7 @@ bool checkBingo(){
         if(x != 2 && i != 2){
           
           if(fields[x][i] == a){
-            fields[x][i] = 0;
+            fields[x][i] = "0";
             print("field $a updated");
           }
         }

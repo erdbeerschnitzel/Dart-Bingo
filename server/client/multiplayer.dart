@@ -120,8 +120,9 @@ void BingoHandler(bingoevent){
   else {
     
     if(playercard.checkBingo()) {
-      
+     
      ws.send("THISISBINGO:${playercard.toWSMessage()}");
+     show("Bingo sent to server"); 
     }
     else {
       
@@ -176,7 +177,7 @@ String MessageHandler(String msg){
     return "";
   }
   
-  if(msg.contains('Number')) {
+  if(msg.contains('Number') && !msg.contains('of')) {
     
     currentNumber = msg.replaceAll("Number: ", "");
     
@@ -214,6 +215,7 @@ String MessageHandler(String msg){
   if(msg.contains("Player has Bingo. Game stopped.")){
     
     gameStarted = false;
+    show("Other Player has Bingo. Round ended.");
     return "";
   }
   
@@ -292,7 +294,7 @@ void addCellClickHandlers(){
             
             el.style.textDecoration = 'underline';
             el.style.backgroundColor = 'red';
-            playercard.fields[i][x] = 0;
+            playercard.fields[i][x] = "0";
           }
 
         });         

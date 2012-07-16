@@ -77,6 +77,10 @@ class MessageHandler{
  
       originalconnection.send(gamecard.toWSMessage());
       
+      List elems = gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
+      
+      log("returning gamecard with ${elems.length} elements");
+      
       clients.forEach((var client) {
         
         if(client.con == originalconnection) client.gamecard = gamecard;
@@ -139,7 +143,7 @@ class MessageHandler{
       
       msg = msg.replaceFirst("GAMECARD:", "");
       
-      List values = msg.split(",");
+      List<String> values = msg.split(",");
       
       if(values.length > 2){
         
@@ -154,25 +158,30 @@ class MessageHandler{
             
             log("client found");
             
-            List originalvalues = client.gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
+            List<String> originalvalues = client.gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
             
             log("originalvalues  has ${originalvalues.length} elements");
-            
+            log("values  has ${values.length} elements");
            
             for(int i = 0; i < values.length; i++){
               
-              if(values[i] == 0){
-                
-                if(addedNumbers.indexOf(originalvalues[i]) >= 0){
-                  
-                  log("number was in original values");
-                  client.gamecard.updateField(originalvalues[i]);
-                }
-              }
+              print("check ${values[i]} and ${originalvalues[i]}");
+              
+       
+                addedNumbers.forEach((var number) {
+                  print("${values[i]} vs $number");
+                  if(values[i] == "$number"){
+                    
+                    log("number was in original values");
+                    client.gamecard.updateField(originalvalues[i]);
+                  }
+
+                });
             }
             
             if(client.gamecard.checkBingo()){
               
+              log("Bingo!");
               gameStarted = false;
               stopTimer();
               sendMessageToAllClients("Player has Bingo. Game stopped.");
@@ -192,7 +201,7 @@ class MessageHandler{
   
     void timeHandler(timeevent) {
     
-      if(gameStarted && getNumberOfReadyClients() > 1){
+      if(gameStarted && getNumberOfReadyClients() > 1 && addedNumbers.length < 99){
         
         sendMessageToAllClients("Number: ${getRandomNumber()}");
       }
@@ -205,7 +214,7 @@ class MessageHandler{
     
     void startTimer(){
     
-      if(messageTimer == null) messageTimer = new Timer.repeating(5000, timeHandler);
+      if(messageTimer == null) messageTimer = new Timer.repeating(2000, timeHandler);
       
     }
     
