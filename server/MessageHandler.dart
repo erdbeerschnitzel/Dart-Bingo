@@ -29,18 +29,18 @@ class MessageHandler{
   void removeConnection(WebSocketConnection conn) {
     
     int index = connections.indexOf(conn);
+    
     if (index > -1) {
       connections.removeRange(index, 1);
       clients.removeRange(index, 1);
     }
     
-    if(clients.length < 1) {
+    if(clients.length < 2) {
       
-      log("All Clients disconnected. Game stopped.");
-      gameStarted = false;
-      if(messageTimer != null)  messageTimer.cancel();
-      // clear list for new game
-      addedNumbers = new List<int>();
+      log("All Clients disconnected.");
+
+      stopTimer();
+
     }
     
     sendMessageToAllClients("Number of Players: ${(connections.length)}");
@@ -48,124 +48,151 @@ class MessageHandler{
   
   // send a message to all WebSocket clients
   void sendMessageToAllClients(String msg){
-    
-    connections.forEach((WebSocketConnection conn) {
-      conn.send(msg);
-    });  
+      
+      connections.forEach((WebSocketConnection conn) {
+        conn.send(msg);
+      });  
   }
 
-// check incoming WebSocket messages
-void delegateMessage(String msg, WebSocketConnection originalconnection){
-  
-  log("Client sent message: $msg");
- 
-  // handle client connect
-  if(msg.contains("client hello") && connections.length > 1) sendMessageToAllClients("Other Players: ${(connections.length - 1)}");
-  
-  // handle single client ready 
-  if(msg.contains("client ready") && connections.length == 1){
+  // check incoming WebSocket messages
+  void delegateMessage(String msg, WebSocketConnection originalconnection){
     
-    connections[0].send("You need to wait for other players!");
-    clients[0].ready = true;
-  }
-  
-  
-  // handle gamecard request
-  if(msg.contains("getGamecard")){
+    log("Client sent message: $msg");
+   
+    // handle client connect
+    if(msg.contains("client hello") && connections.length > 1) sendMessageToAllClients("Other Players: ${(connections.length - 1)}");
     
-    Gamecard gamecard = new Gamecard();
-    
-    originalconnection.send(gamecard.toWSMessage());
-  }
-
-  // handle client ready
-  if(msg.contains("client ready") && connections.length > 1){
-    
-    int numberReady = 0;
-    
-    clients.forEach((var client) {
+    // handle single client ready 
+    if(msg.contains("client ready") && connections.length == 1){
       
-      if(client.con == originalconnection) client.ready = true;
-      
-      if(client.ready) numberReady++;
-    });
-  }
-  
-  // handle client not ready
-  if(msg.contains("client notready") && connections.length > 0){
+      connections[0].send("You need to wait for other players!");
+      clients[0].ready = true;
+    }
     
-    clients.forEach((var client) {
+    
+    // handle gamecard request
+    if(msg.contains("getGamecard")){
       
-      if(client.con == originalconnection) {
-        client.ready = false;
-        log("client set status to not ready");
+      Gamecard gamecard = new Gamecard();
+      
+      originalconnection.send(gamecard.toWSMessage());
+    }
+  
+    // handle client ready
+    if(msg.contains("client ready") && connections.length > 1){
+      
+      int numberReady = 0;
+      
+      clients.forEach((var client) {
+        
+        if(client.con == originalconnection) client.ready = true;
+        
+        if(client.ready) numberReady++;
+      });
+    }
+    
+    // handle client not ready
+    if(msg.contains("client notready") && connections.length > 0){
+      
+      clients.forEach((var client) {
+        
+        if(client.con == originalconnection) {
+          client.ready = false;
+          log("client set status to not ready");
+        }
+  
+      });
+    
+    }
+    
+  
+    
+    sendMessageToAllClients("Number of Players: ${(connections.length)}   Players Ready: ${getNumberOfReadyClients()}");
+    
+    // when all clients are ready start the game
+    if(getNumberOfReadyClients() == clients.length && getNumberOfReadyClients() > 1) {
+      
+      gameStarted = true;
+      startTimer();
+      log("Game started...");
+      sendMessageToAllClients("All players are ready! Starting the Game!");
+    }
+    
+    
+    // handle bingo
+    if(msg.contains("thisisbingo")) {
+      
+      gameStarted = false;
+      stopTimer();
+      sendMessageToAllClients("Player has Bingo. Game stopped.");
+    }
+    
+  }
+    
+  
+    void timeHandler(timeevent) {
+    
+      if(gameStarted && getNumberOfReadyClients() > 1){
+        
+        sendMessageToAllClients("Number: ${getRandomNumber()}");
       }
-
-    });
-  
-  }
-  
-  int numberReady = 0;
-  
-  clients.forEach((var client) {
-    
-    if(client.ready) numberReady++;
-  });  
-  
-  sendMessageToAllClients("Number of Players: ${(connections.length)}   Players Ready: $numberReady");
-  
-  // when all clients are ready start the game
-  if(numberReady == clients.length && numberReady > 1) {
-    
-    gameStarted = true;
-    startTimer();
-    log("Game started...");
-    sendMessageToAllClients("All players are ready! Starting the Game!");
-  }
-  
-  
-  // handle bingo
-  if(msg.contains("thisisbingo")) {
-    
-    gameStarted = false;
-    messageTimer.cancel();
-    sendMessageToAllClients("Player has Bingo. Game stopped.");
-  }
-  
-}
-  
-
-  void timeHandler(timeevent) {
-  
-    if(gameStarted) sendMessageToAllClients("Number: ${getRandomNumber()}");
-  
-  }
-  
-  void startTimer(){
-  
-    messageTimer = new Timer.repeating(10000, timeHandler);
-    
-  }
-  
-  // get a random number between 1 and 99
-  // no duplicates
-  int getRandomNumber(){
-    
-    int a = (Math.random()*100).toInt();
-    
-    while(a > 99 || a < 1 || (addedNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
-    
-    addedNumbers.add(a);
+      else {
+        stopTimer();
+      }
       
-    return a;
-  }
+    
+    }
+    
+    void startTimer(){
+    
+      messageTimer = new Timer.repeating(10000, timeHandler);
+      
+    }
+    
+    void stopTimer(){
+      
+      if(messageTimer != null) messageTimer.cancel();
+      
+      log("Game stopped.");
+      
+      gameStarted = false;
+      
+      // clear list for new game
+      addedNumbers = new List<int>();
+    }
+  
+    
+    int getNumberOfReadyClients(){
+      
+      int numberReady = 0;
+      
+      clients.forEach((var client) {
+        
+        if(client.ready) numberReady++;
+      });  
+      
+      return numberReady;
+    }
+    
+    // get a random number between 1 and 99
+    // no duplicates
+    int getRandomNumber(){
+      
+      int a = (Math.random()*100).toInt();
+      
+      while(a > 99 || a < 1 || (addedNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
+      
+      addedNumbers.add(a);
+        
+      return a;
+    }
+    
+    
+    // simple logging method printing time and msg
+    void log(String msg){
+      print("${new Date.now()}: $msg");  
+    }
   
   
-  // simple logging method printing time and msg
-  void log(String msg){
-    print("${new Date.now()}: $msg");  
-  }
-
-
 
 }

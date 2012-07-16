@@ -12,7 +12,7 @@
 // globals
 Gamecard playercard;
 WebSocket ws;
-int currentNumber = 22;
+String currentNumber = "22";
 bool first = true;
 bool gameStarted = false;
 
@@ -66,12 +66,21 @@ void GameHandler(gameevent){
   
   if(!first){
   
-
-
-    document.query('#getGamecard').on.click.remove(GamecardHandler);
-    document.query('#startGame').on.click.remove(GameHandler);
-    document.query('#startGame').value = "I'm ready!";
-    document.query('#startGame').on.click.add(ReadyHandler);
+    if(!gameStarted){
+      
+      if(document.query('#startGame').value == "I'm ready!"){
+        
+        ws.send("client ready");
+        document.query('#startGame').value = "I'm not ready!";
+        document.query('#getGamecard').on.click.remove(GamecardHandler);
+      }
+      else {
+        
+        ws.send("client notready");
+        document.query('#startGame').value = "I'm ready!";
+        document.query('#getGamecard').on.click.add(GamecardHandler);
+      }       
+    }  
 
   }
   else {
@@ -81,24 +90,6 @@ void GameHandler(gameevent){
 
 }
 
-// handles ready button
-void ReadyHandler(readyevent){
-  
-  
-  if(!gameStarted){
-    
-    if(document.query('#startGame').value == "I'm ready!"){
-      
-      ws.send("client ready");
-      document.query('#startGame').value = "I'm not ready!";
-    }
-    else {
-      
-      ws.send("client notready");
-      document.query('#startGame').value = "I'm ready!";
-    }       
-  }  
-}
 
 // handles gamecard creating
 void GamecardHandler(gamecardevent){
@@ -159,7 +150,7 @@ String MessageHandler(String msg){
     
     gameStarted = true;
 
-    document.query('#startGame').on.click.remove(ReadyHandler);
+    document.query('#startGame').on.click.remove(GameHandler);
     document.query('#startGame').remove();
     document.query('#getGamecard').remove();
     

@@ -3724,10 +3724,17 @@ $.allMatches = function(receiver, str) {
 
 $.GameHandler = function(gameevent) {
   if ($.first !== true) {
-    $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
-    $.document().query$1('#startGame').get$on().get$click().remove$1($.GameHandler);
-    $.document().query$1('#startGame').set$value('I\'m ready!');
-    $.add$1($.document().query$1('#startGame').get$on().get$click(), $.ReadyHandler);
+    if ($.gameStarted !== true) {
+      if ($.eqB($.document().query$1('#startGame').get$value(), 'I\'m ready!')) {
+        $.ws.send$1('client ready');
+        $.document().query$1('#startGame').set$value('I\'m not ready!');
+        $.document().query$1('#getGamecard').get$on().get$click().remove$1($.GamecardHandler);
+      } else {
+        $.ws.send$1('client notready');
+        $.document().query$1('#startGame').set$value('I\'m ready!');
+        $.add$1($.document().query$1('#getGamecard').get$on().get$click(), $.GamecardHandler);
+      }
+    }
   } else $.show('Get some Gamecards first!');
 };
 
@@ -4144,18 +4151,6 @@ $.regExpExec = function(regExp, str) {
   var result = ($.regExpGetNative(regExp).exec(str));
   if (result === null) return;
   return result;
-};
-
-$.ReadyHandler = function(readyevent) {
-  if ($.gameStarted !== true) {
-    if ($.eqB($.document().query$1('#startGame').get$value(), 'I\'m ready!')) {
-      $.ws.send$1('client ready');
-      $.document().query$1('#startGame').set$value('I\'m not ready!');
-    } else {
-      $.ws.send$1('client notready');
-      $.document().query$1('#startGame').set$value('I\'m ready!');
-    }
-  }
 };
 
 $.geB = function(a, b) {
@@ -5224,7 +5219,7 @@ $.MessageHandler = function(msg) {
   }
   if ($.contains$1(msg, 'Starting the Game') === true) {
     $.gameStarted = true;
-    $.document().query$1('#startGame').get$on().get$click().remove$1($.ReadyHandler);
+    $.document().query$1('#startGame').get$on().get$click().remove$1($.GameHandler);
     $.document().query$1('#startGame').remove$0();
     $.document().query$1('#getGamecard').remove$0();
     return '';
@@ -5529,28 +5524,26 @@ $.Futures_wait$bailout = function(state, futures, t1) {
 
 $.dynamicBind.$call$4 = $.dynamicBind;
 $.dynamicBind.$name = "dynamicBind";
-$.typeNameInIE.$call$1 = $.typeNameInIE;
-$.typeNameInIE.$name = "typeNameInIE";
-$.GamecardHandler.$call$1 = $.GamecardHandler;
-$.GamecardHandler.$name = "GamecardHandler";
-$.ReadyHandler.$call$1 = $.ReadyHandler;
-$.ReadyHandler.$name = "ReadyHandler";
-$.typeNameInFirefox.$call$1 = $.typeNameInFirefox;
-$.typeNameInFirefox.$name = "typeNameInFirefox";
-$.constructorNameFallback.$call$1 = $.constructorNameFallback;
-$.constructorNameFallback.$name = "constructorNameFallback";
 $.BingoHandler.$call$1 = $.BingoHandler;
 $.BingoHandler.$name = "BingoHandler";
 $.invokeClosure.$call$5 = $.invokeClosure;
 $.invokeClosure.$name = "invokeClosure";
+$.GamecardHandler.$call$1 = $.GamecardHandler;
+$.GamecardHandler.$name = "GamecardHandler";
 $.toStringWrapper.$call$0 = $.toStringWrapper;
 $.toStringWrapper.$name = "toStringWrapper";
-$.typeNameInChrome.$call$1 = $.typeNameInChrome;
-$.typeNameInChrome.$name = "typeNameInChrome";
 $.GameHandler.$call$1 = $.GameHandler;
 $.GameHandler.$name = "GameHandler";
+$.typeNameInChrome.$call$1 = $.typeNameInChrome;
+$.typeNameInChrome.$name = "typeNameInChrome";
 $.throwNoSuchMethod.$call$3 = $.throwNoSuchMethod;
 $.throwNoSuchMethod.$name = "throwNoSuchMethod";
+$.typeNameInIE.$call$1 = $.typeNameInIE;
+$.typeNameInIE.$name = "typeNameInIE";
+$.typeNameInFirefox.$call$1 = $.typeNameInFirefox;
+$.typeNameInFirefox.$name = "typeNameInFirefox";
+$.constructorNameFallback.$call$1 = $.constructorNameFallback;
+$.constructorNameFallback.$name = "constructorNameFallback";
 Isolate.$finishClasses($$);
 $$ = {};
 Isolate.makeConstantList = function(list) {
@@ -5574,7 +5567,7 @@ $.gameStarted = false;
 $._getTypeNameOf = null;
 $.playercard = null;
 $._cachedBrowserPrefix = null;
-$.currentNumber = 22;
+$.currentNumber = '22';
 $.ws = null;
 var $ = null;
 Isolate.$finishClasses($$);
