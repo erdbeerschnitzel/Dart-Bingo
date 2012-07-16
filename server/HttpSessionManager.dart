@@ -48,7 +48,7 @@ class HttpSessionManager{
     
     var id = getRequestedSessionId(request);
     
-    print("fetched id: $id");
+    //print("fetched id: $id");
     
     if (id == null) {
       
@@ -114,14 +114,14 @@ class HttpSessionManager{
   
   // Set cookie parameter to the response header.
   // (Name and value will be URL encoded.)
-  void setCookieParameter(HttpResponse response, String name, String value, [String path = null]) {
-    if (path == null) {
-      response.headers.add("Set-Cookie",
-          "${new String.fromCharCodes(_urlEncode(name))} = ${new String.fromCharCodes(_urlEncode(value))}");
-    }
-    else response.headers.add("Set-Cookie",
-      "${new String.fromCharCodes(_urlEncode(name))} = ${new String.fromCharCodes(_urlEncode(value))}; Path = ${path} ");
-  }
+//  void setCookieParameter(HttpResponse response, String name, String value, [String path = null]) {
+//    if (path == null) {
+//      response.headers.add("Set-Cookie",
+//          "${new String.fromCharCodes(_urlEncode(name))} = ${new String.fromCharCodes(_urlEncode(value))}");
+//    }
+//    else response.headers.add("Set-Cookie",
+//      "${new String.fromCharCodes(_urlEncode(name))} = ${new String.fromCharCodes(_urlEncode(value))}; Path = ${path} ");
+//  }
   
   // Get cookie parameters from the request
   Map getCookieParameters(HttpRequest request) {

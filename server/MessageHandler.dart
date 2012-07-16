@@ -6,13 +6,14 @@
 #library("MessageHandler");
 #import("dart:io");
 #import("dart:isolate");
+#source("client/Gamecard.dart");
 
 class MessageHandler{
   
 
   List<WebSocketConnection> connections;
   List clients;
-  List<int> addNumbers;
+  List<int> addedNumbers;
   
   Timer messageTimer;
   bool gameStarted = false;
@@ -22,7 +23,7 @@ class MessageHandler{
     
     clients = new List();
     connections = new List<WebSocketConnection>();
-    addNumbers = new List<int>();
+    addedNumbers = new List<int>();
   }
   
   void removeConnection(WebSocketConnection conn) {
@@ -37,7 +38,9 @@ class MessageHandler{
       
       log("All Clients disconnected. Game stopped.");
       gameStarted = false;
-      if(!(messageTimer == null))  messageTimer.cancel();
+      if(messageTimer != null)  messageTimer.cancel();
+      // clear list for new game
+      addedNumbers = new List<int>();
     }
     
     sendMessageToAllClients("Number of Players: ${(connections.length)}");
@@ -65,6 +68,15 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
     connections[0].send("You need to wait for other players!");
     clients[0].ready = true;
   }
+  
+  
+  // handle gamecard request
+  if(msg.contains("getGamecard")){
+    
+    Gamecard gamecard = new Gamecard();
+    
+    originalconnection.send(gamecard.toWSMessage());
+  }
 
   // handle client ready
   if(msg.contains("client ready") && connections.length > 1){
@@ -80,7 +92,7 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
   }
   
   // handle client not ready
-  if(msg.contains("client notready") && connections.length > 1){
+  if(msg.contains("client notready") && connections.length > 0){
     
     clients.forEach((var client) {
       
@@ -141,9 +153,9 @@ void delegateMessage(String msg, WebSocketConnection originalconnection){
     
     int a = (Math.random()*100).toInt();
     
-    while(a > 99 || a < 1 || (addNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
+    while(a > 99 || a < 1 || (addedNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
     
-    addNumbers.add(a);
+    addedNumbers.add(a);
       
     return a;
   }

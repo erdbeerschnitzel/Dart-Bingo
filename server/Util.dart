@@ -79,7 +79,6 @@ void log(String msg){
 
 void logToFile(String msg){
   
-  print("saving $msg");
   
   File file = new File('server.log');
   OutputStream out = file.openOutputStream(FileMode.APPEND);

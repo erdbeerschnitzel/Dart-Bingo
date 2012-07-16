@@ -13,7 +13,6 @@
 Gamecard playercard;
 WebSocket ws;
 int currentNumber = 22;
-List<int> addNumbers;
 bool first = true;
 bool gameStarted = false;
 
@@ -22,9 +21,6 @@ bool gameStarted = false;
  * main entry point - attaches handlers and inits objects
  **/
 void main() {
-
- // init some Objects
- addNumbers = new List<int>();
 
  playercard = new Gamecard();
 
@@ -43,6 +39,7 @@ void main() {
  ws =  new WebSocket("ws://localhost:8080/bingo");
  
  ws.on.message.add((MessageEvent e) {
+   
    document.query('#status').innerHTML = "${e.data}";
    
    if(MessageHandler(e.data) != ""){
@@ -109,10 +106,7 @@ void GamecardHandler(gamecardevent){
     playercard = new Gamecard();
   
     ws.send("getGamecard");
-    
-    //document.query('#playertable').innerHTML = playercard.createCardHTML(false);
-    
-    
+     
 }
 
 
@@ -143,13 +137,13 @@ String MessageHandler(String msg){
   if(msg == "Hello from Server!") return "client hello!";
   
   if(msg.contains("GAMECARD:")){
-    show(msg);
+
     playercard = new Gamecard.fromServer(msg);
     document.query('#playertable').innerHTML = playercard.createCardHTML(false);
     
-    //addCellClickHandlers();
+    addCellClickHandlers();
 
-    //show("Gamecard created!");
+    show("Gamecard created!");
     
     first = false;
   }

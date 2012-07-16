@@ -17,7 +17,7 @@ class HttpSession {
     _attributes = new Map<String, Dynamic>();
     _sessionId = createSessionId();
     
-    print("created new session with id: $_sessionId");
+    //print("created new session with id: $_sessionId");
     
     response.headers.add("Set-Cookie", " DSESSIONID = $_sessionId; Path = ${request.path}; HttpOnly");
 
