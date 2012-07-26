@@ -97,7 +97,11 @@ void GameHandler(gameevent){
 }
 
 
-// handles gamecard creating
+/**
+ * handle click on "Get new Gamecards"
+ * 
+ * sends msg to server to request new gamecard
+ */
 void GamecardHandler(gamecardevent){
 
     playercard = new Gamecard();
@@ -107,7 +111,11 @@ void GamecardHandler(gamecardevent){
 }
 
 
-// handle bingo button
+/**
+ * handles clicks on the bingo button
+ * if player has bingo the marked fields of the gamecard
+ * are sent to the server
+ **/
 void BingoHandler(bingoevent){
   
   if(!gameStarted){
@@ -135,9 +143,12 @@ String MessageHandler(String msg){
   
   if(msg == "Hello from Server!") return "client hello!";
   
+  /**
+   * receiving a gamecard string
+   **/
   if(msg.contains("GAMECARD:")){
 
-    print("received: $msg");
+    //print("received: $msg");
     playercard = new Gamecard.fromServer(msg);
     document.query('#playertable').innerHTML = playercard.createCardHTML(false);
     
@@ -148,13 +159,18 @@ String MessageHandler(String msg){
     first = false;
   }
     
-  
+  /**
+   * receiving number of other players
+   **/
   if(msg.contains('Other Players:')) {
     
     show(msg);
     return "";
   }
   
+  /**
+   * receiving chat msg
+   **/
   if(msg.contains('CHAT:')) {
     
     msg = msg.replaceFirst("CHAT:", "");
@@ -164,6 +180,10 @@ String MessageHandler(String msg){
     return "";
   }
   
+  /**
+   * receiving game start event from server
+   * removes buttons
+   **/
   if(msg.contains('Starting the Game')) {
     
     gameStarted = true;
@@ -175,11 +195,14 @@ String MessageHandler(String msg){
     return "";
   }
   
+  /**
+   * receiving new number from server
+   **/
   if(msg.contains('Number') && !msg.contains('of')) {
     
     currentNumber = msg.replaceAll("Number: ", "");
     
-    // debug help
+    // DEBUG HELP!
     
     for(int i = 0; i < 5; i++){
       
@@ -190,8 +213,10 @@ String MessageHandler(String msg){
         }
         else {
           
+          // get element of gamecard table
           TableCellElement el = document.query('#p$i$x');
   
+            // if received number is equal to field number
             if(currentNumber.toString() == el.innerHTML.toString()){
               
               //el.style.textDecoration = 'underline';
@@ -204,18 +229,27 @@ String MessageHandler(String msg){
       }    
     }
     
-    //
+    return "";
+  }
+  
+  /**
+   * received bingo event from server
+   **/
+  if(msg.contains("Player has Bingo. Game stopped.")){
     
+    gameStarted = false;
+    
+    if(!playercard.checkBingo()){
+      
+      show("Other Player has Bingo. Round ended.");
+    }
+    else {
+      show("Bingo! You win this round!");
+    }
 
     return "";
   }
   
-  if(msg.contains("Player has Bingo. Game stopped.")){
-    
-    gameStarted = false;
-    show("Other Player has Bingo. Round ended.");
-    return "";
-  }
   
   return "";
   

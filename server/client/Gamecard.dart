@@ -13,6 +13,10 @@ class Gamecard {
   
   }
   
+  /**
+   * named constructor to create a gamecard
+   * from a websocket msg sent by the server
+   **/
   Gamecard.fromServer(String msg){
     
     fields = new List<List<String>>();
@@ -45,6 +49,10 @@ class Gamecard {
     }    
   }
   
+  /**
+   *  init the fields of a gamecard
+   *  with random values
+   **/
   void initFields(){
     
     for(int i = 0; i < 5; i++){
@@ -140,16 +148,13 @@ bool checkBingo(){
       }
       else 
       {
-        
-  
-        if(fields[i][x] != "0"){
+      if(fields[i][x] != "0"){
 
           result = false;
           
         }
         
         deb = "$deb$i$x: ${fields[i][x]} ";
-
       }
     }
     
@@ -190,6 +195,7 @@ bool checkBingo(){
   return result;
 }
   
+
   int getRandomNumber(){
     
     int a = (Math.random()*100).toInt();
@@ -199,6 +205,11 @@ bool checkBingo(){
     return a;
   }
   
+  
+  /**
+   * convert a gamecard object to String
+   * to be sent via Websockets
+   **/
   String toWSMessage(){
     
     StringBuffer sb = new StringBuffer();
@@ -226,18 +237,24 @@ bool checkBingo(){
   }
   
  
-  
+  /**
+   * update field in gamecard with specific number (taken as string)
+   * sets field to value "0" which indicates a marked field
+   **/
   void updateField(String a){
     
     for(int x = 0; x < 5; x++){
       
       for(int i = 0; i < 5; i++){
         
-        if(x != 2 && i != 2){
+        if(x == 2 && i == 2){
           
+
+        }
+        else {
           if(fields[x][i] == a){
             fields[x][i] = "0";
-            print("field $a updated");
+            //print("field $a updated");
           }
         }
       }

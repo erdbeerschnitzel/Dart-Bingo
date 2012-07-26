@@ -184,7 +184,6 @@ class MessageHandler{
             if(client.gamecard.checkBingo()){
               
               log("Bingo!");
-              gameStarted = false;
               stopTimer();
               sendMessageToAllClients("Player has Bingo. Game stopped.");
             }
@@ -220,23 +219,33 @@ class MessageHandler{
       
     }
     
+    /**
+     * stops the timer which sends numbers to clients
+     * sets gameStarted to false if not already set
+     **/
     void stopTimer(){
       
       if(messageTimer != null) messageTimer.cancel();
       
       if(gameStarted){
         
-        log("Game stopped.");
+        log("Game stopped. Timer stopped.");
         
         gameStarted = false;
         
         // clear list for new game
         addedNumbers = new List<int>();
       }
+      else {
+        
+        log("Game ended. Timer stopped.");
+      }
 
     }
   
-    
+    /**
+     * check how many clients are ready to play
+     **/
     int getNumberOfReadyClients(){
       
       int numberReady = 0;
@@ -264,10 +273,6 @@ class MessageHandler{
     
     
     // simple logging method printing time and msg
-    void log(String msg){
-      print("${new Date.now()}: $msg");  
-    }
-  
-  
+    void log(String msg) => print("${new Date.now()}: $msg");  
 
 }
