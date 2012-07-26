@@ -6,15 +6,14 @@
 #import('dart:html');
 #import('dart:json');
 #import('js.dart', prefix: 'js');
-//#import('C:\\code\\dart\\dart-sdk\\lib\\i18n\\date_format.dart');
 #source('Gamecard.dart');
 
 // globals
-Gamecard playercard;
-WebSocket ws;
-String currentNumber = "22";
-bool first = true;
-bool gameStarted = false;
+Gamecard _playercard;
+WebSocket _ws;
+String _currentNumber = "42";
+bool _first = true;
+bool _gameStarted = false;
 InputElement _messageInput;
 InputElement _nicknameInput;
 InputElement _messageWindow;
@@ -40,15 +39,15 @@ void main() {
 
 
  
- ws =  new WebSocket("ws://localhost:8080/bingo");
+ _ws =  new WebSocket("ws://localhost:8080/bingo");
  
- ws.on.message.add((MessageEvent e) {
+ _ws.on.message.add((MessageEvent e) {
    
    if(!e.data.toString().contains("CHAT:")) document.query('#status').innerHTML = "${e.data}";
    
    if(MessageHandler(e.data) != ""){
      
-     ws.send(MessageHandler(e.data));
+     _ws.send(MessageHandler(e.data));
    }
    
  });
@@ -70,19 +69,19 @@ void main() {
  **/
 void GameHandler(gameevent){
   
-  if(!first){
+  if(!_first){
   
-    if(!gameStarted){
+    if(!_gameStarted){
       
       if(document.query('#startGame').value == "I'm ready!"){
         
-        ws.send("client ready");
+        _ws.send("client ready");
         document.query('#startGame').value = "I'm not ready!";
         document.query('#getGamecard').on.click.remove(GamecardHandler);
       }
       else {
         
-        ws.send("client notready");
+        _ws.send("client notready");
         document.query('#startGame').value = "I'm ready!";
         document.query('#getGamecard').on.click.add(GamecardHandler);
       }       
@@ -104,9 +103,9 @@ void GameHandler(gameevent){
  */
 void GamecardHandler(gamecardevent){
 
-    playercard = new Gamecard();
+    _playercard = new Gamecard();
   
-    ws.send("getGamecard");
+    _ws.send("getGamecard");
      
 }
 
@@ -115,25 +114,46 @@ void GamecardHandler(gamecardevent){
  * handles clicks on the bingo button
  * if player has bingo the marked fields of the gamecard
  * are sent to the server
+ * 
+ * button is renamed to "New Round" on round end
+ * click on "New Round" reenables other buttons and renames this one
  **/
 void BingoHandler(bingoevent){
   
-  if(!gameStarted){
-    
-    show("The Game hasn't started yet or already ended!");
-  }
-  else {
-    
-    if(playercard.checkBingo()) {
-     
-     ws.send("THISISBINGO:${playercard.toWSMessage()}");
-     show("Bingo sent to server"); 
+  if(document.query('#Bingo').value.contains("Bingo!")){
+   
+    if(!_gameStarted){
+      
+      show("The Game hasn't started yet or already ended!");
     }
     else {
       
-      show("You don't have a Bingo!");
-    }
+      if(_playercard.checkBingo()) {
+       
+       _ws.send("THISISBINGO:${_playercard.toWSMessage()}");
+       show("Bingo sent to server"); 
+      }
+      else {
+        
+        show("You don't have a Bingo!");
+      }
+    }    
+    
   }
+  
+  // reenable buttons for new round
+  if(document.query('#Bingo').value.contains("New Round")){
+    
+    document.query('#Bingo').value = "Bingo!";
+    
+    document.query('#startGame').on.click.add(GameHandler);
+    document.query('#startGame').hidden = false;
+    document.query('#startGame').value = "I'm ready!";
+    document.query('#getGamecard').hidden = false;
+    document.query('#getGamecard').on.click.add(GamecardHandler);
+  }
+  
+
   
 }
 
@@ -149,14 +169,14 @@ String MessageHandler(String msg){
   if(msg.contains("GAMECARD:")){
 
     //print("received: $msg");
-    playercard = new Gamecard.fromServer(msg);
-    document.query('#playertable').innerHTML = playercard.createCardHTML(false);
+    _playercard = new Gamecard.fromServer(msg);
+    document.query('#playertable').innerHTML = _playercard.createCardHTML(false);
     
     addCellClickHandlers();
 
     show("Gamecard created!");
     
-    first = false;
+    _first = false;
   }
     
   /**
@@ -186,11 +206,11 @@ String MessageHandler(String msg){
    **/
   if(msg.contains('Starting the Game')) {
     
-    gameStarted = true;
+    _gameStarted = true;
 
     document.query('#startGame').on.click.remove(GameHandler);
-    document.query('#startGame').remove();
-    document.query('#getGamecard').remove();
+    document.query('#startGame').hidden = true;
+    document.query('#getGamecard').hidden = true;
     
     return "";
   }
@@ -200,7 +220,7 @@ String MessageHandler(String msg){
    **/
   if(msg.contains('Number') && !msg.contains('of')) {
     
-    currentNumber = msg.replaceAll("Number: ", "");
+    _currentNumber = msg.replaceAll("Number: ", "");
     
     // DEBUG HELP!
     
@@ -217,11 +237,11 @@ String MessageHandler(String msg){
           TableCellElement el = document.query('#p$i$x');
   
             // if received number is equal to field number
-            if(currentNumber.toString() == el.innerHTML.toString()){
+            if(_currentNumber.toString() == el.innerHTML.toString()){
               
               //el.style.textDecoration = 'underline';
               el.style.backgroundColor = 'red';
-              playercard.fields[i][x] = "0";
+              _playercard.fields[i][x] = "0";
             }
 
        
@@ -237,11 +257,12 @@ String MessageHandler(String msg){
    **/
   if(msg.contains("Player has Bingo. Game stopped.")){
     
-    gameStarted = false;
+    _gameStarted = false;
+    document.query('#Bingo').value = "New Round";
     
-    if(!playercard.checkBingo()){
+    if(!_playercard.checkBingo()){
       
-      show("Other Player has Bingo. Round ended.");
+      show("Other Player has Bingo. Round ended.");      
     }
     else {
       show("Bingo! You win this round!");
@@ -273,7 +294,7 @@ void addChatEventHandlers() {
   _messageInput.on.keyPress.add((event) {
     if (event.keyCode == 13) { 
       
-      ws.send("CHAT: <${_nicknameInput.value}> ${_messageInput.value}");
+      _ws.send("CHAT: <${_nicknameInput.value}> ${_messageInput.value}");
   
       addMessageToMessageWindow(" <${_nicknameInput.value}> ${_messageInput.value}");
         
@@ -322,11 +343,11 @@ void addCellClickHandlers(){
         
         el.on.click.add((event2) {
           
-          if(currentNumber.toString() == el.innerHTML){
+          if(_currentNumber.toString() == el.innerHTML){
             
             el.style.textDecoration = 'underline';
             el.style.backgroundColor = 'red';
-            playercard.fields[i][x] = "0";
+            _playercard.fields[i][x] = "0";
           }
 
         });         

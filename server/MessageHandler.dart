@@ -26,6 +26,10 @@ class MessageHandler{
     addedNumbers = new List<int>();
   }
   
+  /**
+   * remove a websocket connection client from lists
+   * if number of clients is below 2 stop the game
+   **/
   void removeConnection(WebSocketConnection conn) {
     
     int index = connections.indexOf(conn);
@@ -148,10 +152,7 @@ class MessageHandler{
       List<String> values = msg.split(",");
       
       if(values.length > 2){
-        
-        log("Bingo msg seems ok");
-           
-        
+
         log("Searching client...");
         
         clients.forEach((var client) {
@@ -161,20 +162,15 @@ class MessageHandler{
             log("client found");
             log("client ws msg: ${client.gamecard.toWSMessage()}");
             List<String> originalvalues = client.gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
-            
-            log("originalvalues  has ${originalvalues.length} elements");
-            log("values  has ${values.length} elements");
            
             for(int i = 0; i < values.length; i++){
               
-              print("check ${values[i]} and ${originalvalues[i]}");
-              
-       
-                addedNumbers.forEach((var number) {
+              //print("check ${values[i]} and ${originalvalues[i]}");
+              addedNumbers.forEach((var number) {
                   //print("${originalvalues[i]} vs $number");
                   if(originalvalues[i] == "$number"){
                     
-                    log("number was in original values");
+                    //log("number was in original values");
                     client.gamecard.updateField(originalvalues[i]);
                   }
 
@@ -214,10 +210,9 @@ class MessageHandler{
     }
     
     void startTimer(){
-    
-      if(messageTimer == null) messageTimer = new Timer.repeating(2000, timeHandler);
-      
+      messageTimer = new Timer.repeating(2000, timeHandler);
     }
+
     
     /**
      * stops the timer which sends numbers to clients
@@ -232,6 +227,10 @@ class MessageHandler{
         log("Game stopped. Timer stopped.");
         
         gameStarted = false;
+        
+        clients.forEach((var client) {
+            client.ready = false;    
+        });
         
         // clear list for new game
         addedNumbers = new List<int>();
