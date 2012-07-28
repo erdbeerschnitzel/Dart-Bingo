@@ -5,19 +5,20 @@
 **/
 
 
-String createLoginPage(){
+String createPageFromHTMLFile(String path){
 
-    File file = new File("index.html");
+    File file = new File(path);
     
     if(file != null){
     
+      //print("returning ${file.readAsTextSync()}");
       return file.readAsTextSync();
     }
     else {
-      return  createErrorPage("Error reading file: index.html");
+      return  createErrorPage("Error reading file: $path");
     }
 
-  }
+}
 
 
 // create html for error page

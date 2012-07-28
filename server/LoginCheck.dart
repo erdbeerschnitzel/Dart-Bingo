@@ -58,13 +58,10 @@
                   }
                 }
               }
-              else {
-                
-                print("Error reading POST");
-              }
-    
+   
           }
           else {
+            print("Error reading POST in LoginCheck");
             valid = false;
           }
     

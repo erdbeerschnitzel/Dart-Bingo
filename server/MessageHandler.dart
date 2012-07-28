@@ -6,6 +6,7 @@
 #library("MessageHandler");
 #import("dart:io");
 #import("dart:isolate");
+//#import("dart:math");
 #source("client/Gamecard.dart");
 
 class MessageHandler{
@@ -153,8 +154,6 @@ class MessageHandler{
       
       if(values.length > 2){
 
-        log("Searching client...");
-        
         clients.forEach((var client) {
           
           if(client.con == originalconnection){
