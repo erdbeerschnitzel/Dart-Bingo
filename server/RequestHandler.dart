@@ -29,21 +29,21 @@ class RequestHandler {
 // serving http requests
 void handleRequest(HttpRequest req, HttpResponse resp) {
   
-  log("trying to handle ${req.method} request");
+  //log("trying to handle ${req.method} request");
 
   htmlResponse = "empty";
   
   if(req.method == "POST"){
   
     handlePOSTRequest(req, resp).then((result){
-      log("POST handeld");
+      log("POST handeld for ${req.path}");
       answerRequest(req, resp);
       });
   }
   else {
     
     handleGETRequest(req, resp).then((result){
-      log("GET handeld");
+      log("GET handeld for ${req.path}");
       answerRequest(req, resp);
       });
   }
@@ -54,11 +54,11 @@ void handleRequest(HttpRequest req, HttpResponse resp) {
 
 void answerRequest(HttpRequest req, HttpResponse resp){
   
-  log("response: $htmlResponse");
+  //log("response: $htmlResponse");
   //setCookieParameter(resp, "testName", "TestValue_\u221A2=1.41", req.path);
  
   if(htmlResponse != "!File!"){
-    log("writing response $htmlResponse");
+    //log("writing response $htmlResponse");
     resp.outputStream.writeString(htmlResponse);
   }
   
@@ -73,6 +73,8 @@ Future handleGETRequest(HttpRequest req, HttpResponse resp){
   
   try {
 
+    if(!req.path.endsWith(".css") && !req.path.endsWith(".js") && !req.path.contains('.png')){
+    
     session = sessionManager.getSession(req, resp);
    
     if (session != null){
@@ -85,6 +87,7 @@ Future handleGETRequest(HttpRequest req, HttpResponse resp){
 
         htmlResponse = createPageFromHTMLFile("index.html");
       }
+      
       else {
         
         if(req.path.contains('.png')){
@@ -98,6 +101,19 @@ Future handleGETRequest(HttpRequest req, HttpResponse resp){
         }
       }
       
+    }
+    }
+    else {
+      
+      if(req.path.contains('.png')){
+        
+        handleOtherFile(req, resp);
+        
+      } else {
+ 
+        handleTextFile(req, resp);
+      
+      }
     }
  
     
@@ -159,7 +175,7 @@ Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
   
   
   
-  log("complete with $result");
+  //log("complete with $result");
   
   maincompleter.future.then((data){
     log("complete with new result: $result");
@@ -182,8 +198,7 @@ void handleLogin(HttpRequest req, HttpResponse resp, String body){
   if(check(req, body)) htmlResponse = createPageFromHTMLFile("main.html");
   else htmlResponse = createLoginErrorPage();
 
-  log("login result: $htmlResponse"); 
-}
+  }
 
 
 void handleRegistration(){
@@ -235,21 +250,14 @@ String createHtmlResponse(HttpRequest req) {
 
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
   
-  log("requested $path req.path: ${req.path}");
+  //log("requested $path req.path: ${req.path}");
   
   
   if(req.path.endsWith('/') || req.path.endsWith('8080')){
     
-    path = 'http:\\\\localhost:8080\\main.html';
+    path = 'main.html';
   }
-  
-  if(path.contains("singleplayer.html") && check(req, "singleplayer.html"))  return FileManager.readHTMLFile();
-    
-  
-    if(!path.contains("singleplayer.html")){
-      
-    //log("requesting unrelated file");
-  
+
     File file = new File(path);
   
     if(file != null){
@@ -260,11 +268,7 @@ String createHtmlResponse(HttpRequest req) {
         return createErrorPage("Internal error reading User DB!");
       }
   
-    }
-    else {
-      
-      return createLoginErrorPage();
-    }
+    
   }
   
 
