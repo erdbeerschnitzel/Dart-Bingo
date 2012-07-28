@@ -6,7 +6,7 @@
 #import("dart:io");
 
 
-  bool check(HttpRequest req){
+  bool check(HttpRequest req, String body){
   
     File file = new File("data.txt");
     
@@ -23,18 +23,16 @@
         //print("pass file exists");
         
         List<String> lines = file.readAsLinesSync();
-        
-        
-        
+      
         print("pass file read");
   
           if(!heads.contains("multiplayer.html")){
             
             print("retrieving postmessage");
-             
-            if(req.inputStream.read() != null){
+
+            if(body != null){
                     
-              String postmessage = new String.fromCharCodes(req.inputStream.read());
+              String postmessage = body;
               
               print("postmessage $postmessage");
               

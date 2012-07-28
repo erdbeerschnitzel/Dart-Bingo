@@ -1,5 +1,7 @@
 
-// simple Class representing a Client consisting of a Websocket Connection a 
+/**
+ * simple Class representing a Client consisting of a Websocket Connection a 
+ **/
 class Client {
   
   bool ready = false;

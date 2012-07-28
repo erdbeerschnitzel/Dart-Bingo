@@ -30,27 +30,46 @@ class RequestHandler {
 void handleRequest(HttpRequest req, HttpResponse resp) {
   
   log("trying to handle ${req.method} request");
+
+  htmlResponse = "empty";
   
   if(req.method == "POST"){
-
-    
-    handlePOSTRequest(req, resp);
+  
+    handlePOSTRequest(req, resp).then((result){
+      log("POST handeld");
+      answerRequest(req, resp);
+      });
   }
   else {
     
-    handleGETRequest(req, resp);
+    handleGETRequest(req, resp).then((result){
+      log("GET handeld");
+      answerRequest(req, resp);
+      });
   }
   
   
+
+}
+
+void answerRequest(HttpRequest req, HttpResponse resp){
   
+  log("response: $htmlResponse");
   //setCookieParameter(resp, "testName", "TestValue_\u221A2=1.41", req.path);
  
-  if(htmlResponse != "!File!") resp.outputStream.writeString(htmlResponse);
+  if(htmlResponse != "!File!"){
+    log("writing response $htmlResponse");
+    resp.outputStream.writeString(htmlResponse);
+  }
   
   resp.outputStream.close();
 }
 
-void handleGETRequest(HttpRequest req, HttpResponse resp){
+Future handleGETRequest(HttpRequest req, HttpResponse resp){
+  
+  Completer maincompleter = new Completer();
+  
+  var result = "emptyResponse";
   
   try {
 
@@ -86,9 +105,19 @@ void handleGETRequest(HttpRequest req, HttpResponse resp){
     
     htmlResponse = createErrorPage(err.toString());
   }
+  
+  result = htmlResponse;
+  maincompleter.complete(result);  
+
+  return maincompleter.future; 
 }
 
-void handlePOSTRequest(HttpRequest req, HttpResponse resp){
+Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
+  
+  Completer maincompleter = new Completer();
+  
+  var result = "emptyPOSTResponse";
+  
   
   session = sessionManager.getSession(req, resp);
   
@@ -116,27 +145,44 @@ void handlePOSTRequest(HttpRequest req, HttpResponse resp){
   // process the request and send a response
   completer.future.then((data){
     if(bodyString.contains("repeatpassword")){
+      
       handleRegistration();
     }
     else if (bodyString.contains("username=")){
-      handleLogin(req, resp);
+      
+      handleLogin(req, resp, bodyString);
+      result = 2;
+      maincompleter.complete(result); 
+      
     }
   });
   
   
+  
+  log("complete with $result");
+  
+  maincompleter.future.then((data){
+    log("complete with new result: $result");
+    result = htmlResponse;
+    
+  });
+  
+    
+   
+
+  return maincompleter.future; 
 
 }
 
 
-void handleLogin(HttpRequest req, HttpResponse resp){
+void handleLogin(HttpRequest req, HttpResponse resp, String body){
 
   log("Attempting login...");
  
-  if(check(req)) htmlResponse = createPageFromHTMLFile("main.html");
+  if(check(req, body)) htmlResponse = createPageFromHTMLFile("main.html");
   else htmlResponse = createLoginErrorPage();
 
-  resp.headers.add("Content-Type", "text/html; charset=UTF-8");
-  
+  log("login result: $htmlResponse"); 
 }
 
 
@@ -197,7 +243,7 @@ String createHtmlResponse(HttpRequest req) {
     path = 'http:\\\\localhost:8080\\main.html';
   }
   
-  if(path.contains("singleplayer.html") && check(req))  return FileManager.readHTMLFile();
+  if(path.contains("singleplayer.html") && check(req, "singleplayer.html"))  return FileManager.readHTMLFile();
     
   
     if(!path.contains("singleplayer.html")){
