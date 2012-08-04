@@ -58,10 +58,13 @@ void answerRequest(HttpRequest req, HttpResponse resp){
   //setCookieParameter(resp, "testName", "TestValue_\u221A2=1.41", req.path);
  
   if(htmlResponse != "!File!"){
+    
     //log("writing response $htmlResponse");
+    resp.contentLength =htmlResponse.splitChars().length;
+
     resp.outputStream.writeString(htmlResponse);
   }
-  
+
   resp.outputStream.close();
 }
 
@@ -90,15 +93,26 @@ Future handleGETRequest(HttpRequest req, HttpResponse resp){
       
       else {
         
-        if(req.path.contains('.png')){
+        if(session.getAttribute("loggedin") == true){
           
-          handleOtherFile(req, resp);
+          if(req.path.contains('.png')){
+            
+            handleOtherFile(req, resp);
+            
+          } else {
+     
+            handleTextFile(req, resp);
           
-        } else {
-   
-          handleTextFile(req, resp);
-        
+          }
         }
+        
+        else {
+          
+          if(req.path != "/index.html") htmlResponse = createLoginErrorPage();
+          else htmlResponse = createPageFromHTMLFile("index.html");
+        }
+        
+
       }
       
     }
@@ -141,12 +155,18 @@ Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
     
     if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
   }
+  else {
+    log("session was null");
+  }
+  
+  
   
   
   String bodyString = ""; 
   var completer = new Completer();
   
   var strins = new StringInputStream(req.inputStream, Encoding.UTF_8);
+  
   strins.onData = (){
     bodyString = bodyString.concat(strins.read());
   };
@@ -160,14 +180,23 @@ Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
   
   // process the request and send a response
   completer.future.then((data){
+    
+    result = 2;
+    
     if(bodyString.contains("repeatpassword")){
       
       handleRegistration();
+      maincompleter.complete(result);
     }
     else if (bodyString.contains("username=")){
       
-      handleLogin(req, resp, bodyString);
-      result = 2;
+      if(handleLogin(req, resp, bodyString)){
+        session.setAttribute("loggedin", true);
+      }
+      else {
+        session.setAttribute("loggedin", false);
+      }
+      
       maincompleter.complete(result); 
       
     }
@@ -191,12 +220,17 @@ Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
 }
 
 
-void handleLogin(HttpRequest req, HttpResponse resp, String body){
+bool handleLogin(HttpRequest req, HttpResponse resp, String body){
 
   log("Attempting login...");
  
-  if(check(req, body)) htmlResponse = createPageFromHTMLFile("main.html");
+  if(check(req, body)){
+    htmlResponse = createPageFromHTMLFile("main.html");
+    return true;
+  }
   else htmlResponse = createLoginErrorPage();
+  
+  return false;
 
   }
 

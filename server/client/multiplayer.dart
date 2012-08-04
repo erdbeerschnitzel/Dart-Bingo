@@ -25,11 +25,11 @@ InputElement _messageWindow;
 void main() {
 
  // attach handlers
- document.query('#getGamecard').on.click.add(GamecardHandler);
+ query('#getGamecard').on.click.add(GamecardHandler);
  
- document.query('#startGame').on.click.add(GameHandler);
+ query('#startGame').on.click.add(GameHandler);
  
- document.query('#Bingo').on.click.add(BingoHandler);
+ query('#Bingo').on.click.add(BingoHandler);
  
  _messageWindow = document.query("#messagewindow");
  
@@ -43,7 +43,10 @@ void main() {
  
  _ws.on.message.add((MessageEvent e) {
    
-   if(!e.data.toString().contains("CHAT:")) document.query('#status').innerHTML = "${e.data}";
+   if(!e.data.toString().contains("CHAT:")){
+     
+     query('#status').innerHTML = "${e.data}";
+   }
    
    if(MessageHandler(e.data) != ""){
      
@@ -151,6 +154,9 @@ void BingoHandler(bingoevent){
     document.query('#startGame').value = "I'm ready!";
     document.query('#getGamecard').hidden = false;
     document.query('#getGamecard').on.click.add(GamecardHandler);
+    
+    _playercard = new Gamecard();
+    document.query('#playertable').innerHTML = _playercard.createCardHTML(false);
   }
   
 
@@ -159,7 +165,7 @@ void BingoHandler(bingoevent){
 
 // TODO: refactor to own file
 String MessageHandler(String msg){
-  
+
   
   if(msg == "Hello from Server!") return "client hello!";
   

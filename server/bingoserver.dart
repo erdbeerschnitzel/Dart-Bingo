@@ -47,7 +47,8 @@ void main() {
   HttpServer server = new HttpServer();
   server.addRequestHandler((HttpRequest req) => (req.path == "/bingo"), websocketHandler.onRequest);
   server.addRequestHandler((_) => true, delegateRequestHandler); 
-
+  server.onError = (e) => log(e);
+  
   server.listen("127.0.0.1", 8080);  
   
   log("Server running...");
@@ -83,6 +84,3 @@ void delegateRequestHandler(HttpRequest req, HttpResponse resp) {
  
   requestHandler.handleRequest(req, resp);
 }
-
-
-

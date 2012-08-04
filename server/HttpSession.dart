@@ -71,8 +71,12 @@ class HttpSession {
 
   // setAttribute(String name, Dynamic value)
   void setAttribute(String name, Dynamic value) {
-    _attributes.remove(name);
+    
+    if(_attributes[name] != null) _attributes.remove(name);
+
     _attributes[name] = value;
+    
+    print("session is $_sessionId and  ${_sessions[_sessionId]}");
     _sessions[_sessionId].remove("attributes");
     _sessions[_sessionId]["attributes"] = _attributes;
   }

@@ -53,7 +53,7 @@ class HttpSessionManager{
     if (id == null) {
       
       HttpSession sess = new HttpSession.fresh(request, response);
-      _sessions[sess.getId()] = {"invalidated": false, "isNew": true, "creationTime": new Date.now(),
+      _sessions[sess.getId()] = {"invalidated": false, "isNew": true, "creationTime": new Date.now(), "loggedin": false,
                                "lastAccessedTime": new Date.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
       return sess;
     }
@@ -61,7 +61,14 @@ class HttpSessionManager{
     else if (_sessions[id] == null) {
       
       //print("session not found in sessions");
-      return new HttpSession.fresh(request, response);
+      HttpSession newSession =  new HttpSession.fresh(request, response);
+      
+      newSession.setId(id);
+      
+      _sessions[id] = {"invalidated": false, "isNew": true, "creationTime": new Date.now(), "loggedin": false,
+                                 "lastAccessedTime": new Date.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
+      
+      return newSession;
     }
     
     else if (_sessions[id]["invalidated"] == true) {
