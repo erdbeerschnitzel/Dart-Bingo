@@ -7,6 +7,7 @@
 #import("dart:utf", prefix:"utf");
 #import("dart:io");
 #import('dart:isolate');
+#import('dart:crypto');
 #source('HttpSession.dart');
 
 // these vars are visible to the HttpSession class

@@ -97,38 +97,17 @@ class HttpSession {
     _sessions[_sessionId]["attributes"] = _attributes;
   }
   
-// Create a new session ID.
-String createSessionId() {
-  String rndHash = _createHash((Math.random() * 0x100000000 + 0x100000000).toInt());
-  String dateHash = _createHash(Clock.now() & 0xFFFFFFFF);
-  return "${rndHash}${dateHash}";
-}
+  // Create a new session ID.
+  String createSessionId() {
+    
+    String id = "${(Math.random() * 0x100000000 + 0x100000000).toString()} ${new Date.now().toString()}";
+  
+    id = CryptoUtils.bytesToHex(new MD5().update(id.charCodes()).digest());
+    
+    // make it 16 chars long
+    id = id.substring(id.length - 16);
+  
+    return id;
+  }
 
-// Create hash hexa string from int value.
-String _createHash(int iv) {
-  List bytes = [];
-  for (int i = 0; i < 4; i++){
-    bytes.add(iv & 0xff);
-    iv = iv >> 8;
-  }
-  var hexaHash = "";
-  int intHash = _getHash(bytes);
-  for (int i = 0; i < 8; i++){
-    hexaHash = (intHash & 0xf).toRadixString(16).concat(hexaHash);
-    intHash = intHash >> 4;
-  }
-  return hexaHash;
-}
-
-// Fowler/Noll/Vo (FNV) 32-bit hash function.
-int _getHash(List<int> bytes) {
-  int fnv_prime = 0x811C9DC5;
-  int hash = 0;
-  for(int i = 0; i < bytes.length; i++)
-  {
-    hash *= fnv_prime;
-    hash ^= bytes[i];
-  }
-  return hash & 0xFFFFFFFF;
-}
 }

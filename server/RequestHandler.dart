@@ -55,8 +55,7 @@ void handleRequest(HttpRequest req, HttpResponse resp) {
 void answerRequest(HttpRequest req, HttpResponse resp){
   
   //log("response: $htmlResponse");
-  //setCookieParameter(resp, "testName", "TestValue_\u221A2=1.41", req.path);
- 
+
   if(htmlResponse != "!File!"){
     
     //log("writing response $htmlResponse");
@@ -84,35 +83,42 @@ Future handleGETRequest(HttpRequest req, HttpResponse resp){
    
       if (session.isNew(sessionManager.getSessions())){
         
-        
         session.setMaxInactiveInterval(MaxInactiveInterval);
+        
         log("new Session opened");
+        
+        session.setAttribute("isNew", false);
 
-        htmlResponse = createPageFromHTMLFile("index.html");
+        htmlResponse = createLoginErrorPage();
       }
       
       else {
         
-        if(session.getAttribute("loggedin") == true){
+        if(session.getAttribute("loggedin") != null){
           
-          if(req.path.contains('.png')){
+          if(session.getAttribute("loggedin") == true){
             
-            handleOtherFile(req, resp);
+            if(req.path.contains('.png')){
+              
+              handleOtherFile(req, resp);
+              
+            } else {
+       
+              handleTextFile(req, resp);
             
-          } else {
-     
-            handleTextFile(req, resp);
-          
+            }
           }
-        }
+
         
         else {
           
           if(req.path != "/index.html") htmlResponse = createLoginErrorPage();
-          else htmlResponse = createPageFromHTMLFile("index.html");
+          else{
+            log("wtf");
+            htmlResponse = createPageFromHTMLFile("index.html");
+          }
         }
-        
-
+        }       
       }
       
     }
@@ -305,57 +311,4 @@ String createHtmlResponse(HttpRequest req) {
     
   }
   
-
-void setCookieParameter(HttpResponse response, String name, String value, [String path = null]) {
-  log("setting cookie parameters for response");
-  
-  if (path == null) response.headers.add("Set-Cookie",  "${uri.encodeUriComponent(name)}=${uri.encodeUriComponent(value)}");
-  else response.headers.add("Set-Cookie",  "${uri.encodeUriComponent(name)}=${uri.encodeUriComponent(value)};Path=${path}");
-  
-}
-   
-  // Get cookie parameters from the request
-Map getCookieParameters(HttpRequest request) {
-  
-  String cookieHeader = request.headers.value("Cookie");
-  if (cookieHeader == null) return null; // no Session header included
-  return _splitHeaderString(cookieHeader);
-}
-  
-  // Split cookie header string.
-  // "," separation is used for cookies in a single set-cookie folded header
-  // ";" separation is used for cookies sent by multiple set-cookie headers
-  Map<String, String> _splitHeaderString(String cookieString) {
-    
-    
-  Map<String, String> result = new Map<String, String>();
-  int currentPosition = 0;
-  int position0;
-  int position1;
-  int position2;
-  while (currentPosition < cookieString.length) {
-  int position = cookieString.indexOf("=", currentPosition);
-  if (position == -1) {
-  break;
-  }
-  String name = cookieString.substring(currentPosition, position);
-  currentPosition = position + 1;
-  position1 = cookieString.indexOf(";", currentPosition);
-  position2 = cookieString.indexOf(",", currentPosition);
-  String value;
-  if (position1 == -1 && position2 == -1) {
-  value = cookieString.substring(currentPosition);
-  currentPosition = cookieString.length;
-  } else {
-  if (position1 == -1) position0 = position2;
-  else if (position2 == -1) position0 = position1;
-  else if (position1 < position2) position0 = position1;
-  else position0 = position2;
-  value = cookieString.substring(currentPosition, position0);
-  currentPosition = position0 + 1;
-  }
-  result[uri.decodeUriComponent(name.trim())] = uri.decodeUriComponent(value.trim());
-  }
-  return result;
-  }
 }
