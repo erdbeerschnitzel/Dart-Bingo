@@ -74,67 +74,73 @@ Future handleGETRequest(HttpRequest req, HttpResponse resp){
   var result = "emptyResponse";
   
   try {
-
-    if(!req.path.endsWith(".css") && !req.path.endsWith(".js") && !req.path.contains('.png')){
     
-    session = sessionManager.getSession(req, resp);
-   
-    if (session != null){
-   
-      if (session.isNew(sessionManager.getSessions())){
-        
-        session.setMaxInactiveInterval(MaxInactiveInterval);
-        
-        log("new Session opened");
-        
-        session.setAttribute("isNew", false);
-
-        htmlResponse = createLoginErrorPage();
-      }
+    if(!req.path.contains("index.html")){
       
-      else {
+      if(!req.path.endsWith(".css") && !req.path.endsWith(".js") && !req.path.contains('.png')){
         
-        if(session.getAttribute("loggedin") != null){
-          
-          if(session.getAttribute("loggedin") == true){
-            
-            if(req.path.contains('.png')){
-              
-              handleOtherFile(req, resp);
-              
-            } else {
+        session = sessionManager.getSession(req, resp);
        
-              handleTextFile(req, resp);
+        if (session != null){
+       
+          if (session.isNew(sessionManager.getSessions())){
             
-            }
-          }
+            session.setMaxInactiveInterval(MaxInactiveInterval);
+            
+            log("new Session opened");
+            
+            session.setAttribute("isNew", false);
 
-        
+            htmlResponse = createLoginErrorPage();
+          }
+          
+          else {
+            
+            if(session.getAttribute("loggedin") != null){
+              
+              if(session.getAttribute("loggedin") == true){
+                
+                if(req.path.contains('.png')){
+                  
+                  handleOtherFile(req, resp);
+                  
+                } else {
+           
+                  handleTextFile(req, resp);
+                
+                }
+              } 
+              else {
+                
+                if(req.path != "/index.html") htmlResponse = createLoginErrorPage();
+                else{
+                  log("wtf");
+                  htmlResponse = createPageFromHTMLFile("index.html");
+                }
+              }
+            }       
+          }
+          
+        }
+        }
         else {
           
-          if(req.path != "/index.html") htmlResponse = createLoginErrorPage();
-          else{
-            log("wtf");
-            htmlResponse = createPageFromHTMLFile("index.html");
+          if(req.path.contains('.png')){
+            
+            handleOtherFile(req, resp);
+            
+          } else {
+     
+            handleTextFile(req, resp);
+          
           }
         }
-        }       
-      }
-      
-    }
     }
     else {
-      
-      if(req.path.contains('.png')){
-        
-        handleOtherFile(req, resp);
-        
-      } else {
- 
-        handleTextFile(req, resp);
-      
-      }
+      htmlResponse = createPageFromHTMLFile("index.html");
     }
+
+
  
     
   } catch (Exception err) {
@@ -191,7 +197,7 @@ Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
     
     if(bodyString.contains("repeatpassword")){
       
-      handleRegistration();
+      handleRegistration(req, resp, bodyString);
       maincompleter.complete(result);
     }
     else if (bodyString.contains("username=")){
@@ -241,9 +247,88 @@ bool handleLogin(HttpRequest req, HttpResponse resp, String body){
   }
 
 
-void handleRegistration(){
+void handleRegistration(HttpRequest req, HttpResponse resp, String body){
   
   log("Registration started...");
+  
+  if(checkRegistrationParameters(req, body)){
+    
+    htmlResponse = createPageFromHTMLFile("main.html");
+  }
+  else {
+    log("Registration failed");
+  }
+  
+}
+
+bool checkRegistrationParameters(HttpRequest req, String body){
+  
+  bool result = true;
+  
+  List split = body.split("&");
+
+  if(split.length < 5){
+    return false;
+  }
+  else {
+    
+    String username = returnStringIfInList("username=", split);
+    String password = returnStringIfInList("password=", split);
+    String repeatpassword = returnStringIfInList("repeatpassword=", split);
+    String age = returnStringIfInList("age=", split);
+    String email = returnStringIfInList("email=", split);
+    
+    if(username != "" && password != "" && repeatpassword != "" && age != "" && email != ""){
+      
+      if(!userExists(username)){
+        
+        if(password == repeatpassword){
+          
+          File file = new File("data.txt");
+          
+            if (file.existsSync()) {
+              
+              OutputStream out = file.openOutputStream(FileMode.APPEND);
+
+              out.writeString("\r\n$username=$password");
+              out.close();
+              
+              log("Registration of username $username successful!");
+              
+            }
+        }
+        else {
+          
+          return false;
+        }
+      }
+      // user exists
+      else {
+        log("Registration failed - user already exists.");
+        return false;
+      }
+      
+
+    }
+    else {
+      return false;
+    }
+  }
+  
+  
+  
+  return result;
+  
+}
+
+String returnStringIfInList(String string, List list){
+  
+  for(int i = 0; i < list.length; i++){
+    
+    if(list[i].startsWith(string)) return list[i].replaceFirst(string, "");
+  }
+  
+  return "";
 }
 
 void handleTextFile(HttpRequest req, HttpResponse resp){

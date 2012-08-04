@@ -74,23 +74,15 @@ StringBuffer cleanText(StringBuffer text) {
 }
 
 // simple logging method printing time and msg
-void log(var msg){
-  print("${new Date.now()}: $msg");  
-}
+void log(var msg) => print("${new Date.now()}: $msg");  
 
+// log to file server.log
 void logToFile(String msg){
-  
   
   File file = new File('server.log');
   OutputStream out = file.openOutputStream(FileMode.APPEND);
   
-  StringBuffer sb = new StringBuffer();
-  
-  sb.add("\n");
-  sb.add("${new Date.now()}: ");
-  sb.add(msg);
-  
-  out.writeString(sb.toString());
+  out.writeString("\r\n${new Date.now()}: $msg");
   out.close();
   
 }
