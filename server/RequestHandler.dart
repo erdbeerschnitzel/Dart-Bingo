@@ -119,7 +119,7 @@ class RequestHandler {
             
             else {
 
-                if(_session.getAttribute("loggedin")) _htmlResponse = createHtmlResponse(req);
+                if(_session.getAttribute("loggedin")) _htmlResponse = createHtmlResponse(req.path);
 
                 else _htmlResponse = createLoginErrorPage();
        
@@ -131,11 +131,11 @@ class RequestHandler {
           else {
             
             if(req.path.contains('.png')) _htmlResponse = "!File!";
-            else _htmlResponse = createHtmlResponse(req);
+            else _htmlResponse = createHtmlResponse(req.path);
           }
       }
       // path = index.html
-      else _htmlResponse = createPageFromHTMLFile("index.html");
+      else _htmlResponse = createPageFromHTMLFile("html/index.html");
  
     } catch (Exception error) {
       
@@ -225,7 +225,7 @@ class RequestHandler {
     log("Attempting login...");
    
     if(check(body)){
-      _htmlResponse = createPageFromHTMLFile("main.html");
+      _htmlResponse = createPageFromHTMLFile("html/main.html");
       return true;
     }
     else _htmlResponse = createLoginErrorPage();
@@ -245,7 +245,7 @@ class RequestHandler {
     
     if(checkRegistrationParameters(body)){
       
-      _htmlResponse = createPageFromHTMLFile("main.html");
+      _htmlResponse = createPageFromHTMLFile("html/main.html");
       return true;
     }
     else {

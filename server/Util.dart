@@ -28,6 +28,7 @@ String createErrorPage(String errorMessage) {
         <div align="center">
         <h1> *** An Internal Error occured ***</h1><br>
         <p>Server error occured: ${cleanText(new StringBuffer(errorMessage)).toString()}</p><br>
+        <p><a href='/index.html'>Go to Login Page</a></p><br>
         </div>
       </body>
     </html>''').toString();
@@ -52,19 +53,19 @@ String createLoginErrorPage() {
 }
 
 // Create HTML response for request
-String createHtmlResponse(HttpRequest req) {
+String createHtmlResponse(String path) {
 
-  String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
+  path = (path.endsWith('/')) ? ".${path}index.html" : ".${path}";
   
   //log("requested $path req.path: ${req.path}");
   
-  if(req.path.endsWith('/') || req.path.endsWith('8080')) path = 'main.html';
+  if(path.endsWith('/') || path.endsWith('8080') || path.contains("main.html")) path = 'html/main.html';
 
     File file = new File(path);
   
     if(file != null) return file.readAsTextSync();
     
-    else return createErrorPage("Error reading file ${req.path}!");
+    else return createErrorPage("Error reading file ${path}!");
 
   }
 
