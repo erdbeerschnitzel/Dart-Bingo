@@ -19,7 +19,7 @@ class HttpSession {
     
     //print("created new session with id: $_sessionId");
     
-    response.headers.add("Set-Cookie", " DSESSIONID = $_sessionId; Path = ${request.path}; HttpOnly");
+    response.headers.add("Set-Cookie", " DSESSIONID = $_sessionId; HttpOnly");
 
   }
 

@@ -203,6 +203,7 @@ Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
     else if (bodyString.contains("username=")){
       
       if(handleLogin(req, resp, bodyString)){
+        print("setting session loggedin");
         session.setAttribute("loggedin", true);
       }
       else {

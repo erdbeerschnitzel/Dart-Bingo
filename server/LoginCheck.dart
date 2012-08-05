@@ -10,13 +10,6 @@
  
     bool valid = false;
     
-    String heads = req.headers.toString();
-
-  
-    if(!heads.contains("multiplayer.html")){
-            
-    print("retrieving postmessage");
-
     if(body != null){
                     
        String postmessage = body;
@@ -41,8 +34,7 @@
       print("Error reading POST in LoginCheck");
       valid = false;
     }
-    
-     }
+
   }
   
   /**
