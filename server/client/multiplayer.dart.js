@@ -3494,10 +3494,6 @@ $$.main_anon = {"":
  super: "Closure",
  $call$1: function(e) {
   if ($.contains$1($.toString(e.get$data()), 'CHAT:') !== true) {
-    if ($.contains$1($.toString(e.get$data()), 'Number:') === true) {
-      $.query('#status').get$style().set$transition('1s');
-      $.query('#status').get$style().set$transform('rotate(360deg)');
-    }
     var t1 = $.S(e.get$data());
     $.query('#status').set$innerHTML(t1);
   }
@@ -6064,12 +6060,6 @@ $.$defineNativeClass('CSSRuleList', ["length?"], {
 });
 
 $.$defineNativeClass('CSSStyleDeclaration', ["length?"], {
- set$transition: function(value) {
-  this.setProperty$3($.S($._browserPrefix()) + 'transition', value, '');
- },
- set$transform: function(value) {
-  this.setProperty$3($.S($._browserPrefix()) + 'transform', value, '');
- },
  set$textDecoration: function(value) {
   this.setProperty$3('text-decoration', value, '');
  },

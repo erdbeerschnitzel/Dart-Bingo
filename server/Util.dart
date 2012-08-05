@@ -53,10 +53,46 @@ String createLoginErrorPage() {
     </html>''').toString();
 }
 
+// Create HTML response to the request.
+String createHtmlResponse(HttpRequest req) {
+
+  String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
+  
+  //log("requested $path req.path: ${req.path}");
+  
+  
+  if(req.path.endsWith('/') || req.path.endsWith('8080')){
+    
+    path = 'main.html';
+  }
+
+    File file = new File(path);
+  
+    if(file != null){
+
+      return file.readAsTextSync();
+    
+      } else {
+        return createErrorPage("Internal error reading User DB!");
+      }
+  
+    
+  }
+
+String returnStringIfInList(String string, List list){
+  
+  for(int i = 0; i < list.length; i++){
+    
+    if(list[i].startsWith(string)) return list[i].replaceFirst(string, "");
+  }
+  
+  return "";
+}
+
 // escaping
 StringBuffer cleanText(StringBuffer text) {
   
-  var s = text.toString();
+  String s = text.toString();
   text.clear(); 
   text = new StringBuffer();
   

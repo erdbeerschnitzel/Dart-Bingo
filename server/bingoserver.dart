@@ -27,26 +27,16 @@ RequestHandler requestHandler;
 // ## main entry point ##
 //
 void main() {
-
-  try{
-
-  }
-  catch(String x){
-    
-    print("caught: $x");
-  }
-  
+ 
   websocketHandler = new WebSocketHandler();
   messageHandler = new MessageHandler();
   requestHandler = new RequestHandler();
   
   addWebSocketHandlers();
-  
-  
-  
+
   HttpServer server = new HttpServer();
   server.addRequestHandler((HttpRequest req) => (req.path == "/bingo"), websocketHandler.onRequest);
-  server.addRequestHandler((_) => true, delegateRequestHandler); 
+  server.addRequestHandler((_) => true, requestHandler.handleRequest); 
   server.onError = (e) => log(e);
   
   server.listen("127.0.0.1", 8080);  
@@ -64,6 +54,7 @@ void addWebSocketHandlers(){
     
     conn.send("Hello from Server!");
 
+    
     messageHandler.clients.add(new Client.start(conn, false));
     
     log("Client ${messageHandler.clients.length} connected...");
@@ -76,11 +67,4 @@ void addWebSocketHandlers(){
     conn.onMessage = (msg) => messageHandler.delegateMessage(msg, conn);
   };
   
-}
-
-
-// delegate Request to RequestHandler
-void delegateRequestHandler(HttpRequest req, HttpResponse resp) {
- 
-  requestHandler.handleRequest(req, resp);
 }

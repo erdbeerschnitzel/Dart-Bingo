@@ -8,14 +8,11 @@
 
 List readNonTextFile(String path){
   
-  //print("requesting non text file $path");
-  
   File file = new File(".$path");
 
   
   if(file != null){
-    
-    
+   
     return file.readAsBytesSync();
   }
   else {
@@ -23,12 +20,5 @@ List readNonTextFile(String path){
     return new List();
   }
   
-}
-
-String readHTMLFile(){
-  
-  File client = new File("./client/singleplayer.html");
-
-  return client.readAsTextSync();
 }
 

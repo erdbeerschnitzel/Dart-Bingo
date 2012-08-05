@@ -6,7 +6,7 @@
 #library("MessageHandler");
 #import("dart:io");
 #import("dart:isolate");
-//#import("dart:math");
+#import("dart:math");
 #source("client/Gamecard.dart");
 
 class MessageHandler{
@@ -260,13 +260,13 @@ class MessageHandler{
     // no duplicates
     int getRandomNumber(){
       
-      int a = (Math.random()*100).toInt();
+      int random = new Random().nextInt(75);
       
-      while(a > 99 || a < 1 || (addedNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
+      while(random > 75 || random < 1 || (addedNumbers.indexOf(random) >= 0)) random = new Random().nextInt(75);
       
-      addedNumbers.add(a);
+      addedNumbers.add(random);
         
-      return a;
+      return random;
     }
     
     

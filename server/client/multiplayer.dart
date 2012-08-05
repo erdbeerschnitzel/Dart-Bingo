@@ -5,7 +5,7 @@
 
 #import('dart:html');
 #import('dart:json');
-#import('js.dart', prefix: 'js');
+#import("dart:math");
 #source('Gamecard.dart');
 
 // globals

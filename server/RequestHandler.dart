@@ -113,10 +113,7 @@ Future handleGETRequest(HttpRequest req, HttpResponse resp){
               else {
                 
                 if(req.path != "/index.html") htmlResponse = createLoginErrorPage();
-                else{
-                  log("wtf");
-                  htmlResponse = createPageFromHTMLFile("index.html");
-                }
+                else htmlResponse = createPageFromHTMLFile("index.html");
               }
             }       
           }
@@ -170,10 +167,8 @@ Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
   else {
     log("session was null");
   }
-  
-  
-  
-  
+
+
   String bodyString = ""; 
   var completer = new Completer();
   
@@ -197,18 +192,16 @@ Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
     
     if(bodyString.contains("repeatpassword")){
       
-      handleRegistration(req, resp, bodyString);
+     if(handleRegistration(req, resp, bodyString)) session.setAttribute("loggedin", true);
+     
+     else session.setAttribute("loggedin", false);
       maincompleter.complete(result);
     }
     else if (bodyString.contains("username=")){
       
-      if(handleLogin(req, resp, bodyString)){
-        print("setting session loggedin");
-        session.setAttribute("loggedin", true);
-      }
-      else {
-        session.setAttribute("loggedin", false);
-      }
+      if(handleLogin(req, resp, bodyString)) session.setAttribute("loggedin", true);
+      
+      else session.setAttribute("loggedin", false);
       
       maincompleter.complete(result); 
       
@@ -216,18 +209,8 @@ Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
   });
   
   
-  
-  //log("complete with $result");
-  
-  maincompleter.future.then((data){
-    log("complete with new result: $result");
-    result = htmlResponse;
+  maincompleter.future.then((data) => result = htmlResponse);
     
-  });
-  
-    
-   
-
   return maincompleter.future; 
 
 }
@@ -248,16 +231,18 @@ bool handleLogin(HttpRequest req, HttpResponse resp, String body){
   }
 
 
-void handleRegistration(HttpRequest req, HttpResponse resp, String body){
+bool handleRegistration(HttpRequest req, HttpResponse resp, String body){
   
   log("Registration started...");
   
   if(checkRegistrationParameters(req, body)){
     
     htmlResponse = createPageFromHTMLFile("main.html");
+    return true;
   }
   else {
     log("Registration failed");
+    return false;
   }
   
 }
@@ -322,37 +307,16 @@ bool checkRegistrationParameters(HttpRequest req, String body){
   
 }
 
-String returnStringIfInList(String string, List list){
-  
-  for(int i = 0; i < list.length; i++){
-    
-    if(list[i].startsWith(string)) return list[i].replaceFirst(string, "");
-  }
-  
-  return "";
-}
+
 
 void handleTextFile(HttpRequest req, HttpResponse resp){
   
   htmlResponse = createHtmlResponse(req);
 
-  if(htmlResponse.contains("#EAEAEA") || htmlResponse.contains('#FFC6A5')){
-    
-    //print("requesting css file");
-    
-    resp.headers.add("Content-Type", "text/css; charset=UTF-8");
-  } 
-  else {
-      
-    resp.headers.add("Content-Type", "text/html; charset=UTF-8");
-  }
-  
-}
+  if(req.path.endsWith(".css")) resp.headers.add("Content-Type", "text/css; charset=UTF-8");
 
-void handleTextFileWithoutRequest(HttpResponse resp){
-  
+  else resp.headers.add("Content-Type", "text/html; charset=UTF-8");
 
-  
 }
 
 void handleOtherFile(HttpRequest req, HttpResponse resp){
@@ -371,30 +335,6 @@ void handleOtherFile(HttpRequest req, HttpResponse resp){
 
 
 
-// Create HTML response to the request.
-String createHtmlResponse(HttpRequest req) {
 
-  String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
-  
-  //log("requested $path req.path: ${req.path}");
-  
-  
-  if(req.path.endsWith('/') || req.path.endsWith('8080')){
-    
-    path = 'main.html';
-  }
-
-    File file = new File(path);
-  
-    if(file != null){
-
-      return file.readAsTextSync();
-    
-      } else {
-        return createErrorPage("Internal error reading User DB!");
-      }
-  
-    
-  }
   
 }

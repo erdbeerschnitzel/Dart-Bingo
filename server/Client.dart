@@ -1,12 +1,13 @@
 
 /**
- * simple Class representing a Client consisting of a Websocket Connection a 
+ * simple Class representing a Client consisting of a Websocket Connection and a Gamecard object
  **/
 class Client {
   
   bool ready = false;
   WebSocketConnection con;
   Gamecard gamecard;
+  String username;
   
   Client();
   

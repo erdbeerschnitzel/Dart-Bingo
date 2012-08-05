@@ -198,11 +198,11 @@ bool checkBingo(){
 
   int getRandomNumber(){
     
-    int a = (Math.random()*100).toInt();
+    int random = new Random().nextInt(75);
     
-    while(a > 99 || a < 1 || (addedNumbersGamecard.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
+    while(random > 75 || random < 1 || (addedNumbersGamecard.indexOf(random) >= 0)) random = new Random().nextInt(75);
       
-    return a;
+    return random;
   }
   
   
