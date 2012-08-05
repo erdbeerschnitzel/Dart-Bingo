@@ -155,7 +155,7 @@ class HttpSessionManager{
         if (key != "" && _sessions[key]["lastAccessedTime"] + _sessions[key]["maxInactiveInterval"] * 1000 < now) {
           
           _sessions.remove(key);
-          print("${new Date.now()} sessionGarbageCollector: removed session $key");
+          print("${new Date.now()}: sessionGarbageCollector: removed session $key");
         }
       });
 

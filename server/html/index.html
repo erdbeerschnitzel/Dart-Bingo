@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+	<head>
+		<link href="css/default.css" rel="stylesheet" type="text/css" />
+		<title>Online-Bingo - Login</title>
+	</head>
+
+	<body>
+
+		<h1 style="text-align: center;">Online-Bingo</h1>
+
+		<div class="dark-box" id="login">
+			<form id="efg" action="main.html" method="post">
+				<table align="center" style="padding: 20px;">
+					<tr>
+						<td>Username</td>
+						<td><input type="text" name="username"/></td>
+					</tr>
+					<tr>
+						<td>Password</td>
+						<td><input type="password" name="password"/></td>
+						<td align="right"><input type="submit" value="Login"></input></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td align="left">
+						<input id="register" type="button" value="Create new Account"></input>
+						</td>
+					</tr>
+				</table>
+			</form>
+			
+		</div>
+	
+		<div class="dark-box" id="registerdiv" style="visibility: hidden">
+			<form id="abc" action="main.html" method="post">
+				<table align="center" style="padding: 20px;">
+					<tr>					
+						<td><input type="text" name="username"/></td>
+						<td>Username</td>
+					</tr>
+					<tr>
+						
+						<td><input type="password" name="password"/></td>
+						<td>Password</td>
+					</tr>
+					<tr>						
+						<td><input type="password" name="repeatpassword"/></td>
+						<td>Repeat Password</td>
+					</tr>
+					<tr>						
+						<td><input type="number" name="age"/></td>
+						<td>Your Age</td>
+					</tr>					
+					<tr>						
+						<td><input type="email" name="email"/></td>
+						<td>E-Mail</td>
+					</tr>										
+					<tr>
+						<td></td>
+						<td align="right">
+						<input type="submit" value="Create Account"></input>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<div id="footer" style="text-align: center;">
+			<p>Copyright 2012 adesso AG</p>
+		</div>
+		
+		<script type="application/javascript" src="/../client/register.dart.js"></script>
+	</body>
+
+</html>

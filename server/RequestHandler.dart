@@ -17,6 +17,7 @@ class RequestHandler {
   HttpSessionManager _sessionManager;
   String _htmlResponse;
   HttpSession _session;
+  String path;
   
   // standard constructor
   RequestHandler(){ 
@@ -119,8 +120,18 @@ class RequestHandler {
             
             else {
 
-                if(_session.getAttribute("loggedin")) _htmlResponse = createHtmlResponse(req.path);
-
+                if(_session.getAttribute("loggedin")){
+                  
+                  path = req.path; 
+                  
+                  if(path.endsWith('/') || path.endsWith('8080')) path = "html/index.html";
+                  else path = ".${path}";
+                  
+                  
+                  if(path.contains("main.html")) path = 'html/main.html';
+       
+                  _htmlResponse = createHtmlResponse(path);
+                }
                 else _htmlResponse = createLoginErrorPage();
        
             }
@@ -131,11 +142,11 @@ class RequestHandler {
           else {
             
             if(req.path.contains('.png')) _htmlResponse = "!File!";
-            else _htmlResponse = createHtmlResponse(req.path);
+            else _htmlResponse = createHtmlResponse(".${req.path}");
           }
       }
       // path = index.html
-      else _htmlResponse = createPageFromHTMLFile("html/index.html");
+      else _htmlResponse = createHtmlResponse("html/index.html");
  
     } catch (Exception error) {
       
@@ -225,7 +236,7 @@ class RequestHandler {
     log("Attempting login...");
    
     if(check(body)){
-      _htmlResponse = createPageFromHTMLFile("html/main.html");
+      _htmlResponse = createHtmlResponse("html/main.html");
       return true;
     }
     else _htmlResponse = createLoginErrorPage();
@@ -245,7 +256,7 @@ class RequestHandler {
     
     if(checkRegistrationParameters(body)){
       
-      _htmlResponse = createPageFromHTMLFile("html/main.html");
+      _htmlResponse = createHtmlResponse("html/main.html");
       return true;
     }
     else {

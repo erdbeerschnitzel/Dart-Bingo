@@ -4,16 +4,6 @@
 *
 **/
 
-// create HTML string for specific path
-String createPageFromHTMLFile(String path){
-
-    File file = new File(path);
-    
-    if(file != null) return file.readAsTextSync();
-
-    else return createErrorPage("Error reading file: $path");
-}
-
 
 // create html for error page
 String createErrorPage(String errorMessage) {
@@ -52,14 +42,10 @@ String createLoginErrorPage() {
     </html>''').toString();
 }
 
-// Create HTML response for request
+// Create HTML response for request path
 String createHtmlResponse(String path) {
 
-  path = (path.endsWith('/')) ? ".${path}index.html" : ".${path}";
-  
   //log("requested $path req.path: ${req.path}");
-  
-  if(path.endsWith('/') || path.endsWith('8080') || path.contains("main.html")) path = 'html/main.html';
 
     File file = new File(path);
   
@@ -67,7 +53,7 @@ String createHtmlResponse(String path) {
     
     else return createErrorPage("Error reading file ${path}!");
 
-  }
+}
 
 // check a list of strings for a specific string (param=value)
 // if exists return value part of string
@@ -186,7 +172,7 @@ void log(var msg) => print("${new Date.now()}: $msg");
 // log to file server.log
 void logToFile(String msg){
   
-  File file = new File('server.log');
+  File file = new File('log/server.log');
   
   OutputStream out = file.openOutputStream(FileMode.APPEND);  
   out.writeString("\r\n${new Date.now()}: $msg");
