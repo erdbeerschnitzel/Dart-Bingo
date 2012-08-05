@@ -26,7 +26,10 @@ class RequestHandler {
   }
   
  
-  // serving http requests
+  /**
+   * main request handling method
+   * delegates GET and POST to own methods and calls answerRequest()
+   **/
   void handleRequest(HttpRequest req, HttpResponse resp) {
     
     //log("trying to handle ${req.method} request");
@@ -47,14 +50,21 @@ class RequestHandler {
         answerRequest(req, resp);
         });
     }
-    
-    
-  
+
   }
   
+  /**
+   * answer request by writing to response outputstream
+   * set content type and content length
+   **/
   void answerRequest(HttpRequest req, HttpResponse resp){
     
     //log("response: $htmlResponse");
+    
+    if(req.path.endsWith(".css")) resp.headers.add("Content-Type", "text/css; charset=UTF-8");
+    
+    else resp.headers.add("Content-Type", "text/html; charset=UTF-8");
+    
   
     if(htmlResponse != "!File!"){
   
@@ -69,7 +79,7 @@ class RequestHandler {
       else resp.outputStream.writeString("error reading file: ${req.path}");
  
     }
-  
+
     resp.outputStream.close();
   }
   
@@ -81,6 +91,7 @@ class RequestHandler {
     
     Completer maincompleter = new Completer();
     
+    // future standard result
     String result = "emptyResponse";
     
     try {
@@ -107,16 +118,10 @@ class RequestHandler {
             }
             
             else {
-                             
-                // if logged in
-                if(session.getAttribute("loggedin")) handleTextFile(req, resp);
 
-                // not logged in
-                else {
-                  
-                  if(req.path != "/index.html") htmlResponse = createLoginErrorPage();
-                  else htmlResponse = createPageFromHTMLFile("index.html");
-                }
+                if(session.getAttribute("loggedin")) htmlResponse = createHtmlResponse(req);
+
+                else htmlResponse = createLoginErrorPage();
        
             }
             
@@ -126,17 +131,18 @@ class RequestHandler {
           else {
             
             if(req.path.contains('.png')) htmlResponse = "!File!";
-            else handleTextFile(req, resp);
+            else htmlResponse = createHtmlResponse(req);
           }
       }
       // path = index.html
       else htmlResponse = createPageFromHTMLFile("index.html");
  
-    } catch (Exception err) {
+    } catch (Exception error) {
       
-      htmlResponse = createErrorPage(err.toString());
+      htmlResponse = createErrorPage(error.toString());
     }
     
+    // assign final result
     result = htmlResponse;
     maincompleter.complete(result);  
   
@@ -148,8 +154,10 @@ class RequestHandler {
    **/
   Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
     
+    // main completer for this future
     Completer maincompleter = new Completer();
     
+    // standard future result
     String result = "emptyPOSTResponse";
   
     session = sessionManager.getSession(req, resp);
@@ -160,23 +168,26 @@ class RequestHandler {
 
   
     String bodyString = ""; 
+    
+    // completer for request parameter reading
     Completer completer = new Completer();
     
     // async read from request.inputstream
     StringInputStream strins = new StringInputStream(req.inputStream, Encoding.UTF_8);
    
+    // handler for incoming data
     strins.onData = (() => bodyString = bodyString.concat(strins.read()));
-    
+    // handler for read finish
     strins.onClosed = (() => completer.complete("body data received"));
-    
+    // handler for error
     strins.onError = ((Exception e) => print('exeption occured : ${e.toString()}'));
 
-    
-    
-    // process the request and send a response
+
+    // process the request and set htmlResponse
     completer.future.then((data){
       
-      result = "2";
+      // debug
+      result = "emptyInnerPOSTResponse";
       
       // registration
       if(bodyString.contains("repeatpassword")){
@@ -194,16 +205,17 @@ class RequestHandler {
         else session.setAttribute("loggedin", false);
 
       }
-      // complete
+      // complete the main completer
       maincompleter.complete(result);
     });
    
-   // when complete assign htmlResponse to result 
+   // when completed assign htmlResponse to result 
    maincompleter.future.then((data) => result = htmlResponse);
       
    return maincompleter.future; 
   
   }
+  
   
   /**
    * handle login POST
@@ -221,6 +233,7 @@ class RequestHandler {
     return false;
   
     }
+  
   
   
   /**
@@ -241,78 +254,5 @@ class RequestHandler {
     }
     
   }
-  
-  /**
-   * check registration parameters of POST request
-   * if valid and user doesn't exist persist username and password
-   **/
-  bool checkRegistrationParameters(String body){
-    
-    bool result = true;
-    
-    List split = body.split("&");
-  
-    // something wrong with parameters
-    if(split.length < 5) return false;
-    // parameters seem ok
-    else {
-      
-      String username = returnStringIfInList("username=", split);
-      String password = returnStringIfInList("password=", split);
-      String repeatpassword = returnStringIfInList("repeatpassword=", split);
-      String age = returnStringIfInList("age=", split);
-      String email = returnStringIfInList("email=", split);
-      
-      if(username != "" && password != "" && repeatpassword != "" && age != "" && email != ""){
-        
-        if(!userExists(username)){
-          
-          if(password == repeatpassword){
-            
-            File file = new File("data.txt");
-            
-              if (file.existsSync()) {
-                
-                OutputStream out = file.openOutputStream(FileMode.APPEND);
-  
-                out.writeString("\r\n$username=$password");
-                out.close();
-                
-                log("Registration of username $username successful!");
-                
-              }
-          }
-          else {
-            
-            return false;
-          }
-        }
-        // user exists
-        else {
-          log("Registration failed - user already exists.");
-          return false;
-        }
-        
-  
-      }
-      else {
-        return false;
-      }
-    }
  
-    return result;
-    
-  }
-  
-  void handleTextFile(HttpRequest req, HttpResponse resp){
-    
-    htmlResponse = createHtmlResponse(req);
-  
-    if(req.path.endsWith(".css")) resp.headers.add("Content-Type", "text/css; charset=UTF-8");
-  
-    else resp.headers.add("Content-Type", "text/html; charset=UTF-8");
-  
-  }
-
-  
 }

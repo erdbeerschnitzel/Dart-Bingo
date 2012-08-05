@@ -14,14 +14,9 @@
 
 
 WebSocketHandler websocketHandler;
-bool gameStarted = false;
-
-final int MaxInactiveInterval = 60; // 
 MessageHandler messageHandler;
 RequestHandler requestHandler;
-
-
-
+bool gameStarted = false;
 
 //
 // ## main entry point ##
@@ -53,8 +48,7 @@ void addWebSocketHandlers(){
   websocketHandler.onOpen = (WebSocketConnection conn) {
     
     conn.send("Hello from Server!");
-
-    
+  
     messageHandler.clients.add(new Client.start(conn, false));
     
     log("Client ${messageHandler.clients.length} connected...");

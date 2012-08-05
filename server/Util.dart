@@ -89,6 +89,70 @@ String returnStringIfInList(String string, List list){
   return "";
 }
 
+
+/**
+ * check registration parameters of POST request
+ * if valid and user doesn't exist persist username and password
+ **/
+bool checkRegistrationParameters(String body){
+  
+  bool result = true;
+  
+  List split = body.split("&");
+
+  // something wrong with parameters
+  if(split.length < 5) return false;
+  // parameters seem ok
+  else {
+    
+    String username = returnStringIfInList("username=", split);
+    String password = returnStringIfInList("password=", split);
+    String repeatpassword = returnStringIfInList("repeatpassword=", split);
+    String age = returnStringIfInList("age=", split);
+    String email = returnStringIfInList("email=", split);
+    
+    if(username != "" && password != "" && repeatpassword != "" && age != "" && email != ""){
+      
+      if(!userExists(username)){
+        
+        if(password == repeatpassword){
+          
+          File file = new File("data.txt");
+          
+            if (file.existsSync()) {
+              
+              OutputStream out = file.openOutputStream(FileMode.APPEND);
+
+              out.writeString("\r\n$username=$password");
+              out.close();
+              
+              log("Registration of username $username successful!");
+              
+            }
+        }
+        else {
+          
+          return false;
+        }
+      }
+      // user exists
+      else {
+        log("Registration failed - user already exists.");
+        return false;
+      }
+      
+
+    }
+    else {
+      return false;
+    }
+  }
+
+  return result;
+  
+}
+
+
 // escaping
 StringBuffer cleanText(StringBuffer text) {
   
