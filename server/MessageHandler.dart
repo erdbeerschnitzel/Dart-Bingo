@@ -85,9 +85,10 @@ class MessageHandler{
       
       clients.forEach((var client) {
         
-        if(client.con == originalconnection) client.gamecard = gamecard;
-        
-        log("gamecard saved for client");
+        if(client.con == originalconnection){
+          client.gamecard = gamecard;
+          log("gamecard saved for client");
+        }
 
       });
     }
@@ -132,7 +133,7 @@ class MessageHandler{
     if(getNumberOfReadyClients() == clients.length && getNumberOfReadyClients() > 1 && !gameStarted) {
       
       gameStarted = true;
-      startTimer();
+      messageTimer = new Timer.repeating(2000, timeHandler);
       log("Game started...");
       sendMessageToAllClients("All players are ready! Starting the Game!");
     }
@@ -194,10 +195,6 @@ class MessageHandler{
       else stopTimer();
     }
     
-    void startTimer(){
-      messageTimer = new Timer.repeating(2000, timeHandler);
-    }
-
     
     /**
      * stops the timer which sends numbers to clients

@@ -7,15 +7,11 @@ class Gamecard {
   
   List<List<String>> fields;
   
-  List<int> addedNumbersGamecard;
-  
   RandomNumberGenerator RNG;
   
   Gamecard(){
   
     fields = new List<List<String>>();
-    addedNumbersGamecard = new List<int>();
-    RNG = new RandomNumberGenerator();
     initFields(); 
   }
   
@@ -27,7 +23,7 @@ class Gamecard {
     
     // create a random card locally
     fields = new List<List<String>>();
-    addedNumbersGamecard = new List<int>();  
+    
     initFields();
     
     msg = msg.replaceFirst("GAMECARD:", "");
@@ -51,7 +47,8 @@ class Gamecard {
           }
         }
       }        
-    }    
+    }
+    else print("Something is wrong with the server msg $msg");
   }
   
   /**
@@ -59,6 +56,8 @@ class Gamecard {
    *  with random values
    **/
   void initFields(){
+    
+    RNG = new RandomNumberGenerator();
     
     for(int i = 0; i < 5; i++){
       
@@ -76,8 +75,6 @@ class Gamecard {
           
           int temp = RNG.getRandomNumber();
           fields[i][x] = temp.toString();
-          
-          addedNumbersGamecard.add(temp);
         }
       }
     }

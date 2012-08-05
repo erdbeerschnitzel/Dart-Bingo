@@ -63,13 +63,13 @@ void GameHandler(gameevent){
   if(!first){
   
     currentNumber = RNG.getRandomNumber();  
-    show("the current number is $currentNumber");
+    show("The current number is $currentNumber");
     
     for(int i = 0; i < 5; i++){
      
       for(int x = 0; x < 5; x++){
         
-        if(computercard.fields[i][x] == currentNumber){
+        if(computercard.fields[i][x] == currentNumber.toString()){
           
           query('#c$i$x').style.textDecoration = 'underline';
           query('#c$i$x').style.backgroundColor = 'red';

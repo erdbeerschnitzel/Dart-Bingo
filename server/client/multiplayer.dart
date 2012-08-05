@@ -7,9 +7,10 @@
 #import('dart:json');
 #import("dart:math");
 #source('Gamecard.dart');
+#source('RandomNumberGenerator.dart');
 
 // globals
-Gamecard _playercard;
+Gamecard playercard;
 WebSocket _ws;
 String _currentNumber = "42";
 bool _first = true;
@@ -23,7 +24,7 @@ InputElement _messageWindow;
  * main entry point - attaches handlers and inits objects
  **/
 void main() {
-
+  
  // attach handlers
  query('#getGamecard').on.click.add(GamecardHandler);
  
@@ -31,11 +32,11 @@ void main() {
  
  query('#Bingo').on.click.add(BingoHandler);
  
- _messageWindow = document.query("#messagewindow");
+ _messageWindow = query("#messagewindow");
  
  _messageWindow.value = "";
  
- //show('Welcome to Bingo');
+ show('Welcome to Bingo');
 
 
  
@@ -48,9 +49,9 @@ void main() {
      query('#status').innerHTML = "${e.data}";
    }
    
-   if(MessageHandler(e.data) != ""){
+   if(handleMessage(e.data) != ""){
      
-     _ws.send(MessageHandler(e.data));
+     _ws.send(handleMessage(e.data));
    }
    
  });
@@ -76,17 +77,17 @@ void GameHandler(gameevent){
   
     if(!_gameStarted){
       
-      if(document.query('#startGame').value == "I'm ready!"){
+      if(query('#startGame').value == "I'm ready!"){
         
         _ws.send("client ready");
-        document.query('#startGame').value = "I'm not ready!";
-        document.query('#getGamecard').on.click.remove(GamecardHandler);
+        query('#startGame').value = "I'm not ready!";
+        query('#getGamecard').on.click.remove(GamecardHandler);
       }
       else {
         
         _ws.send("client notready");
-        document.query('#startGame').value = "I'm ready!";
-        document.query('#getGamecard').on.click.add(GamecardHandler);
+        query('#startGame').value = "I'm ready!";
+        query('#getGamecard').on.click.add(GamecardHandler);
       }       
     }  
 
@@ -106,7 +107,7 @@ void GameHandler(gameevent){
  */
 void GamecardHandler(gamecardevent){
 
-    _playercard = new Gamecard();
+    playercard = new Gamecard();
   
     _ws.send("getGamecard");
      
@@ -131,9 +132,9 @@ void BingoHandler(bingoevent){
     }
     else {
       
-      if(_playercard.checkBingo()) {
+      if(playercard.checkBingo()) {
        
-       _ws.send("THISISBINGO:${_playercard.toWSMessage()}");
+       _ws.send("THISISBINGO:${playercard.toWSMessage()}");
        show("Bingo sent to server"); 
       }
       else {
@@ -145,26 +146,30 @@ void BingoHandler(bingoevent){
   }
   
   // reenable buttons for new round
-  if(document.query('#Bingo').value.contains("New Round")){
+  if(query('#Bingo').value.contains("New Round")){
     
-    document.query('#Bingo').value = "Bingo!";
+    query('#Bingo').value = "Bingo!";
     
-    document.query('#startGame').on.click.add(GameHandler);
-    document.query('#startGame').hidden = false;
-    document.query('#startGame').value = "I'm ready!";
-    document.query('#getGamecard').hidden = false;
-    document.query('#getGamecard').on.click.add(GamecardHandler);
+    query('#startGame').on.click.add(GameHandler);
+    query('#startGame').hidden = false;
+    query('#startGame').value = "I'm ready!";
+    query('#getGamecard').hidden = false;
+    query('#getGamecard').on.click.add(GamecardHandler);
     
-    _playercard = new Gamecard();
-    document.query('#playertable').innerHTML = _playercard.createCardHTML(false);
+    playercard = new Gamecard();
+    query('#playertable').innerHTML = playercard.createCardHTML(false);
   }
   
 
   
 }
 
-// TODO: refactor to own file
-String MessageHandler(String msg){
+/**
+ * handle websocket messages from server
+ * TODO: refactor to own file
+ * returns string for websocket client answer
+ **/
+String handleMessage(String msg){
 
   
   if(msg == "Hello from Server!") return "client hello!";
@@ -174,9 +179,9 @@ String MessageHandler(String msg){
    **/
   if(msg.contains("GAMECARD:")){
 
-    //print("received: $msg");
-    _playercard = new Gamecard.fromServer(msg);
-    document.query('#playertable').innerHTML = _playercard.createCardHTML(false);
+    print("received: $msg");
+    playercard = new Gamecard.fromServer(msg);
+    query('#playertable').innerHTML = playercard.createCardHTML(false);
     
     addCellClickHandlers();
 
@@ -214,9 +219,9 @@ String MessageHandler(String msg){
     
     _gameStarted = true;
 
-    document.query('#startGame').on.click.remove(GameHandler);
-    document.query('#startGame').hidden = true;
-    document.query('#getGamecard').hidden = true;
+    query('#startGame').on.click.remove(GameHandler);
+    query('#startGame').hidden = true;
+    query('#getGamecard').hidden = true;
     
     return "";
   }
@@ -247,7 +252,7 @@ String MessageHandler(String msg){
               
               //el.style.textDecoration = 'underline';
               el.style.backgroundColor = 'red';
-              _playercard.fields[i][x] = "0";
+              playercard.fields[i][x] = "0";
             }
 
        
@@ -264,9 +269,9 @@ String MessageHandler(String msg){
   if(msg.contains("Player has Bingo. Game stopped.")){
     
     _gameStarted = false;
-    document.query('#Bingo').value = "New Round";
+    query('#Bingo').value = "New Round";
     
-    if(!_playercard.checkBingo()){
+    if(!playercard.checkBingo()){
       
       show("Other Player has Bingo. Round ended.");      
     }
@@ -282,6 +287,7 @@ String MessageHandler(String msg){
   
 }
 
+
 // **** Methods ****
 // *****************
 
@@ -293,9 +299,9 @@ void show(String message) {
 
 void addChatEventHandlers() {
   
-  _messageInput = document.query("#message");
-  _nicknameInput = document.query("#nickname");
-  InputElement messagewindow = document.query("#messagewindow");
+  _messageInput = query("#message");
+  _nicknameInput = query("#nickname");
+  InputElement messagewindow = query("#messagewindow");
   
   _messageInput.on.keyPress.add((event) {
     if (event.keyCode == 13) { 
@@ -336,6 +342,8 @@ void addMessageToMessageWindow(String msg){
 // add CellClickHandlers to playercard
 void addCellClickHandlers(){
   
+  
+  print("muh");
   for(int i = 0; i < 5; i++){
  
     for(int x = 0; x < 5; x++){
@@ -345,15 +353,16 @@ void addCellClickHandlers(){
       }
       else {
         
-        TableCellElement el = document.query('#p$i$x');
+        TableCellElement el = query('#p$i$x');
         
         el.on.click.add((event2) {
           
           if(_currentNumber.toString() == el.innerHTML){
             
+            print("muh");
             el.style.textDecoration = 'underline';
             el.style.backgroundColor = 'red';
-            _playercard.fields[i][x] = "0";
+            playercard.fields[i][x] = "0";
           }
 
         });         
@@ -368,6 +377,6 @@ void endGame(){
   
   show("ENDE!");
   
-  document.query('#startGame').on.click.remove(GameHandler);
+  query('#startGame').on.click.remove(GameHandler);
 }
 

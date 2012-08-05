@@ -3024,10 +3024,10 @@ $.allMatches = function(receiver, str) {
 $.GameHandler = function(gameevent) {
   if ($.first !== true) {
     $.currentNumber = $.RNG.getRandomNumber$0();
-    $.show('the current number is ' + $.S($.currentNumber));
+    $.show('The current number is ' + $.S($.currentNumber));
     for (var i = 0; i < 5; ++i) {
       for (var x = 0; x < 5; ++x) {
-        if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.currentNumber)) {
+        if ($.eqB($.index($.index($.computercard.get$fields(), i), x), $.toString($.currentNumber))) {
           $.query('#c' + $.S(i) + $.S(x)).get$style().set$textDecoration('underline');
           $.query('#c' + $.S(i) + $.S(x)).get$style().set$backgroundColor('red');
           $.indexSet($.index($.computercard.get$fields(), i), x, '0');
