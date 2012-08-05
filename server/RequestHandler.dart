@@ -143,76 +143,76 @@ class RequestHandler {
     return maincompleter.future; 
   }
   
+  /**
+   * handle POST Request async
+   **/
   Future handlePOSTRequest(HttpRequest req, HttpResponse resp){
     
     Completer maincompleter = new Completer();
     
-    var result = "emptyPOSTResponse";
-    
-    
+    String result = "emptyPOSTResponse";
+  
     session = sessionManager.getSession(req, resp);
     
-    if (session != null){
-      
-      if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
-    }
-    else {
-      log("session was null");
-    }
-  
+    if (session != null) if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
+
+    else log("session was null");
+
   
     String bodyString = ""; 
-    var completer = new Completer();
+    Completer completer = new Completer();
     
-    var strins = new StringInputStream(req.inputStream, Encoding.UTF_8);
+    // async read from request.inputstream
+    StringInputStream strins = new StringInputStream(req.inputStream, Encoding.UTF_8);
+   
+    strins.onData = (() => bodyString = bodyString.concat(strins.read()));
     
-    strins.onData = (){
-      bodyString = bodyString.concat(strins.read());
-    };
-    strins.onClosed = () {
-      completer.complete("body data received");
-    };
-    strins.onError = (Exception e) {
-      print('exeption occured : ${e.toString()}');
-    };
+    strins.onClosed = (() => completer.complete("body data received"));
+    
+    strins.onError = ((Exception e) => print('exeption occured : ${e.toString()}'));
+
     
     
     // process the request and send a response
     completer.future.then((data){
       
-      result = 2;
+      result = "2";
       
+      // registration
       if(bodyString.contains("repeatpassword")){
         
-       if(handleRegistration(req, resp, bodyString)) session.setAttribute("loggedin", true);
+       if(handleRegistration(bodyString)) session.setAttribute("loggedin", true);
        
        else session.setAttribute("loggedin", false);
-        maincompleter.complete(result);
+
       }
+      // login
       else if (bodyString.contains("username=")){
         
-        if(handleLogin(req, resp, bodyString)) session.setAttribute("loggedin", true);
+        if(handleLogin(bodyString)) session.setAttribute("loggedin", true);
         
         else session.setAttribute("loggedin", false);
-        
-        maincompleter.complete(result); 
-        
+
       }
+      // complete
+      maincompleter.complete(result);
     });
-    
-    
-    maincompleter.future.then((data) => result = htmlResponse);
+   
+   // when complete assign htmlResponse to result 
+   maincompleter.future.then((data) => result = htmlResponse);
       
-    return maincompleter.future; 
+   return maincompleter.future; 
   
   }
   
-  
-  bool handleLogin(HttpRequest req, HttpResponse resp, String body){
+  /**
+   * handle login POST
+   **/
+  bool handleLogin(String body){
   
     log("Attempting login...");
    
-    if(check(req, body)){
+    if(check(body)){
       htmlResponse = createPageFromHTMLFile("main.html");
       return true;
     }
@@ -223,11 +223,14 @@ class RequestHandler {
     }
   
   
-  bool handleRegistration(HttpRequest req, HttpResponse resp, String body){
+  /**
+   * handle registration POST
+   **/
+  bool handleRegistration(String body){
     
     log("Registration started...");
     
-    if(checkRegistrationParameters(req, body)){
+    if(checkRegistrationParameters(body)){
       
       htmlResponse = createPageFromHTMLFile("main.html");
       return true;
@@ -239,15 +242,19 @@ class RequestHandler {
     
   }
   
-  bool checkRegistrationParameters(HttpRequest req, String body){
+  /**
+   * check registration parameters of POST request
+   * if valid and user doesn't exist persist username and password
+   **/
+  bool checkRegistrationParameters(String body){
     
     bool result = true;
     
     List split = body.split("&");
   
-    if(split.length < 5){
-      return false;
-    }
+    // something wrong with parameters
+    if(split.length < 5) return false;
+    // parameters seem ok
     else {
       
       String username = returnStringIfInList("username=", split);
@@ -292,14 +299,10 @@ class RequestHandler {
         return false;
       }
     }
-    
-    
-    
+ 
     return result;
     
   }
-  
-  
   
   void handleTextFile(HttpRequest req, HttpResponse resp){
     
