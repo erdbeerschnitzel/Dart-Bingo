@@ -134,12 +134,11 @@ String createCardHTML(bool forComputer){
 bool checkBingo(){
   
   bool result = true;
-  
-  String deb = "";
    
-  // horizontal check
+  
   for(int i = 0; i < 5; i++){
     
+    // horizontal check
     for(int x = 0; x < 5; x++){
    
       if(i == 2 && x == 2){}
@@ -147,25 +146,20 @@ bool checkBingo(){
     }
     
     if(result) return result; 
- 
-    
-  }
-  
-  // vertical check
-  for(int i = 0; i < 5; i++){
     
     result = true;
-    
+    // vertical check
     for(int x = 0; x < 5; x++){
       
       if(i == 2 && x == 2) {}
       else if(fields[x][i] != "0") result = false;
 
     }
-
-    if(result) return result;  
-
-  }  
+ 
+    if(result) return result; 
+  }
+  
+  
   
   return result;
 }

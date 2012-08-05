@@ -15,6 +15,7 @@ WebSocket _ws;
 String _currentNumber = "42";
 bool _first = true;
 bool _gameStarted = false;
+bool _bingoSent = false;
 InputElement _messageInput;
 InputElement _nicknameInput;
 InputElement _messageWindow;
@@ -135,6 +136,7 @@ void BingoHandler(bingoevent){
       if(playercard.checkBingo()) {
        
        _ws.send("THISISBINGO:${playercard.toWSMessage()}");
+       _bingoSent = true;
        show("Bingo sent to server"); 
       }
       else {
@@ -271,13 +273,10 @@ String handleMessage(String msg){
     _gameStarted = false;
     query('#Bingo').value = "New Round";
     
-    if(!playercard.checkBingo()){
-      
-      show("Other Player has Bingo. Round ended.");      
-    }
-    else {
-      show("Bingo! You win this round!");
-    }
+    if(playercard.checkBingo() && _bingoSent) show("Bingo! You win this round!");
+
+    else show("Other Player has Bingo. Round ended.");   
+
 
     return "";
   }

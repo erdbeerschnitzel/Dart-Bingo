@@ -1393,26 +1393,24 @@ $$.Gamecard = {"":
       if (!(t2 && x === 2)) {
         if (i < 0 || i >= t3) throw $.ioore(i);
         var t4 = t1[i];
-        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(2, t4, x, i, t2, result, t1);
+        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(2, t4, x, result, i, t2, t1);
         var t6 = t4.length;
         if (x < 0 || x >= t6) throw $.ioore(x);
         t4 = t4[x];
-        if (typeof t4 !== 'string') return this.checkBingo$0$bailout(3, t4, result, t2, x, i, t1);
+        if (typeof t4 !== 'string') return this.checkBingo$0$bailout(3, x, result, t4, i, t2, t1);
         if (!(t4 === '0')) result = false;
       }
     }
     if (result) return result;
-  }
-  for (i = 0; i < 5; ++i) {
-    for (t2 = i === 2, result = true, x = 0; x < 5; ++x) {
+    for (result = true, x = 0; x < 5; ++x) {
       if (!(t2 && x === 2)) {
         if (x < 0 || x >= t3) throw $.ioore(x);
         t4 = t1[x];
-        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(4, result, x, t4, i, t2, t1);
+        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(4, t1, x, i, t2, t4, result);
         t6 = t4.length;
         if (i < 0 || i >= t6) throw $.ioore(i);
         t4 = t4[i];
-        if (typeof t4 !== 'string') return this.checkBingo$0$bailout(5, result, x, t4, t1, i, t2);
+        if (typeof t4 !== 'string') return this.checkBingo$0$bailout(5, t4, x, i, t2, t1, result);
         if (!(t4 === '0')) result = false;
       }
     }
@@ -1428,34 +1426,34 @@ $$.Gamecard = {"":
     case 2:
       t3 = env0;
       x = env1;
-      i = env2;
-      t2 = env3;
-      result = env4;
+      result = env2;
+      i = env3;
+      t2 = env4;
       t1 = env5;
       break;
     case 3:
-      t3 = env0;
+      x = env0;
       result = env1;
-      t2 = env2;
-      x = env3;
-      i = env4;
-      t1 = env5;
-      break;
-    case 4:
-      result = env0;
-      x = env1;
       t3 = env2;
       i = env3;
       t2 = env4;
       t1 = env5;
       break;
-    case 5:
-      result = env0;
+    case 4:
+      t1 = env0;
       x = env1;
-      t3 = env2;
-      t1 = env3;
-      i = env4;
-      t2 = env5;
+      i = env2;
+      t2 = env3;
+      t3 = env4;
+      result = env5;
+      break;
+    case 5:
+      t3 = env0;
+      x = env1;
+      i = env2;
+      t2 = env3;
+      t1 = env4;
+      result = env5;
       break;
   }
   switch (state) {
@@ -1495,24 +1493,14 @@ $$.Gamecard = {"":
               }
             }
             if (result) return result;
-            ++i;
-        }
-      }
-      i = 0;
-    case 4:
-    case 5:
-      L2: while (true) {
-        switch (state) {
-          case 0:
-            if (!(i < 5)) break L2;
-            t2 = i === 2;
             result = true;
             x = 0;
-          default:
-            L3: while (true) {
+          case 4:
+          case 5:
+            L2: while (true) {
               switch (state) {
                 case 0:
-                  if (!(x < 5)) break L3;
+                  if (!(x < 5)) break L2;
                 default:
                   if ((state == 0 && (t2 && x === 2))) {
                   } else {
@@ -1685,73 +1673,68 @@ $$.Gamecard = {"":
   }
  },
  initFields$0: function() {
-  $.print('mudsa');
+  this.RNG = $.RandomNumberGenerator$();
   var t1 = this.fields;
-  if (typeof t1 !== 'string' && (typeof t1 !== 'object' || t1 === null || (t1.constructor !== Array && !t1.is$JavaScriptIndexingBehavior()))) return this.initFields$0$bailout(1, t1, 0, 0, 0, 0, 0, 0);
-  var t3 = this.RNG;
+  if (typeof t1 !== 'string' && (typeof t1 !== 'object' || t1 === null || (t1.constructor !== Array && !t1.is$JavaScriptIndexingBehavior()))) return this.initFields$0$bailout(1, t1, 0, 0, 0, 0, 0);
   var i = 0;
   for (; i < 5; ++i) {
     var t2 = $.ListFactory_List(null);
     $.setRuntimeTypeInfo(t2, ({E: 'String'}));
     $.add$1(t1, t2);
     for (t2 = i === 2, x = 0; x < 5; ++x) {
-      var t4 = t1.length;
-      if (i < 0 || i >= t4) throw $.ioore(i);
+      var t3 = t1.length;
+      if (i < 0 || i >= t3) throw $.ioore(i);
       $.add$1(t1[i], '0');
       if (x === 2 && t2) {
-        t4 = t1.length;
-        if (i < 0 || i >= t4) throw $.ioore(i);
-        var t5 = t1[i];
-        if (typeof t5 !== 'object' || t5 === null || ((t5.constructor !== Array || !!t5.immutable$list) && !t5.is$JavaScriptIndexingBehavior())) return this.initFields$0$bailout(2, t5, t1, i, t2, x, t3, 0);
-        var t7 = t5.length;
-        if (x < 0 || x >= t7) throw $.ioore(x);
-        t5[x] = '';
+        t3 = t1.length;
+        if (i < 0 || i >= t3) throw $.ioore(i);
+        var t4 = t1[i];
+        if (typeof t4 !== 'object' || t4 === null || ((t4.constructor !== Array || !!t4.immutable$list) && !t4.is$JavaScriptIndexingBehavior())) return this.initFields$0$bailout(2, t4, t1, i, t2, x, 0);
+        var t6 = t4.length;
+        if (x < 0 || x >= t6) throw $.ioore(x);
+        t4[x] = '';
       } else {
-        var temp = t3.getRandomNumber$0();
-        $.print('k: ' + $.S(temp));
-        t4 = t1.length;
-        if (i < 0 || i >= t4) throw $.ioore(i);
-        t5 = t1[i];
-        if (typeof t5 !== 'object' || t5 === null || ((t5.constructor !== Array || !!t5.immutable$list) && !t5.is$JavaScriptIndexingBehavior())) return this.initFields$0$bailout(3, temp, t1, i, t2, x, t5, t3);
-        t7 = $.toString(temp);
-        var t8 = t5.length;
-        if (x < 0 || x >= t8) throw $.ioore(x);
-        t5[x] = t7;
+        var temp = this.RNG.getRandomNumber$0();
+        t3 = t1.length;
+        if (i < 0 || i >= t3) throw $.ioore(i);
+        t4 = t1[i];
+        if (typeof t4 !== 'object' || t4 === null || ((t4.constructor !== Array || !!t4.immutable$list) && !t4.is$JavaScriptIndexingBehavior())) return this.initFields$0$bailout(3, t1, temp, i, t4, t2, x);
+        t6 = $.toString(temp);
+        var t7 = t4.length;
+        if (x < 0 || x >= t7) throw $.ioore(x);
+        t4[x] = t6;
       }
     }
   }
   var x;
  },
- initFields$0$bailout: function(state, env0, env1, env2, env3, env4, env5, env6) {
+ initFields$0$bailout: function(state, env0, env1, env2, env3, env4, env5) {
   switch (state) {
     case 1:
       t1 = env0;
       break;
     case 2:
-      t4 = env0;
+      t3 = env0;
       t1 = env1;
       i = env2;
       t2 = env3;
       x = env4;
-      t3 = env5;
       break;
     case 3:
-      temp = env0;
-      t1 = env1;
+      t1 = env0;
+      temp = env1;
       i = env2;
-      t2 = env3;
-      x = env4;
-      t4 = env5;
-      t3 = env6;
+      t3 = env3;
+      t2 = env4;
+      x = env5;
       break;
   }
   switch (state) {
     case 0:
-      $.print('mudsa');
+      this.RNG = $.RandomNumberGenerator$();
       var t1 = this.fields;
     case 1:
       state = 0;
-      var t3 = this.RNG;
       var i = 0;
     default:
       L0: while (true) {
@@ -1773,20 +1756,19 @@ $$.Gamecard = {"":
                   if (state == 2 || (state == 0 && (x === 2 && t2))) {
                     switch (state) {
                       case 0:
-                        var t4 = $.index(t1, i);
+                        var t3 = $.index(t1, i);
                       case 2:
                         state = 0;
-                        $.indexSet(t4, x, '');
+                        $.indexSet(t3, x, '');
                     }
                   } else {
                     switch (state) {
                       case 0:
-                        var temp = t3.getRandomNumber$0();
-                        $.print('k: ' + $.S(temp));
-                        t4 = $.index(t1, i);
+                        var temp = this.RNG.getRandomNumber$0();
+                        t3 = $.index(t1, i);
                       case 3:
                         state = 0;
-                        $.indexSet(t4, x, $.toString(temp));
+                        $.indexSet(t3, x, $.toString(temp));
                     }
                   }
                   ++x;
@@ -1798,18 +1780,16 @@ $$.Gamecard = {"":
   }
  },
  Gamecard$fromServer$1: function(msg) {
-  $.print('hello');
   var t1 = $.ListFactory_List(null);
   $.setRuntimeTypeInfo(t1, ({E: 'List<String>'}));
   this.fields = t1;
-  this.RNG = $.RandomNumberGenerator$();
   this.initFields$0();
   msg = $.replaceFirst(msg, 'GAMECARD:', '');
   var liste = $.split(msg, ',');
-  if (typeof liste !== 'string' && (typeof liste !== 'object' || liste === null || (liste.constructor !== Array && !liste.is$JavaScriptIndexingBehavior()))) return this.Gamecard$fromServer$1$bailout(1, msg, liste, 0, 0, 0, 0, 0);
+  if (typeof liste !== 'string' && (typeof liste !== 'object' || liste === null || (liste.constructor !== Array && !liste.is$JavaScriptIndexingBehavior()))) return this.Gamecard$fromServer$1$bailout(1, liste, msg, 0, 0, 0, 0, 0);
   if (liste.length >= 24) {
     t1 = this.fields;
-    if (typeof t1 !== 'string' && (typeof t1 !== 'object' || t1 === null || (t1.constructor !== Array && !t1.is$JavaScriptIndexingBehavior()))) return this.Gamecard$fromServer$1$bailout(2, t1, liste, 0, 0, 0, 0, 0);
+    if (typeof t1 !== 'string' && (typeof t1 !== 'object' || t1 === null || (t1.constructor !== Array && !t1.is$JavaScriptIndexingBehavior()))) return this.Gamecard$fromServer$1$bailout(2, liste, t1, 0, 0, 0, 0, 0);
     var count = 0;
     var x = 0;
     for (; x < 5; ++x) {
@@ -1818,7 +1798,7 @@ $$.Gamecard = {"":
           var t3 = t1.length;
           if (x < 0 || x >= t3) throw $.ioore(x);
           var t4 = t1[x];
-          if (typeof t4 !== 'object' || t4 === null || ((t4.constructor !== Array || !!t4.immutable$list) && !t4.is$JavaScriptIndexingBehavior())) return this.Gamecard$fromServer$1$bailout(3, t2, t4, t1, count, i, liste, x);
+          if (typeof t4 !== 'object' || t4 === null || ((t4.constructor !== Array || !!t4.immutable$list) && !t4.is$JavaScriptIndexingBehavior())) return this.Gamecard$fromServer$1$bailout(3, i, liste, x, t2, t1, t4, count);
           var t6 = liste.length;
           if (count < 0 || count >= t6) throw $.ioore(count);
           var t7 = liste[count];
@@ -1834,30 +1814,28 @@ $$.Gamecard = {"":
  Gamecard$fromServer$1$bailout: function(state, env0, env1, env2, env3, env4, env5, env6) {
   switch (state) {
     case 1:
-      msg = env0;
-      liste = env1;
+      liste = env0;
+      msg = env1;
       break;
     case 2:
-      t1 = env0;
-      liste = env1;
+      liste = env0;
+      t1 = env1;
       break;
     case 3:
-      t2 = env0;
-      t3 = env1;
-      t1 = env2;
-      count = env3;
-      i = env4;
-      liste = env5;
-      x = env6;
+      i = env0;
+      liste = env1;
+      x = env2;
+      t2 = env3;
+      t1 = env4;
+      t3 = env5;
+      count = env6;
       break;
   }
   switch (state) {
     case 0:
-      $.print('hello');
       var t1 = $.ListFactory_List(null);
       $.setRuntimeTypeInfo(t1, ({E: 'List<String>'}));
       this.fields = t1;
-      this.RNG = $.RandomNumberGenerator$();
       this.initFields$0();
       var msg = $.replaceFirst(msg, 'GAMECARD:', '');
       var liste = $.split(msg, ',');
@@ -1912,7 +1890,6 @@ $$.Gamecard = {"":
   var t1 = $.ListFactory_List(null);
   $.setRuntimeTypeInfo(t1, ({E: 'List<String>'}));
   this.fields = t1;
-  this.RNG = $.RandomNumberGenerator$();
   this.initFields$0();
  }
 };
@@ -3986,8 +3963,9 @@ $.handleMessage = function(msg) {
   if ($.contains$1(msg, 'Player has Bingo. Game stopped.') === true) {
     $._gameStarted = false;
     $.query('#Bingo').set$value('New Round');
-    if ($.playercard.checkBingo$0() !== true) $.show('Other Player has Bingo. Round ended.');
-    else $.show('Bingo! You win this round!');
+    t1 = $.playercard.checkBingo$0() === true && $._bingoSent === true;
+    if (t1) $.show('Bingo! You win this round!');
+    else $.show('Other Player has Bingo. Round ended.');
     return '';
   }
   return '';
@@ -4506,6 +4484,7 @@ $.BingoHandler = function(bingoevent) {
     else {
       if ($.playercard.checkBingo$0() === true) {
         $._ws.send$1('THISISBINGO:' + $.S($.playercard.toWSMessage$0()));
+        $._bingoSent = true;
         $.show('Bingo sent to server');
       } else $.show('You don\'t have a Bingo!');
     }
@@ -5861,6 +5840,7 @@ $.CTC1 = new Isolate.$isolateProperties.NoMoreElementsException();
 $.CTC9 = new Isolate.$isolateProperties.EmptyQueueException();
 $._gameStarted = false;
 $._first = true;
+$._bingoSent = false;
 $._messageWindow = null;
 $._ws = null;
 $._getTypeNameOf = null;
