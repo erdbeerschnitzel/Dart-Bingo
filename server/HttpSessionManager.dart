@@ -12,20 +12,21 @@
 
 
 Map<String, Map> _sessions;
-final int _defaultMaxInactiveInterval = 1800;  // 30 minutes default timeout
+final int _defaultMaxInactiveInterval = 1800;  // 30 minutes
 
 class HttpSessionManager{
 
-  final int _sessionGarbageCollectionDelay = 300;  // repeat every 5 minutes
+  final int _sessionGarbageCollectionDelay = 300*1000;  // 5 minutes
   Map<String, Dynamic> _attributes;
   
   // init constructor
   HttpSessionManager(){
     
     _sessions = new Map<String, Map>();
+    new Timer.repeating(_sessionGarbageCollectionDelay , sessionGarbageCollect);
   }
   
-  //
+  // return sessions map
   Map<String, Map> getSessions(){
     
     if(_sessions != null) return _sessions;
@@ -43,7 +44,6 @@ class HttpSessionManager{
       
       print("sessions was null");
       _sessions = new Map<String, Map>();
-      sessionGarbageCollect();
     };
     
     String id = getRequestSessionId(request);
@@ -103,6 +103,7 @@ class HttpSessionManager{
   }
   
 
+  // check if session is valid
   bool isSessionIdValid(HttpRequest request) {
     
     var id = getRequestSessionId(request);
@@ -114,7 +115,7 @@ class HttpSessionManager{
     else return false;
   }
   
-  // Get cookie parameters from  request
+  // Get cookie parameters from request
   Map getCookieParameters(HttpRequest request) {
     
     String cookieHeader = request.headers.value("Cookie");
@@ -124,8 +125,7 @@ class HttpSessionManager{
     // no Session header included
     if (cookieHeader == null) return null; 
     else {
-      
-      
+          
       List list = cookieHeader.replaceAll(" ", "").split(";");
 
       if(list.length > 0){
@@ -144,21 +144,21 @@ class HttpSessionManager{
   }
   
   // Session garbage collection
-  void sessionGarbageCollect() {
+  void sessionGarbageCollect(timeevent) {
     
     print("${new Date.now()} sessionGarbageCollector started");
-    
-    void collect(timeevent) {
+
       int now = new Date.now().millisecondsSinceEpoch;
+      
       _sessions.forEach((key, value){
+        
         if (key != "" && _sessions[key]["lastAccessedTime"] + _sessions[key]["maxInactiveInterval"] * 1000 < now) {
+          
           _sessions.remove(key);
           print("${new Date.now()} sessionGarbageCollector : removed session $key");
         }
       });
-    }
-    
-    new Timer.repeating(_sessionGarbageCollectionDelay * 1000, collect);
+
   }
 
 }

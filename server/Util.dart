@@ -4,20 +4,14 @@
 *
 **/
 
-
+// create HTML string for specific path
 String createPageFromHTMLFile(String path){
 
     File file = new File(path);
     
-    if(file != null){
-    
-      //print("returning ${file.readAsTextSync()}");
-      return file.readAsTextSync();
-    }
-    else {
-      return  createErrorPage("Error reading file: $path");
-    }
+    if(file != null) return file.readAsTextSync();
 
+    else return createErrorPage("Error reading file: $path");
 }
 
 
@@ -31,13 +25,15 @@ String createErrorPage(String errorMessage) {
         <title>Error Page</title>
       </head>
       <body>
+        <div align="center">
         <h1> *** An Internal Error occured ***</h1><br>
         <p>Server error occured: ${cleanText(new StringBuffer(errorMessage)).toString()}</p><br>
+        </div>
       </body>
     </html>''').toString();
 }
 
-// create html for error page
+// create html for login error page
 String createLoginErrorPage() {
   
   return new StringBuffer('''
@@ -47,38 +43,33 @@ String createLoginErrorPage() {
         <title>Error Page</title>
       </head>
       <body>
+        <div align="center">
         <h1> *** You are not logged in or your session expired! ***</h1><br>
         <div><a href='/index.html'>Go to Login Page</a></div>
+        </div>
       </body>
     </html>''').toString();
 }
 
-// Create HTML response to the request.
+// Create HTML response for request
 String createHtmlResponse(HttpRequest req) {
 
   String path = (req.path.endsWith('/')) ? ".${req.path}index.html" : ".${req.path}";
   
   //log("requested $path req.path: ${req.path}");
   
-  
-  if(req.path.endsWith('/') || req.path.endsWith('8080')){
-    
-    path = 'main.html';
-  }
+  if(req.path.endsWith('/') || req.path.endsWith('8080')) path = 'main.html';
 
     File file = new File(path);
   
-    if(file != null){
+    if(file != null) return file.readAsTextSync();
+    
+    else return createErrorPage("Error reading file ${req.path}!");
 
-      return file.readAsTextSync();
-    
-      } else {
-        return createErrorPage("Internal error reading User DB!");
-      }
-  
-    
   }
 
+// check a list of strings for a specific string (param=value)
+// if exists return value part of string
 String returnStringIfInList(String string, List list){
   
   for(int i = 0; i < list.length; i++){
@@ -153,7 +144,7 @@ bool checkRegistrationParameters(String body){
 }
 
 
-// escaping
+// html escaping
 StringBuffer cleanText(StringBuffer text) {
   
   String s = text.toString();
@@ -171,6 +162,21 @@ StringBuffer cleanText(StringBuffer text) {
   }
   
   return text;
+}
+
+List readNonTextFile(String path){
+  
+  File file = new File(".$path");
+ 
+  if(file != null){
+   
+    return file.readAsBytesSync();
+  }
+  else {
+    
+    return new List();
+  }
+  
 }
 
 // simple logging method printing time and msg

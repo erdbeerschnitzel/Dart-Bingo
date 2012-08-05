@@ -2,10 +2,11 @@
  * Provides a simple Login check based on access data read from a txt file and http post data
  * 
  **/ 
-#library("LoginCheck");
-#import("dart:io");
 
 
+ /**
+  * check if login is valid via POST request body string 
+  **/
   bool check(String body){
  
     bool valid = false;
@@ -14,7 +15,7 @@
                     
        String postmessage = body;
               
-       print("postmessage $postmessage");
+       //print("postmessage $postmessage");
               
        postmessage = postmessage.replaceAll("username=", "");
        postmessage = postmessage.replaceAll("password=", "");
@@ -24,14 +25,14 @@
          String user = postmessage.split("&")[0];
          String pass = postmessage.split("&")[1];
                   
-         print("user: $user pass: $pass");
+         //print("user: $user pass: $pass");
                 
          if(userExists(user, pass)) return true;
        }
    
     }
     else {
-      print("Error reading POST in LoginCheck");
+      log("Error reading POST in LoginCheck");
       valid = false;
     }
 
@@ -60,7 +61,7 @@
           
           if(line.split("=")[0] == user && line.split("=")[1] == password){
             
-            print("found login");
+            log("found login for $user");
             return  true;
             
           }
@@ -69,7 +70,7 @@
           
           if(line.split("=")[0] == user){
             
-            print("found user");
+            log("found user $user");
             return  true;
             
           }

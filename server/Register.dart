@@ -1,12 +1,14 @@
+/**
+ * client side script for registration input elements 
+ **/
+
 #import('dart:html');
 
-main(){
-  
-  document.query('#register').on.click.add(registerHandler);
-}
+main() => query('#register').on.click.add(registerHandler);
+
 
 void registerHandler(registerevent){
   
-  document.query('#registerdiv').style.visibility = "visible";
-  document.query('#login').style.visibility = "hidden";
+  query('#registerdiv').style.visibility = "visible";
+  query('#login').style.visibility = "hidden";
 }

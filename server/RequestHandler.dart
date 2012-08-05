@@ -3,17 +3,17 @@
  * 
  **/
 #library("MessageHandler");
+
 #import("dart:io");
 #import("dart:isolate");
-#import("dart:uri", prefix:"uri");
+
 #import('HttpSessionManager.dart');
-#import('FileManager.dart', prefix:"FileManager");
-#import('LoginCheck.dart');
+#source('LoginCheck.dart');
 #source('Util.dart');
 
 class RequestHandler {
   
-  final int MaxInactiveInterval = 60; // 
+  final int MaxInactiveInterval = 60;
   HttpSessionManager sessionManager;
   String htmlResponse;
   HttpSession session;
@@ -39,14 +39,14 @@ class RequestHandler {
     if(req.method == "POST"){
     
       handlePOSTRequest(req, resp).then((result){
-        log("POST handeld for ${req.path}");
+        log("POST handled for ${req.path}");
         answerRequest(req, resp);
         });
     }
     else {
       
       handleGETRequest(req, resp).then((result){
-        log("GET handeld for ${req.path}");
+        log("GET handled for ${req.path}");
         answerRequest(req, resp);
         });
     }
@@ -74,7 +74,7 @@ class RequestHandler {
     }
     else {
       
-      if(FileManager.readNonTextFile(req.path).length > 0 && htmlResponse == "!File!") resp.outputStream.write(FileManager.readNonTextFile(req.path));
+      if(readNonTextFile(req.path).length > 0 && htmlResponse == "!File!") resp.outputStream.write(readNonTextFile(req.path));
      
       else resp.outputStream.writeString("error reading file: ${req.path}");
  
