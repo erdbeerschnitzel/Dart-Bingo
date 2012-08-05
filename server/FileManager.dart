@@ -9,8 +9,7 @@
 List readNonTextFile(String path){
   
   File file = new File(".$path");
-
-  
+ 
   if(file != null){
    
     return file.readAsBytesSync();
