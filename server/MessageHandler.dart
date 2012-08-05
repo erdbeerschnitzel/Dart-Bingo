@@ -1,5 +1,5 @@
 /**
- * Manages WebSocket messages
+ * Manages WebSocket messages and bingo game rounds
  * 
  **/
 
@@ -8,14 +8,15 @@
 #import("dart:isolate");
 #import("dart:math");
 #source("client/Gamecard.dart");
+#source("client/RandomNumberGenerator.dart");
 
 class MessageHandler{
   
 
   List<WebSocketConnection> connections;
   List clients;
-  List<int> addedNumbers;
   
+  RandomNumberGenerator RNG;
   Timer messageTimer;
   bool gameStarted = false;
   
@@ -24,7 +25,7 @@ class MessageHandler{
     
     clients = new List();
     connections = new List<WebSocketConnection>();
-    addedNumbers = new List<int>();
+    RNG = new RandomNumberGenerator();
   }
   
   /**
@@ -54,9 +55,7 @@ class MessageHandler{
   // send a message to all WebSocket clients
   void sendMessageToAllClients(String msg){
       
-      connections.forEach((WebSocketConnection conn) {
-        conn.send(msg);
-      });  
+      connections.forEach((WebSocketConnection conn) => conn.send(msg));
   }
 
   // check incoming WebSocket messages
@@ -83,8 +82,6 @@ class MessageHandler{
       originalconnection.send(gamecard.toWSMessage());
       
       List elems = gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
-      
-      log("returning gamecard with ${elems.length} elements: ${gamecard.toWSMessage()}");
       
       clients.forEach((var client) {
         
@@ -163,15 +160,10 @@ class MessageHandler{
             List<String> originalvalues = client.gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
            
             for(int i = 0; i < values.length; i++){
-              
-              //print("check ${values[i]} and ${originalvalues[i]}");
-              addedNumbers.forEach((var number) {
-                  //print("${originalvalues[i]} vs $number");
-                  if(originalvalues[i] == "$number"){
-                    
-                    //log("number was in original values");
-                    client.gamecard.updateField(originalvalues[i]);
-                  }
+
+              RNG.addNumbers.forEach((var number) {
+
+                  if(originalvalues[i] == "$number") client.gamecard.updateField(originalvalues[i]);
 
                 });
             }
@@ -189,7 +181,7 @@ class MessageHandler{
       }
       else {
         
-        log("Something is wrong with the client msg");   
+        log("Something is wrong with the client msg: $msg");   
       }               
     }    
   }
@@ -197,15 +189,9 @@ class MessageHandler{
   
     void timeHandler(timeevent) {
     
-      if(gameStarted && getNumberOfReadyClients() > 1 && addedNumbers.length < 99){
-        
-        sendMessageToAllClients("Number: ${getRandomNumber()}");
-      }
-      else {
-        stopTimer();
-      }
-      
-    
+      if(gameStarted && getNumberOfReadyClients() > 1 && RNG.addNumbers.length < 75) sendMessageToAllClients("Number: ${RNG.getRandomNumber()}");
+
+      else stopTimer();
     }
     
     void startTimer(){
@@ -232,12 +218,9 @@ class MessageHandler{
         });
         
         // clear list for new game
-        addedNumbers = new List<int>();
+        RNG = new RandomNumberGenerator();
       }
-      else {
-        
-        log("Game ended. Timer stopped.");
-      }
+      else log("Game ended. Timer stopped.");
 
     }
   
@@ -256,23 +239,8 @@ class MessageHandler{
       return numberReady;
     }
     
-    /**
-     *  get a random number between 1 and 75
-     *  no duplicates
-     **/ 
-    int getRandomNumber(){
-      
-      int random = new Random().nextInt(75);
-      
-      while(random > 75 || random < 1 || (addedNumbers.indexOf(random) >= 0)) random = new Random().nextInt(75);
-      
-      addedNumbers.add(random);
-        
-      return random;
-    }
-    
-    
+   
     // simple logging method printing time and msg
-    void log(String msg) => print("${new Date.now()}: $msg");  
+    void log(var msg) => print("${new Date.now()}: $msg");  
 
 }

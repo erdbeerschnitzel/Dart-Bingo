@@ -3,21 +3,23 @@
  * singleplayer main
  **/
 #import('dart:html');
+#import('dart:math');
 #source('Gamecard.dart');
+#source('RandomNumberGenerator.dart');
 
 // globals
 Gamecard playercard;
 Gamecard computercard;
+RandomNumberGenerator RNG;
 int currentNumber = 42;
-List<int> addNumbers;
+
 bool active = false;
 bool first = true;
 
 void main() {
  
  // init some Objects
- addNumbers = new List<int>();
- 
+
  computercard = new Gamecard();
  
  playercard = new Gamecard();
@@ -38,6 +40,8 @@ void main() {
 // handles gamecard creating
 void GamecardHandler(gamecardevent){
      
+    RNG = new RandomNumberGenerator();
+  
     computercard = new Gamecard();
     
     playercard = new Gamecard();
@@ -58,7 +62,7 @@ void GameHandler(gameevent){
 
   if(!first){
   
-    currentNumber = playercard.getRandomNumber();  
+    currentNumber = RNG.getRandomNumber();  
     show("the current number is $currentNumber");
     
     for(int i = 0; i < 5; i++){
@@ -97,6 +101,8 @@ void BingoHandler(bingoevent){
       active = false;
       show("You have a Bingo! Congratulations!");
     }
+    else show("You don't have a Bingo!");
+
   }
   
 }

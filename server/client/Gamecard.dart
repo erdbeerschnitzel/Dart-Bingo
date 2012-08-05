@@ -9,11 +9,13 @@ class Gamecard {
   
   List<int> addedNumbersGamecard;
   
+  RandomNumberGenerator RNG;
+  
   Gamecard(){
   
     fields = new List<List<String>>();
     addedNumbersGamecard = new List<int>();
-    
+    RNG = new RandomNumberGenerator();
     initFields(); 
   }
   
@@ -72,7 +74,7 @@ class Gamecard {
 
         else {
           
-          int temp = getRandomNumber();
+          int temp = RNG.getRandomNumber();
           fields[i][x] = temp.toString();
           
           addedNumbersGamecard.add(temp);
@@ -104,7 +106,10 @@ String createCardHTML(bool forComputer){
     for(var value in liste){
       
       // adds a td element with specific class and specific value
-      if(forComputer) if(x < 5 && i < 5)  cardstring.add('<td id="c$i$x"class=top>${fields[i][x]}</td>');
+      if(forComputer){
+        
+        if(x < 5 && i < 5) cardstring.add('<td id="c$i$x"class=top>${fields[i][x]}</td>');
+      }
 
       else if(x < 5 && i < 5)  cardstring.add('<td id="p$i$x"class=top>${fields[i][x]}</td>');
 
@@ -168,19 +173,7 @@ bool checkBingo(){
   return result;
 }
   
-  /**
-   *  get a random number between 1 and 75
-   *  no duplicates
-   **/ 
-  int getRandomNumber(){
-    
-    int random = new Random().nextInt(75);
-    
-    while(random > 75 || random < 1 || (addedNumbersGamecard.indexOf(random) >= 0)) random = new Random().nextInt(75);
-      
-    return random;
-  }
-  
+
   
   /**
    * convert a gamecard object to String

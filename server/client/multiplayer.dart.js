@@ -1207,14 +1207,6 @@ $$.StackOverflowException = {"":
  }
 };
 
-$$.BadNumberFormatException = {"":
- ["_s"],
- super: "Object",
- toString$0: function() {
-  return 'BadNumberFormatException: \'' + $.S(this._s) + '\'';
- }
-};
-
 $$.NullPointerException = {"":
  ["arguments", "functionName"],
  super: "Object",
@@ -1391,72 +1383,58 @@ $$.Gamecard = {"":
   }
  },
  getRandomNumber$0: function() {
-  var t1 = $.Math_random();
-  if (typeof t1 !== 'number') return this.getRandomNumber$0$bailout(1, t1, 0, 0);
-  var a = $.toInt(t1 * 100);
-  if (typeof a !== 'number') return this.getRandomNumber$0$bailout(2, a, 0, 0);
-  t1 = this.addedNumbersGamecard;
+  var random = $._Random$(null).nextInt$1(75);
+  if (typeof random !== 'number') return this.getRandomNumber$0$bailout(1, random, 0, 0);
+  var t1 = this.addedNumbersGamecard;
   while (true) {
-    if (!(a > 99)) {
-      if (!(a < 1)) {
-        var t2 = $.indexOf$1(t1, a);
-        if (typeof t2 !== 'number') return this.getRandomNumber$0$bailout(3, t1, a, t2);
+    if (!(random > 75)) {
+      if (!(random < 1)) {
+        var t2 = $.indexOf$1(t1, random);
+        if (typeof t2 !== 'number') return this.getRandomNumber$0$bailout(2, random, t1, t2);
         t2 = t2 >= 0;
       } else t2 = true;
     } else t2 = true;
     if (!t2) break;
-    t2 = $.Math_random();
-    if (typeof t2 !== 'number') return this.getRandomNumber$0$bailout(4, t1, t2, 0);
-    a = $.toInt(t2 * 100);
-    if (typeof a !== 'number') return this.getRandomNumber$0$bailout(5, t1, a, 0);
+    random = $._Random$(null).nextInt$1(75);
+    if (typeof random !== 'number') return this.getRandomNumber$0$bailout(3, t1, random, 0);
   }
-  return a;
+  return random;
  },
  getRandomNumber$0$bailout: function(state, env0, env1, env2) {
   switch (state) {
     case 1:
-      t1 = env0;
+      random = env0;
       break;
     case 2:
-      a = env0;
+      random = env0;
+      t1 = env1;
+      t2 = env2;
       break;
     case 3:
       t1 = env0;
-      a = env1;
-      t2 = env2;
-      break;
-    case 4:
-      t1 = env0;
-      t2 = env1;
-      break;
-    case 5:
-      t1 = env0;
-      a = env1;
+      random = env1;
       break;
   }
   switch (state) {
     case 0:
-      var t1 = $.Math_random();
+      var random = $._Random$(null).nextInt$1(75);
     case 1:
       state = 0;
-      var a = $.toInt($.mul(t1, 100));
-    case 2:
-      state = 0;
-      t1 = this.addedNumbersGamecard;
+      var t1 = this.addedNumbersGamecard;
     default:
       L0: while (true) {
         switch (state) {
           case 0:
-          case 3:
-            if (state == 3 || (state == 0 && !$.gtB(a, 99))) {
+          case 2:
+            if (state == 2 || (state == 0 && !$.gtB(random, 75))) {
               switch (state) {
                 case 0:
-                case 3:
-                  if (state == 3 || (state == 0 && !$.ltB(a, 1))) {
+                case 2:
+                  if (state == 2 || (state == 0 && !$.ltB(random, 1))) {
                     switch (state) {
                       case 0:
-                        var t2 = $.indexOf$1(t1, a);
-                      case 3:
+                        var t2 = $.indexOf$1(t1, random);
+                      case 2:
                         state = 0;
                         t2 = $.geB(t2, 0);
                     }
@@ -1468,44 +1446,31 @@ $$.Gamecard = {"":
               t2 = true;
             }
             if (!t2) break L0;
-            t2 = $.Math_random();
-          case 4:
-            state = 0;
-            a = $.toInt($.mul(t2, 100));
-          case 5:
+            random = $._Random$(null).nextInt$1(75);
+          case 3:
             state = 0;
         }
       }
-      return a;
+      return random;
   }
  },
  checkBingo$0: function() {
   var t1 = this.fields;
-  if (typeof t1 !== 'string' && (typeof t1 !== 'object' || t1 === null || (t1.constructor !== Array && !t1.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(1, t1, 0, 0, 0, 0, 0, 0);
+  if (typeof t1 !== 'string' && (typeof t1 !== 'object' || t1 === null || (t1.constructor !== Array && !t1.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(1, t1, 0, 0, 0, 0, 0);
+  var t3 = t1.length;
   var i = 0;
-  var deb = '';
   var result = true;
   for (; i < 5; ++i) {
-    for (var t2 = i === 2, x = 0, result = true; x < 5; ++x) {
+    for (var t2 = i === 2, x = 0; x < 5; ++x) {
       if (!(t2 && x === 2)) {
-        var t3 = t1.length;
         if (i < 0 || i >= t3) throw $.ioore(i);
         var t4 = t1[i];
-        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(2, deb, x, i, result, t2, t1, t4);
+        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(2, t4, x, i, t2, result, t1);
         var t6 = t4.length;
         if (x < 0 || x >= t6) throw $.ioore(x);
         t4 = t4[x];
-        if (typeof t4 !== 'string') return this.checkBingo$0$bailout(3, deb, t4, i, result, x, t1, t2);
+        if (typeof t4 !== 'string') return this.checkBingo$0$bailout(3, t4, result, t2, x, i, t1);
         if (!(t4 === '0')) result = false;
-        t3 = deb + $.S(i) + $.S(x) + ': ';
-        t4 = t1.length;
-        if (i < 0 || i >= t4) throw $.ioore(i);
-        var t5 = t1[i];
-        if (typeof t5 !== 'string' && (typeof t5 !== 'object' || t5 === null || (t5.constructor !== Array && !t5.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(4, result, x, t3, t2, i, t5, t1);
-        var t7 = t5.length;
-        if (x < 0 || x >= t7) throw $.ioore(x);
-        var deb0 = t3 + $.S(t5[x]) + ' ';
-        deb = deb0;
       }
     }
     if (result) return result;
@@ -1513,88 +1478,56 @@ $$.Gamecard = {"":
   for (i = 0; i < 5; ++i) {
     for (t2 = i === 2, result = true, x = 0; x < 5; ++x) {
       if (!(t2 && x === 2)) {
-        t3 = t1.length;
         if (x < 0 || x >= t3) throw $.ioore(x);
         t4 = t1[x];
-        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(5, result, x, t1, deb, i, t2, t4);
+        if (typeof t4 !== 'string' && (typeof t4 !== 'object' || t4 === null || (t4.constructor !== Array && !t4.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(4, result, x, t4, i, t2, t1);
         t6 = t4.length;
         if (i < 0 || i >= t6) throw $.ioore(i);
         t4 = t4[i];
-        if (typeof t4 !== 'string') return this.checkBingo$0$bailout(6, result, t4, x, t1, i, deb, t2);
+        if (typeof t4 !== 'string') return this.checkBingo$0$bailout(5, result, x, t4, t1, i, t2);
         if (!(t4 === '0')) result = false;
-        t3 = deb + $.S(i) + $.S(x) + ': ';
-        t4 = t1.length;
-        if (i < 0 || i >= t4) throw $.ioore(i);
-        t5 = t1[i];
-        if (typeof t5 !== 'string' && (typeof t5 !== 'object' || t5 === null || (t5.constructor !== Array && !t5.is$JavaScriptIndexingBehavior()))) return this.checkBingo$0$bailout(7, result, t3, x, t1, t5, i, t2);
-        t7 = t5.length;
-        if (x < 0 || x >= t7) throw $.ioore(x);
-        deb0 = t3 + $.S(t5[x]) + ' ';
-        deb = deb0;
       }
     }
     if (result) return result;
   }
   return result;
  },
- checkBingo$0$bailout: function(state, env0, env1, env2, env3, env4, env5, env6) {
+ checkBingo$0$bailout: function(state, env0, env1, env2, env3, env4, env5) {
   switch (state) {
     case 1:
       t1 = env0;
       break;
     case 2:
-      deb = env0;
+      t3 = env0;
       x = env1;
       i = env2;
-      result = env3;
-      t2 = env4;
+      t2 = env3;
+      result = env4;
       t1 = env5;
-      t3 = env6;
       break;
     case 3:
-      deb = env0;
-      t3 = env1;
-      i = env2;
-      result = env3;
-      x = env4;
+      t3 = env0;
+      result = env1;
+      t2 = env2;
+      x = env3;
+      i = env4;
       t1 = env5;
-      t2 = env6;
       break;
     case 4:
       result = env0;
       x = env1;
       t3 = env2;
-      t2 = env3;
-      i = env4;
-      t4 = env5;
-      t1 = env6;
+      i = env3;
+      t2 = env4;
+      t1 = env5;
       break;
     case 5:
       result = env0;
       x = env1;
-      t1 = env2;
-      deb = env3;
+      t3 = env2;
+      t1 = env3;
       i = env4;
       t2 = env5;
-      t3 = env6;
-      break;
-    case 6:
-      result = env0;
-      t3 = env1;
-      x = env2;
-      t1 = env3;
-      i = env4;
-      deb = env5;
-      t2 = env6;
-      break;
-    case 7:
-      result = env0;
-      t3 = env1;
-      x = env2;
-      t1 = env3;
-      t4 = env4;
-      i = env5;
-      t2 = env6;
       break;
   }
   switch (state) {
@@ -1603,7 +1536,6 @@ $$.Gamecard = {"":
     case 1:
       state = 0;
       var i = 0;
-      var deb = '';
       var result = true;
     default:
       L0: while (true) {
@@ -1612,7 +1544,6 @@ $$.Gamecard = {"":
             if (!(i < 5)) break L0;
             var t2 = i === 2;
             var x = 0;
-            result = true;
           default:
             L1: while (true) {
               switch (state) {
@@ -1630,12 +1561,6 @@ $$.Gamecard = {"":
                       case 3:
                         state = 0;
                         if (!$.eqB(t3, '0')) result = false;
-                        t3 = deb + $.S(i) + $.S(x) + ': ';
-                        var t4 = $.index(t1, i);
-                      case 4:
-                        state = 0;
-                        var deb0 = t3 + $.S($.index(t4, x)) + ' ';
-                        deb = deb0;
                     }
                   }
                   ++x;
@@ -1646,9 +1571,8 @@ $$.Gamecard = {"":
         }
       }
       i = 0;
+    case 4:
     case 5:
-    case 6:
-    case 7:
       L2: while (true) {
         switch (state) {
           case 0:
@@ -1667,18 +1591,12 @@ $$.Gamecard = {"":
                     switch (state) {
                       case 0:
                         t3 = $.index(t1, x);
-                      case 5:
+                      case 4:
                         state = 0;
                         t3 = $.index(t3, i);
-                      case 6:
+                      case 5:
                         state = 0;
                         if (!$.eqB(t3, '0')) result = false;
-                        t3 = deb + $.S(i) + $.S(x) + ': ';
-                        t4 = $.index(t1, i);
-                      case 7:
-                        state = 0;
-                        deb0 = t3 + $.S($.index(t4, x)) + ' ';
-                        deb = deb0;
                     }
                   }
                   ++x;
@@ -1694,7 +1612,7 @@ $$.Gamecard = {"":
  createCardHTML$1: function(forComputer) {
   var cardstring = $.StringBufferImpl$('');
   var t1 = this.fields;
-  if (typeof t1 !== 'string' && (typeof t1 !== 'object' || t1 === null || (t1.constructor !== Array && !t1.is$JavaScriptIndexingBehavior()))) return this.createCardHTML$1$bailout(1, forComputer, t1, cardstring, 0, 0, 0, 0, 0, 0, 0);
+  if (typeof t1 !== 'string' && (typeof t1 !== 'object' || t1 === null || (t1.constructor !== Array && !t1.is$JavaScriptIndexingBehavior()))) return this.createCardHTML$1$bailout(1, forComputer, cardstring, t1, 0, 0, 0, 0, 0, 0, 0);
   var t3 = $.iterator(t1);
   var t4 = forComputer === true;
   var x = 0;
@@ -1705,26 +1623,27 @@ $$.Gamecard = {"":
     for (t2 = $.iterator(t2), t5 = i < 5; t2.hasNext$0() === true; ) {
       t2.next$0();
       if (t4) {
-        if (x < 5 && t5) {
-          var t6 = '<td id="c' + $.S(i) + $.S(x) + '"class=top>';
+        var t6 = x < 5;
+        if (t6 && t5) {
+          t6 = '<td id="c' + $.S(i) + $.S(x) + '"class=top>';
           var t7 = t1.length;
           if (i < 0 || i >= t7) throw $.ioore(i);
           var t8 = t1[i];
-          if (typeof t8 !== 'string' && (typeof t8 !== 'object' || t8 === null || (t8.constructor !== Array && !t8.is$JavaScriptIndexingBehavior()))) return this.createCardHTML$1$bailout(2, x, t1, cardstring, t6, t5, t8, t3, t4, t2, i);
+          if (typeof t8 !== 'string' && (typeof t8 !== 'object' || t8 === null || (t8.constructor !== Array && !t8.is$JavaScriptIndexingBehavior()))) return this.createCardHTML$1$bailout(2, x, cardstring, t6, t1, t5, t8, t3, t4, t2, i);
           var t10 = t8.length;
           if (x < 0 || x >= t10) throw $.ioore(x);
           cardstring.add$1(t6 + $.S(t8[x]) + '</td>');
-        }
-      } else {
-        if (x < 5 && t5) {
-          t6 = '<td id="p' + $.S(i) + $.S(x) + '"class=top>';
-          t7 = t1.length;
-          if (i < 0 || i >= t7) throw $.ioore(i);
-          t8 = t1[i];
-          if (typeof t8 !== 'string' && (typeof t8 !== 'object' || t8 === null || (t8.constructor !== Array && !t8.is$JavaScriptIndexingBehavior()))) return this.createCardHTML$1$bailout(3, t1, x, cardstring, t6, t5, t8, t3, t4, t2, i);
-          t10 = t8.length;
-          if (x < 0 || x >= t10) throw $.ioore(x);
-          cardstring.add$1(t6 + $.S(t8[x]) + '</td>');
+        } else {
+          if (t6 && t5) {
+            t6 = '<td id="p' + $.S(i) + $.S(x) + '"class=top>';
+            t7 = t1.length;
+            if (i < 0 || i >= t7) throw $.ioore(i);
+            t8 = t1[i];
+            if (typeof t8 !== 'string' && (typeof t8 !== 'object' || t8 === null || (t8.constructor !== Array && !t8.is$JavaScriptIndexingBehavior()))) return this.createCardHTML$1$bailout(3, x, t6, cardstring, t1, t5, t8, t3, t4, t2, i);
+            t10 = t8.length;
+            if (x < 0 || x >= t10) throw $.ioore(x);
+            cardstring.add$1(t6 + $.S(t8[x]) + '</td>');
+          }
         }
       }
       if (x === 4) {
@@ -1734,6 +1653,7 @@ $$.Gamecard = {"":
     }
     i = i === 4 ? 0 : i + 1;
   }
+  $.print(cardstring.toString$0());
   return cardstring.toString$0();
   var t5;
  },
@@ -1741,14 +1661,14 @@ $$.Gamecard = {"":
   switch (state) {
     case 1:
       var forComputer = env0;
-      t1 = env1;
-      cardstring = env2;
+      cardstring = env1;
+      t1 = env2;
       break;
     case 2:
       x = env0;
-      t1 = env1;
-      cardstring = env2;
-      t6 = env3;
+      cardstring = env1;
+      t6 = env2;
+      t1 = env3;
       t5 = env4;
       t7 = env5;
       t3 = env6;
@@ -1757,10 +1677,10 @@ $$.Gamecard = {"":
       i = env9;
       break;
     case 3:
-      t1 = env0;
-      x = env1;
+      x = env0;
+      t6 = env1;
       cardstring = env2;
-      t6 = env3;
+      t1 = env3;
       t5 = env4;
       t7 = env5;
       t3 = env6;
@@ -1795,33 +1715,34 @@ $$.Gamecard = {"":
                   if (!(t2.hasNext$0() === true)) break L1;
                   t2.next$0();
                 default:
-                  if (state == 2 || (state == 0 && t4)) {
+                  if (state == 2 || state == 3 || (state == 0 && t4)) {
                     switch (state) {
                       case 0:
-                      case 2:
-                        if (state == 2 || (state == 0 && (x < 5 && t5))) {
+                        var t6 = x < 5;
+                      default:
+                        if (state == 2 || (state == 0 && (t6 && t5))) {
                           switch (state) {
                             case 0:
-                              var t6 = '<td id="c' + $.S(i) + $.S(x) + '"class=top>';
+                              t6 = '<td id="c' + $.S(i) + $.S(x) + '"class=top>';
                               var t7 = $.index(t1, i);
                             case 2:
                               state = 0;
                               cardstring.add$1(t6 + $.S($.index(t7, x)) + '</td>');
                           }
-                        }
-                    }
-                  } else {
-                    switch (state) {
-                      case 0:
-                      case 3:
-                        if (state == 3 || (state == 0 && (x < 5 && t5))) {
+                        } else {
                           switch (state) {
                             case 0:
-                              t6 = '<td id="p' + $.S(i) + $.S(x) + '"class=top>';
-                              t7 = $.index(t1, i);
                             case 3:
-                              state = 0;
-                              cardstring.add$1(t6 + $.S($.index(t7, x)) + '</td>');
+                              if (state == 3 || (state == 0 && (t6 && t5))) {
+                                switch (state) {
+                                  case 0:
+                                    t6 = '<td id="p' + $.S(i) + $.S(x) + '"class=top>';
+                                    t7 = $.index(t1, i);
+                                  case 3:
+                                    state = 0;
+                                    cardstring.add$1(t6 + $.S($.index(t7, x)) + '</td>');
+                                }
+                              }
                           }
                         }
                     }
@@ -1835,6 +1756,7 @@ $$.Gamecard = {"":
             i = i === 4 ? 0 : i + 1;
         }
       }
+      $.print(cardstring.toString$0());
       return cardstring.toString$0();
   }
  },
@@ -1855,16 +1777,17 @@ $$.Gamecard = {"":
         t4 = t1.length;
         if (i < 0 || i >= t4) throw $.ioore(i);
         var t5 = t1[i];
-        if (typeof t5 !== 'object' || t5 === null || ((t5.constructor !== Array || !!t5.immutable$list) && !t5.is$JavaScriptIndexingBehavior())) return this.initFields$0$bailout(2, t1, i, t2, t3, x, t5, 0);
+        if (typeof t5 !== 'object' || t5 === null || ((t5.constructor !== Array || !!t5.immutable$list) && !t5.is$JavaScriptIndexingBehavior())) return this.initFields$0$bailout(2, t1, i, t2, x, t3, t5, 0);
         var t7 = t5.length;
         if (x < 0 || x >= t7) throw $.ioore(x);
         t5[x] = '';
       } else {
         var temp = this.getRandomNumber$0();
+        $.print(temp);
         t4 = t1.length;
         if (i < 0 || i >= t4) throw $.ioore(i);
         t5 = t1[i];
-        if (typeof t5 !== 'object' || t5 === null || ((t5.constructor !== Array || !!t5.immutable$list) && !t5.is$JavaScriptIndexingBehavior())) return this.initFields$0$bailout(3, temp, t1, t5, i, t2, t3, x);
+        if (typeof t5 !== 'object' || t5 === null || ((t5.constructor !== Array || !!t5.immutable$list) && !t5.is$JavaScriptIndexingBehavior())) return this.initFields$0$bailout(3, temp, t1, i, t5, t2, x, t3);
         t7 = $.toString(temp);
         var t8 = t5.length;
         if (x < 0 || x >= t8) throw $.ioore(x);
@@ -1884,18 +1807,18 @@ $$.Gamecard = {"":
       t1 = env0;
       i = env1;
       t2 = env2;
-      t3 = env3;
-      x = env4;
+      x = env3;
+      t3 = env4;
       t4 = env5;
       break;
     case 3:
       temp = env0;
       t1 = env1;
-      t4 = env2;
-      i = env3;
+      i = env2;
+      t4 = env3;
       t2 = env4;
-      t3 = env5;
-      x = env6;
+      x = env5;
+      t3 = env6;
       break;
   }
   switch (state) {
@@ -1934,6 +1857,7 @@ $$.Gamecard = {"":
                     switch (state) {
                       case 0:
                         var temp = this.getRandomNumber$0();
+                        $.print(temp);
                         t4 = $.index(t1, i);
                       case 3:
                         state = 0;
@@ -3489,6 +3413,22 @@ $$._JsVisitedMap = {"":
  }
 };
 
+$$._Random = {"":
+ [],
+ super: "Object",
+ nextInt$1: function(max) {
+  if (typeof max !== 'number') return this.nextInt$1$bailout(1, max);
+  if (max < 0) throw $.captureStackTrace($.IllegalArgumentException$('negative max: ' + $.S(max)));
+  if (max > 4294967296) max = 4294967296;
+  return Math.floor(Math.random() * max);
+ },
+ nextInt$1$bailout: function(state, max) {
+  if ($.ltB(max, 0)) throw $.captureStackTrace($.IllegalArgumentException$('negative max: ' + $.S(max)));
+  if ($.gtB(max, 4294967296)) max = 4294967296;
+  return Math.floor(Math.random() * max);
+ }
+};
+
 $$.main_anon = {"":
  [],
  super: "Closure",
@@ -4061,6 +4001,21 @@ $.tdiv = function(a, b) {
   return a.operator$tdiv$1(b);
 };
 
+$.Primitives_printString = function(string) {
+  if (typeof dartPrint == "function") {
+    dartPrint(string);
+    return;
+  }
+  if (typeof console == "object") {
+    console.log(string);
+    return;
+  }
+  if (typeof write == "function") {
+    write(string);
+    write("\n");
+  }
+};
+
 $.JSSyntaxRegExp$ = function(pattern, multiLine, ignoreCase) {
   return new $.JSSyntaxRegExp(ignoreCase, multiLine, pattern);
 };
@@ -4517,10 +4472,6 @@ $.regExpMakeNative = function(regExp, global) {
   }
 };
 
-$.BadNumberFormatException$ = function(_s) {
-  return new $.BadNumberFormatException(_s);
-};
-
 $._FrozenElementListIterator$ = function(_list) {
   return new $._FrozenElementListIterator(0, _list);
 };
@@ -4533,6 +4484,11 @@ $.Maps_mapToString = function(m) {
   var result = $.StringBufferImpl$('');
   $.Maps__emitMap(m, result, $.ListFactory_List(null));
   return result.toString$0();
+};
+
+$.isEmpty = function(receiver) {
+  if (typeof receiver === 'string' || $.isJsArray(receiver) === true) return receiver.length === 0;
+  return receiver.isEmpty$0();
 };
 
 $.Primitives_lazyAsJsDate = function(receiver) {
@@ -4575,11 +4531,6 @@ $.Maps__emitMap = function(m, result, visiting) {
   $.forEach(m, new $.Maps__emitMap_anon(result, t1, visiting));
   $.add$1(result, '}');
   $.removeLast(visiting);
-};
-
-$.isEmpty = function(receiver) {
-  if (typeof receiver === 'string' || $.isJsArray(receiver) === true) return receiver.length === 0;
-  return receiver.isEmpty$0();
 };
 
 $._IDBDatabaseEventsImpl$ = function(_ptr) {
@@ -4633,6 +4584,10 @@ $.addLast = function(receiver, value) {
   if ($.isJsArray(receiver) !== true) return receiver.addLast$1(value);
   $.checkGrowable(receiver, 'addLast');
   receiver.push(value);
+};
+
+$._Random$ = function(seed) {
+  return new $._Random();
 };
 
 $._FileReaderEventsImpl$ = function(_ptr) {
@@ -4768,16 +4723,6 @@ $._IsolateContext$ = function() {
 $.truncate = function(receiver) {
   if (!(typeof receiver === 'number')) return receiver.truncate$0();
   return receiver < 0 ? $.ceil(receiver) : $.floor(receiver);
-};
-
-$.isNaN = function(receiver) {
-  if (typeof receiver === 'number') return isNaN(receiver);
-  return receiver.isNaN$0();
-};
-
-$.isInfinite = function(receiver) {
-  if (!(typeof receiver === 'number')) return receiver.isInfinite$0();
-  return (receiver == Infinity) || (receiver == -Infinity);
 };
 
 $.allMatchesInStringUnchecked = function(needle, haystack) {
@@ -5030,14 +4975,6 @@ $.checkNumbers = function(a, b) {
   return false;
 };
 
-$.Math_random = function() {
-  return $.MathNatives_random();
-};
-
-$.MathNatives_random = function() {
-  return Math.random();
-};
-
 $._DoubleLinkedQueueEntrySentinel$ = function() {
   var t1 = new $._DoubleLinkedQueueEntrySentinel(null, null, null);
   t1.DoubleLinkedQueueEntry$1(null);
@@ -5169,14 +5106,6 @@ $._MediaStreamTrackListEventsImpl$ = function(_ptr) {
   return new $._MediaStreamTrackListEventsImpl(_ptr);
 };
 
-$.toInt = function(receiver) {
-  if (!(typeof receiver === 'number')) return receiver.toInt$0();
-  if ($.isNaN(receiver) === true) throw $.captureStackTrace($.BadNumberFormatException$('NaN'));
-  if ($.isInfinite(receiver) === true) throw $.captureStackTrace($.BadNumberFormatException$('Infinity'));
-  var truncated = $.truncate(receiver);
-  return (truncated == -0.0) ? 0 : truncated;
-};
-
 $._EventLoop$ = function() {
   var t1 = $.DoubleLinkedQueue$();
   $.setRuntimeTypeInfo(t1, ({E: '_IsolateEvent'}));
@@ -5224,6 +5153,10 @@ $.dynamicFunction = function(name$) {
   bind.methods = methods;
   $.defineProperty((Object.prototype), name$, bind);
   return methods;
+};
+
+$.print = function(obj) {
+  return $.Primitives_printString($.toString(obj));
 };
 
 $.checkString = function(value) {
