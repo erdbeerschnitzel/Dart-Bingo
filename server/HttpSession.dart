@@ -4,7 +4,7 @@
 
 class HttpSession {
 
-  String _sessionId;
+  String _sessionID;
   Map<String, Dynamic> _attributes;
 
   HttpSession(){}
@@ -12,31 +12,31 @@ class HttpSession {
   // constructor for new Session
   HttpSession.fromRequest(HttpRequest request, HttpResponse response) {
     _attributes = new Map<String, Dynamic>();
-    _sessionId = createSessionId();
+    _sessionID = createSessionId();
     
     //print("created new session with id: $_sessionId");
     
-    response.headers.add("Set-Cookie", " DSESSIONID = $_sessionId; HttpOnly");
+    response.headers.add("Set-Cookie", " DSESSIONID = $_sessionID; HttpOnly");
   }
 
 
   bool isNew(var sessionList) {
   
-    if(sessionList[_sessionId] == null){
+    if(sessionList[_sessionID] == null){
 
       return false;
     }
     
-    return sessionList[_sessionId]["isNew"];
+    return sessionList[_sessionID]["isNew"];
   }
 
-  String getId() => _sessionId;
+  String getID() => _sessionID;
   
-  void setId(var id) => _sessionId = id;
+  void setID(var id) => _sessionID = id;
 
-  int getCreationTime() => _sessions[_sessionId]["creationTime"];
+  int getCreationTime() => _sessions[_sessionID]["creationTime"];
 
-  int getLastAccessedTime() => _sessions[_sessionId]["lastAccessedTime"];
+  int getLastAccessedTime() => _sessions[_sessionID]["lastAccessedTime"];
 
   
   // set -1 to use default timeout value
@@ -44,10 +44,10 @@ class HttpSession {
     
     if (t < 0) t = _defaultMaxInactiveInterval;
 
-    _sessions[_sessionId]["maxInactiveInterval"] = t;
+    _sessions[_sessionID]["maxInactiveInterval"] = t;
   }
 
-  int getMaxInactiveInterval() => _sessions[_sessionId]["maxInactiveInterval"];
+  int getMaxInactiveInterval() => _sessions[_sessionID]["maxInactiveInterval"];
 
   // getAttribute(String name)
   Dynamic getAttribute(String name) {
@@ -61,12 +61,12 @@ class HttpSession {
   void setAttribute(String name, Dynamic value) {
     
     _attributes[name] = value;
-    _sessions[_sessionId]["attributes"] = _attributes;
+    _sessions[_sessionID]["attributes"] = _attributes;
   }
 
   void removeAttribute(String name) {
     _attributes.remove(name);
-    _sessions[_sessionId]["attributes"] = _attributes;
+    _sessions[_sessionID]["attributes"] = _attributes;
   }
   
   // create  new session ID

@@ -52,7 +52,7 @@ class HttpSessionManager{
       
       HttpSession sess = new HttpSession.fromRequest(request, response);
       
-      _sessions[sess.getId()] = {"isNew": true, "creationTime": new Date.now(), "loggedin": false,
+      _sessions[sess.getID()] = {"isNew": true, "creationTime": new Date.now(), "loggedin": false,
                                "lastAccessedTime": new Date.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
       return sess;
     }
@@ -62,7 +62,7 @@ class HttpSessionManager{
       //print("session not found in sessions");
       HttpSession newSession =  new HttpSession.fromRequest(request, response);
       
-      newSession.setId(id);
+      newSession.setID(id);
       
       _sessions[id] = {"isNew": true, "creationTime": new Date.now(), "loggedin": false,
                                  "lastAccessedTime": new Date.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
@@ -73,7 +73,7 @@ class HttpSessionManager{
     else { 
       
       HttpSession session = new HttpSession();
-      session._sessionId = id;
+      session._sessionID = id;
       session._attributes = _sessions[id]["attributes"];
       
       var lastAccessedTime =_sessions[id]["lastAccessedTime"];

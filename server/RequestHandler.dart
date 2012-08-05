@@ -13,16 +13,16 @@
 
 class RequestHandler {
   
-  final int MaxInactiveInterval = 60;
-  HttpSessionManager sessionManager;
-  String htmlResponse;
-  HttpSession session;
+  final int _MaxInactiveInterval = 60;
+  HttpSessionManager _sessionManager;
+  String _htmlResponse;
+  HttpSession _session;
   
   // standard constructor
   RequestHandler(){ 
     
     log("creating new request handler and sessionmanager");
-    sessionManager = new HttpSessionManager();
+    _sessionManager = new HttpSessionManager();
   }
   
  
@@ -34,7 +34,7 @@ class RequestHandler {
     
     //log("trying to handle ${req.method} request");
   
-    htmlResponse = "empty";
+    _htmlResponse = "empty";
     
     if(req.method == "POST"){
     
@@ -66,15 +66,15 @@ class RequestHandler {
     else resp.headers.add("Content-Type", "text/html; charset=UTF-8");
     
   
-    if(htmlResponse != "!File!"){
+    if(_htmlResponse != "!File!"){
   
-      resp.contentLength = htmlResponse.splitChars().length;
+      resp.contentLength = _htmlResponse.splitChars().length;
   
-      resp.outputStream.writeString(htmlResponse);
+      resp.outputStream.writeString(_htmlResponse);
     }
     else {
       
-      if(readNonTextFile(req.path).length > 0 && htmlResponse == "!File!") resp.outputStream.write(readNonTextFile(req.path));
+      if(readNonTextFile(req.path).length > 0 && _htmlResponse == "!File!") resp.outputStream.write(readNonTextFile(req.path));
      
       else resp.outputStream.writeString("error reading file: ${req.path}");
  
@@ -102,26 +102,26 @@ class RequestHandler {
         // only html files
         if(req.path.endsWith("html")){
           
-          session = sessionManager.getSession(req, resp);
+          _session = _sessionManager.getSession(req, resp);
          
-          if (session != null){
+          if (_session != null){
          
-            if (session.isNew(sessionManager.getSessions())){
+            if (_session.isNew(_sessionManager.getSessions())){
               
-              session.setMaxInactiveInterval(MaxInactiveInterval);
+              _session.setMaxInactiveInterval(_MaxInactiveInterval);
               
               log("new Session opened");
               
-              session.setAttribute("isNew", false);
+              _session.setAttribute("isNew", false);
   
-              htmlResponse = createLoginErrorPage();
+              _htmlResponse = createLoginErrorPage();
             }
             
             else {
 
-                if(session.getAttribute("loggedin")) htmlResponse = createHtmlResponse(req);
+                if(_session.getAttribute("loggedin")) _htmlResponse = createHtmlResponse(req);
 
-                else htmlResponse = createLoginErrorPage();
+                else _htmlResponse = createLoginErrorPage();
        
             }
             
@@ -130,20 +130,20 @@ class RequestHandler {
           // non-html files
           else {
             
-            if(req.path.contains('.png')) htmlResponse = "!File!";
-            else htmlResponse = createHtmlResponse(req);
+            if(req.path.contains('.png')) _htmlResponse = "!File!";
+            else _htmlResponse = createHtmlResponse(req);
           }
       }
       // path = index.html
-      else htmlResponse = createPageFromHTMLFile("index.html");
+      else _htmlResponse = createPageFromHTMLFile("index.html");
  
     } catch (Exception error) {
       
-      htmlResponse = createErrorPage(error.toString());
+      _htmlResponse = createErrorPage(error.toString());
     }
     
     // assign final result
-    result = htmlResponse;
+    result = _htmlResponse;
     maincompleter.complete(result);  
   
     return maincompleter.future; 
@@ -160,9 +160,9 @@ class RequestHandler {
     // standard future result
     String result = "emptyPOSTResponse";
   
-    session = sessionManager.getSession(req, resp);
+    _session = _sessionManager.getSession(req, resp);
     
-    if (session != null) if (session.isNew(sessionManager.getSessions())) session.setMaxInactiveInterval(MaxInactiveInterval);
+    if (_session != null) if (_session.isNew(_sessionManager.getSessions())) _session.setMaxInactiveInterval(_MaxInactiveInterval);
 
     else log("session was null");
 
@@ -192,17 +192,17 @@ class RequestHandler {
       // registration
       if(bodyString.contains("repeatpassword")){
         
-       if(handleRegistration(bodyString)) session.setAttribute("loggedin", true);
+       if(handleRegistration(bodyString)) _session.setAttribute("loggedin", true);
        
-       else session.setAttribute("loggedin", false);
+       else _session.setAttribute("loggedin", false);
 
       }
       // login
       else if (bodyString.contains("username=")){
         
-        if(handleLogin(bodyString)) session.setAttribute("loggedin", true);
+        if(handleLogin(bodyString)) _session.setAttribute("loggedin", true);
         
-        else session.setAttribute("loggedin", false);
+        else _session.setAttribute("loggedin", false);
 
       }
       // complete the main completer
@@ -210,7 +210,7 @@ class RequestHandler {
     });
    
    // when completed assign htmlResponse to result 
-   maincompleter.future.then((data) => result = htmlResponse);
+   maincompleter.future.then((data) => result = _htmlResponse);
       
    return maincompleter.future; 
   
@@ -225,10 +225,10 @@ class RequestHandler {
     log("Attempting login...");
    
     if(check(body)){
-      htmlResponse = createPageFromHTMLFile("main.html");
+      _htmlResponse = createPageFromHTMLFile("main.html");
       return true;
     }
-    else htmlResponse = createLoginErrorPage();
+    else _htmlResponse = createLoginErrorPage();
     
     return false;
   
@@ -245,7 +245,7 @@ class RequestHandler {
     
     if(checkRegistrationParameters(body)){
       
-      htmlResponse = createPageFromHTMLFile("main.html");
+      _htmlResponse = createPageFromHTMLFile("main.html");
       return true;
     }
     else {

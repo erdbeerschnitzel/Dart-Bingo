@@ -256,8 +256,10 @@ class MessageHandler{
       return numberReady;
     }
     
-    // get a random number between 1 and 99
-    // no duplicates
+    /**
+     *  get a random number between 1 and 75
+     *  no duplicates
+     **/ 
     int getRandomNumber(){
       
       int random = new Random().nextInt(75);

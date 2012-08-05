@@ -1,3 +1,8 @@
+/**
+ * represents a bingo gamecard
+ * 5x5 fields
+ * string values
+ **/
 class Gamecard {
   
   List<List<String>> fields;
@@ -9,8 +14,7 @@ class Gamecard {
     fields = new List<List<String>>();
     addedNumbersGamecard = new List<int>();
     
-    initFields();
-  
+    initFields(); 
   }
   
   /**
@@ -19,6 +23,7 @@ class Gamecard {
    **/
   Gamecard.fromServer(String msg){
     
+    // create a random card locally
     fields = new List<List<String>>();
     addedNumbersGamecard = new List<int>();  
     initFields();
@@ -36,9 +41,7 @@ class Gamecard {
         
         for(int i = 0; i < 5; i++){
           
-          if(x == 2 && i == 2){
-
-          }
+          if(x == 2 && i == 2) {}
           else {
             
             fields[x][i] = liste[count];
@@ -65,10 +68,8 @@ class Gamecard {
         fields[i].add("0");
         
         // middle of gamecard
-        if(x == 2 && i == 2){
-          
-          fields[i][x] = "";
-        }
+        if(x == 2 && i == 2) fields[i][x] = "";
+
         else {
           
           int temp = getRandomNumber();
@@ -81,8 +82,12 @@ class Gamecard {
     
   }
   
-// very static
-// TODO: improve card creating algo
+/**
+ * creates the HTML string for this gamecard
+ * checks if gamecard is for computer enemy 
+ * 
+ * TODO: make it less static
+ **/
 String createCardHTML(bool forComputer){
   
   StringBuffer cardstring = new StringBuffer();
@@ -90,47 +95,40 @@ String createCardHTML(bool forComputer){
   int i = 0;
   int x = 0;
   
-  // TODO: refactor for stuff
+  
   for(List liste in fields){
     
+    // open tr element
     cardstring.add('<tr>');
     
     for(var value in liste){
       
-        // this adds a td element with specific class and specific value
-      if(forComputer){
-        
-        if(x < 5 && i < 5)  cardstring.add('<td id="c$i$x"class=top>${fields[i][x]}</td>');
-      }
-      else {
-        
-        if(x < 5 && i < 5)  cardstring.add('<td id="p$i$x"class=top>${fields[i][x]}</td>');
-        
-      }
-        // close the tr element
-        if(x == 4){ 
-          
-          cardstring.add('</tr>');
-          x = 0;
-        
-        } else {
-          x++;
-        }
-      }
+      // adds a td element with specific class and specific value
+      if(forComputer) if(x < 5 && i < 5)  cardstring.add('<td id="c$i$x"class=top>${fields[i][x]}</td>');
 
-    
-    if(i == 4){
-      i = 0;
-    } else {
-      i++;
+      else if(x < 5 && i < 5)  cardstring.add('<td id="p$i$x"class=top>${fields[i][x]}</td>');
+
+      // close the tr element
+      if(x == 4){ 
+          
+        cardstring.add('</tr>');
+        x = 0;
+        
+      } else x++;
+
     }
+   
+    if(i == 4) i = 0;
+    else i++;
 
   }
 
   return cardstring.toString();
 }
 
-//
+/**
+ * check the gamecard for bingo
+ **/
 bool checkBingo(){
   
   bool result = true;
@@ -140,22 +138,10 @@ bool checkBingo(){
   // horizontal check
   for(int i = 0; i < 5; i++){
     
-    result = true;
-    
     for(int x = 0; x < 5; x++){
    
-      if(i == 2 && x == 2){
-      }
-      else 
-      {
-      if(fields[i][x] != "0"){
-
-          result = false;
-          
-        }
-        
-        deb = "$deb$i$x: ${fields[i][x]} ";
-      }
+      if(i == 2 && x == 2){}
+      else if(fields[i][x] != "0") result = false;
     }
     
     if(result) return result; 
@@ -170,32 +156,22 @@ bool checkBingo(){
     
     for(int x = 0; x < 5; x++){
       
-      if(i == 2 && x == 2){
-      }
-      else 
-      {
-      
-        if(fields[x][i] != "0"){
-          
-          //debug("false: ${card.fields[i][x]}");
-          result = false;
-        }
-        
-        deb = "$deb$i$x: ${fields[i][x]} ";
-      }
+      if(i == 2 && x == 2) {}
+      else if(fields[x][i] != "0") result = false;
+
     }
 
-    if(result) return result; 
- 
-    
+    if(result) return result;  
+
   }  
-  
-  //debug(deb);
   
   return result;
 }
   
-
+  /**
+   *  get a random number between 1 and 75
+   *  no duplicates
+   **/ 
   int getRandomNumber(){
     
     int random = new Random().nextInt(75);
@@ -220,17 +196,15 @@ bool checkBingo(){
       
       for(int x = 0; x < 5; x++){
         
-        if(i == 0 && x == 0){
-          sb.add("${fields[i][x]}");
-        }
+        if(i == 0 && x == 0) sb.add("${fields[i][x]}");
+
         else {
-          if(i == 2 && x == 2){            
-          }
-          else {
-            sb.add(",${fields[i][x]}");
-          }
+          
+          if(i == 2 && x == 2) {}
+          else sb.add(",${fields[i][x]}");
+
         }
-        }  
+      }  
     }
     
     return sb.toString();
@@ -247,16 +221,9 @@ bool checkBingo(){
       
       for(int i = 0; i < 5; i++){
         
-        if(x == 2 && i == 2){
-          
+        if(x == 2 && i == 2) {}
+        else if(fields[x][i] == a) fields[x][i] = "0";
 
-        }
-        else {
-          if(fields[x][i] == a){
-            fields[x][i] = "0";
-            //print("field $a updated");
-          }
-        }
       }
     }  
   }

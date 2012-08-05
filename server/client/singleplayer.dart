@@ -8,7 +8,7 @@
 // globals
 Gamecard playercard;
 Gamecard computercard;
-int currentNumber = 22;
+int currentNumber = 42;
 List<int> addNumbers;
 bool active = false;
 bool first = true;
@@ -23,11 +23,11 @@ void main() {
  playercard = new Gamecard();
  
  // attach handlers
- document.query('#getGamecard').on.click.add(GamecardHandler);
+ query('#getGamecard').on.click.add(GamecardHandler);
  
- document.query('#startGame').on.click.add(GameHandler);
+ query('#startGame').on.click.add(GameHandler);
  
- document.query('#Bingo').on.click.add(BingoHandler);
+ query('#Bingo').on.click.add(BingoHandler);
  
  show('Welcome to Bingo');
 }
@@ -42,11 +42,11 @@ void GamecardHandler(gamecardevent){
     
     playercard = new Gamecard();
   
-    document.query('#playertable').innerHTML = playercard.createCardHTML(false);
+    query('#playertable').innerHTML = playercard.createCardHTML(false);
     
     addCellClickHandlers();
 
-    document.query('#computertable').innerHTML = computercard.createCardHTML(true);
+    query('#computertable').innerHTML = computercard.createCardHTML(true);
     
     show("Gamecards created!");
     
@@ -58,36 +58,30 @@ void GameHandler(gameevent){
 
   if(!first){
   
-  currentNumber = getRandomNumber();  
-  show("the current number is $currentNumber");
-  
-  for(int i = 0; i < 5; i++){
+    currentNumber = playercard.getRandomNumber();  
+    show("the current number is $currentNumber");
     
-    
-    for(int x = 0; x < 5; x++){
-      
-      if(computercard.fields[i][x] == currentNumber){
+    for(int i = 0; i < 5; i++){
+     
+      for(int x = 0; x < 5; x++){
         
-        document.query('#c$i$x').style.textDecoration = 'underline';
-        document.query('#c$i$x').style.backgroundColor = 'red';
-        computercard.fields[i][x] = 0;
-        
-        if(computercard.checkBingo()) endGame();
-      }
-      
+        if(computercard.fields[i][x] == currentNumber){
+          
+          query('#c$i$x').style.textDecoration = 'underline';
+          query('#c$i$x').style.backgroundColor = 'red';
+          computercard.fields[i][x] = "0";
+          
+          if(computercard.checkBingo()) endGame();
+        }      
+      }    
     }
-    
-  }
   
     active = true;
     document.query('#getGamecard').on.click.remove(GamecardHandler);
     document.query('#startGame').value = "Next Number";
     
   }
-  else {
-    
-    show("Get some Gamecards first!");
-  }
+  else show("Get some Gamecards first!");
 
 }
 
@@ -95,10 +89,8 @@ void GameHandler(gameevent){
 // handle bingo button
 void BingoHandler(bingoevent){
   
-  if(!active){
-    
-    show("You need to start the Game!");
-  }
+  if(!active) show("You need to start the Game!");
+
   else {
     
     if(playercard.checkBingo()){
@@ -114,13 +106,13 @@ void BingoHandler(bingoevent){
 
 void show(String message) {
   
-  document.query('#status').innerHTML = message;
+  query('#status').innerHTML = message;
   
 }
 
 void debug(String message) {
   
-  document.query('#debug').innerHTML = message;
+  query('#debug').innerHTML = message;
   
 }
 
@@ -129,12 +121,9 @@ void addCellClickHandlers(){
   
   for(int i = 0; i < 5; i++){
     
-    
     for(int x = 0; x < 5; x++){
       
-      if(i == 2 && x == 2){
-        
-      }
+      if(i == 2 && x == 2) {}
       else {
         
         TableCellElement el = document.query('#p$i$x');
@@ -145,7 +134,7 @@ void addCellClickHandlers(){
             
             el.style.textDecoration = 'underline';
             el.style.backgroundColor = 'red';
-            playercard.fields[i][x] = 0;
+            playercard.fields[i][x] = "0";
           }
 
         });         
@@ -158,23 +147,8 @@ void addCellClickHandlers(){
 
 void endGame(){
   
-  show("ENDE!");
+  show("The computer has won the round!");
   
   document.query('#startGame').on.click.remove(GameHandler);
-}
-
-
-
-// get a random number between 1 and 99
-// no duplicates
-int getRandomNumber(){
-  
-  int a = (Math.random()*100).toInt();
-  
-  while(a > 99 || a < 1 || (addNumbers.indexOf(a) >= 0)) a = (Math.random()*100).toInt();
-  
-  addNumbers.add(a);
-    
-  return a;
 }
 
