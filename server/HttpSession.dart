@@ -82,13 +82,5 @@ class HttpSession {
     return id;
   }
   
-  List getAttibuteNames() {
-    List rawKeys = _attributes.getKeys();
-    var attNames = [];
-    for(String x in rawKeys){
-      attNames.add(x);
-    }
-    return attNames;
-  }  
 
 }

@@ -8,21 +8,21 @@
 #source('RandomNumberGenerator.dart');
 
 // globals
-Gamecard playercard;
-Gamecard computercard;
-RandomNumberGenerator RNG;
-int currentNumber = 42;
+Gamecard _playercard;
+Gamecard _computercard;
+RandomNumberGenerator _RNG;
+int _currentNumber = 42;
 
-bool active = false;
-bool first = true;
+bool _active = false;
+bool _first = true;
 
 void main() {
  
  // init some Objects
 
- computercard = new Gamecard();
+ _computercard = new Gamecard();
  
- playercard = new Gamecard();
+ _playercard = new Gamecard();
  
  // attach handlers
  query('#getGamecard').on.click.add(GamecardHandler);
@@ -40,47 +40,47 @@ void main() {
 // handles gamecard creating
 void GamecardHandler(gamecardevent){
      
-    RNG = new RandomNumberGenerator();
+    _RNG = new RandomNumberGenerator();
   
-    computercard = new Gamecard();
+    _computercard = new Gamecard();
     
-    playercard = new Gamecard();
+    _playercard = new Gamecard();
   
-    query('#playertable').innerHTML = playercard.createCardHTML(false);
+    query('#playertable').innerHTML = _playercard.createCardHTML(false);
     
     addCellClickHandlers();
 
-    query('#computertable').innerHTML = computercard.createCardHTML(true);
+    query('#computertable').innerHTML = _computercard.createCardHTML(true);
     
     show("Gamecards created!");
     
-    first = false;
+    _first = false;
 }
 
 // handle next number and computer logic
 void GameHandler(gameevent){
 
-  if(!first){
+  if(!_first){
   
-    currentNumber = RNG.getRandomNumber();  
-    show("The current number is $currentNumber");
+    _currentNumber = _RNG.getRandomNumber();  
+    show("The current number is $_currentNumber");
     
     for(int i = 0; i < 5; i++){
      
       for(int x = 0; x < 5; x++){
         
-        if(computercard.fields[i][x] == currentNumber.toString()){
+        if(_computercard.fields[i][x] == _currentNumber.toString()){
           
           query('#c$i$x').style.textDecoration = 'underline';
           query('#c$i$x').style.backgroundColor = 'red';
-          computercard.fields[i][x] = "0";
+          _computercard.fields[i][x] = "0";
           
-          if(computercard.checkBingo()) endGame();
+          if(_computercard.checkBingo()) endGame();
         }      
       }    
     }
   
-    active = true;
+    _active = true;
     document.query('#getGamecard').on.click.remove(GamecardHandler);
     document.query('#startGame').value = "Next Number";
     
@@ -93,12 +93,12 @@ void GameHandler(gameevent){
 // handle bingo button
 void BingoHandler(bingoevent){
   
-  if(!active) show("You need to start the Game!");
+  if(!_active) show("You need to start the Game!");
 
   else {
     
-    if(playercard.checkBingo()){
-      active = false;
+    if(_playercard.checkBingo()){
+      _active = false;
       show("You have a Bingo! Congratulations!");
     }
     else show("You don't have a Bingo!");
@@ -136,11 +136,11 @@ void addCellClickHandlers(){
         
         el.on.click.add((event2) {
           
-          if(currentNumber.toString() == el.innerHTML.toString()){
+          if(_currentNumber.toString() == el.innerHTML.toString()){
             
             el.style.textDecoration = 'underline';
             el.style.backgroundColor = 'red';
-            playercard.fields[i][x] = "0";
+            _playercard.fields[i][x] = "0";
           }
 
         });         

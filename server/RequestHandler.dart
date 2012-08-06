@@ -47,7 +47,7 @@ class RequestHandler {
     else {
       
       handleGETRequest(req, resp).then((result){
-        log("GET handled for ${req.path}");
+        log("GET handled for ${req.path} $result");
         answerRequest(req, resp);
         });
     }
@@ -70,6 +70,8 @@ class RequestHandler {
     if(_htmlResponse != "!File!"){
   
       resp.contentLength = _htmlResponse.splitChars().length;
+      
+      if(_htmlResponse == "empty") _htmlResponse = createErrorPage("Error occured");
   
       resp.outputStream.writeString(_htmlResponse);
     }
@@ -141,8 +143,18 @@ class RequestHandler {
           // non-html files
           else {
             
-            if(req.path.contains('.png')) _htmlResponse = "!File!";
-            else _htmlResponse = createHtmlResponse(".${req.path}");
+            // logout
+            if(req.path.endsWith("invalidate")){
+              _session = _sessionManager.getSession(req, resp);
+              _session.setAttribute("loggedin", false);
+              _htmlResponse = createHtmlResponse("html/index.html");
+            }
+            else {
+              
+              if(req.path.contains('.png')) _htmlResponse = "!File!";
+              else _htmlResponse = createHtmlResponse(".${req.path}");
+            }
+
           }
       }
       // path = index.html
