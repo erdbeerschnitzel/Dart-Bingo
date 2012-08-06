@@ -47,7 +47,7 @@ class HttpSessionManager{
     
     if (id == null) {
       
-      HttpSession sess = new HttpSession.fromRequest(request, response);
+      HttpSession sess = new HttpSession.fromRequest(response);
       
       _sessions[sess.getID()] = {"isNew": true, "creationTime": new Date.now(), "loggedin": false,
                                "lastAccessedTime": new Date.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
@@ -57,7 +57,7 @@ class HttpSessionManager{
     else if (_sessions[id] == null) {
       
       print("session $id not found in sessions ${_sessions.getKeys()}");
-      HttpSession newSession =  new HttpSession.fromRequest(request, response);
+      HttpSession newSession =  new HttpSession.fromRequest(response);
       
       newSession.setID(id);
       
@@ -85,7 +85,7 @@ class HttpSessionManager{
       else if (new Date.now().millisecondsSinceEpoch > lastAccessedTime + maxInactiveInterval * 1000){
         _sessions.remove(id); 
         print("session $id expired");
-        session = new HttpSession.fromRequest(request, response);
+        session = new HttpSession.fromRequest(response);
       }
       
       return session;

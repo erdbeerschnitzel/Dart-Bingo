@@ -10,7 +10,7 @@ class HttpSession {
   HttpSession(){}
 
   // constructor for new Session
-  HttpSession.fromRequest(HttpRequest request, HttpResponse response) {
+  HttpSession.fromRequest(HttpResponse response) {
     _attributes = new Map<String, Dynamic>();
     _sessionID = createSessionId();
     
