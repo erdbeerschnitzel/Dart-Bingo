@@ -133,8 +133,8 @@ class RequestHandler {
             // logout
             if(req.path.endsWith("invalidate")){
               _session = _sessionManager.getSession(req, resp);
-              _session.setAttribute("loggedin", false);
-              _htmlResponse = createHtmlResponse("html/index.html");
+              _sessionManager.getSessions()[_session.getID()]["loggedin"] = false;
+              _htmlResponse  = createHtmlResponse("html/index.html");
             }
             else {
               

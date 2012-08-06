@@ -16,6 +16,7 @@ String _currentNumber = "42";
 bool _first = true;
 bool _gameStarted = false;
 bool _bingoSent = false;
+bool _debug = false;
 InputElement _messageInput;
 InputElement _nicknameInput;
 InputElement _messageWindow;
@@ -237,30 +238,35 @@ String handleMessage(String msg){
     
     // DEBUG HELP!
     
-    for(int i = 0; i < 5; i++){
+    if(_debug){
       
-      for(int x = 0; x < 5; x++){
+      for(int i = 0; i < 5; i++){
         
-        if(i == 2 && x == 2){
+        for(int x = 0; x < 5; x++){
           
-        }
-        else {
-          
-          // get element of gamecard table
-          TableCellElement el = document.query('#p$i$x');
-  
-            // if received number is equal to field number
-            if(_currentNumber.toString() == el.innerHTML.toString()){
-              
-              //el.style.textDecoration = 'underline';
-              el.style.backgroundColor = 'red';
-              playercard.fields[i][x] = "0";
-            }
+          if(i == 2 && x == 2){
+            
+          }
+          else {
+            
+            // get element of gamecard table
+            TableCellElement el = document.query('#p$i$x');
+    
+              // if received number is equal to field number
+              if(_currentNumber.toString() == el.innerHTML.toString()){
+                
+                //el.style.textDecoration = 'underline';
+                el.style.backgroundColor = 'red';
+                playercard.fields[i][x] = "0";
+              }
 
-       
-        }
-      }    
+         
+          }
+        }    
+      }      
     }
+    
+
     
     return "";
   }

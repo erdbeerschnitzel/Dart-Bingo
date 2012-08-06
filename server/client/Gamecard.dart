@@ -134,9 +134,10 @@ String createCardHTML(bool forComputer){
 bool checkBingo(){
   
   bool result = true;
-   
-  
+ 
   for(int i = 0; i < 5; i++){
+    
+    result = true;
     
     // horizontal check
     for(int x = 0; x < 5; x++){
@@ -158,9 +159,7 @@ bool checkBingo(){
  
     if(result) return result; 
   }
-  
-  
-  
+
   return result;
 }
   

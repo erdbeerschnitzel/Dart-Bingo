@@ -17,8 +17,9 @@ class MessageHandler{
   List clients;
   
   RandomNumberGenerator RNG;
-  Timer messageTimer;
-  bool gameStarted = false;
+  Timer _messageTimer;
+  bool _gameStarted = false;
+  int _timerTick = 15000;
   
   // standard constructor
   MessageHandler(){
@@ -130,10 +131,10 @@ class MessageHandler{
     }
 
     // when all clients are ready start the game
-    if(getNumberOfReadyClients() == clients.length && getNumberOfReadyClients() > 1 && !gameStarted) {
+    if(getNumberOfReadyClients() == clients.length && getNumberOfReadyClients() > 1 && !_gameStarted) {
       
-      gameStarted = true;
-      messageTimer = new Timer.repeating(2000, timeHandler);
+      _gameStarted = true;
+      _messageTimer = new Timer.repeating(_timerTick, timeHandler);
       log("Game started...");
       sendMessageToAllClients("All players are ready! Starting the Game!");
     }
@@ -158,6 +159,7 @@ class MessageHandler{
             
             log("client found");
             log("client ws msg: ${client.gamecard.toWSMessage()}");
+            
             List<String> originalvalues = client.gamecard.toWSMessage().replaceFirst("GAMECARD:", "").split(",");
            
             for(int i = 0; i < values.length; i++){
@@ -190,7 +192,7 @@ class MessageHandler{
   
     void timeHandler(timeevent) {
     
-      if(gameStarted && getNumberOfReadyClients() > 1 && RNG.addNumbers.length < 75) sendMessageToAllClients("Number: ${RNG.getRandomNumber()}");
+      if(_gameStarted && getNumberOfReadyClients() > 1 && RNG.addNumbers.length < 75) sendMessageToAllClients("Number: ${RNG.getRandomNumber()}");
 
       else stopTimer();
     }
@@ -202,13 +204,13 @@ class MessageHandler{
      **/
     void stopTimer(){
       
-      if(messageTimer != null) messageTimer.cancel();
+      if(_messageTimer != null) _messageTimer.cancel();
       
-      if(gameStarted){
+      if(_gameStarted){
         
         log("Game stopped. Timer stopped.");
         
-        gameStarted = false;
+        _gameStarted = false;
         
         clients.forEach((var client) {
             client.ready = false;    

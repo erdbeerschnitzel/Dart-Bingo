@@ -1389,7 +1389,7 @@ $$.Gamecard = {"":
   var i = 0;
   var result = true;
   for (; i < 5; ++i) {
-    for (var t2 = i === 2, x = 0; x < 5; ++x) {
+    for (var t2 = i === 2, x = 0, result = true; x < 5; ++x) {
       if (!(t2 && x === 2)) {
         if (i < 0 || i >= t3) throw $.ioore(i);
         var t4 = t1[i];
@@ -1470,6 +1470,7 @@ $$.Gamecard = {"":
             if (!(i < 5)) break L0;
             var t2 = i === 2;
             var x = 0;
+            result = true;
           default:
             L1: while (true) {
               switch (state) {
@@ -3947,13 +3948,15 @@ $.handleMessage = function(msg) {
   }
   if ($.contains$1(msg, 'Number') === true && $.contains$1(msg, 'of') !== true) {
     $._currentNumber = $.replaceAll(msg, 'Number: ', '');
-    for (var i = 0; i < 5; ++i) {
-      for (t1 = i === 2, x = 0; x < 5; ++x) {
-        if (!(t1 && x === 2)) {
-          var el = $.document().query$1('#p' + $.S(i) + $.S(x));
-          if ($.eqB($.toString($._currentNumber), $.toString(el.get$innerHTML()))) {
-            el.get$style().set$backgroundColor('red');
-            $.indexSet($.index($.playercard.get$fields(), i), x, '0');
+    if ($._debug === true) {
+      for (var i = 0; i < 5; ++i) {
+        for (t1 = i === 2, x = 0; x < 5; ++x) {
+          if (!(t1 && x === 2)) {
+            var el = $.document().query$1('#p' + $.S(i) + $.S(x));
+            if ($.eqB($.toString($._currentNumber), $.toString(el.get$innerHTML()))) {
+              el.get$style().set$backgroundColor('red');
+              $.indexSet($.index($.playercard.get$fields(), i), x, '0');
+            }
           }
         }
       }
@@ -5846,6 +5849,7 @@ $._ws = null;
 $._getTypeNameOf = null;
 $.playercard = null;
 $._cachedBrowserPrefix = null;
+$._debug = false;
 $._nicknameInput = null;
 $._messageInput = null;
 $._currentNumber = '42';
