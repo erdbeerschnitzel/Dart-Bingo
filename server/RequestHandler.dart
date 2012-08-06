@@ -47,7 +47,7 @@ class RequestHandler {
     else {
       
       handleGETRequest(req, resp).then((result){
-        log("GET handled for ${req.path} $result");
+        log("GET handled for ${req.path}");
         answerRequest(req, resp);
         });
     }
