@@ -106,23 +106,11 @@ class RequestHandler {
         if(req.path.endsWith("html")){
           
           _session = _sessionManager.getSession(req, resp);
-         
-          if (_session != null){
-         
-            if (_session.isNew(_sessionManager.getSessions())){
-              
-              _session.setMaxInactiveInterval(_MaxInactiveInterval);
-              
-              log("new Session opened");
-              
-              _session.setAttribute("isNew", false);
-  
-              _htmlResponse = createLoginErrorPage();
-            }
-            
-            else {
 
-                if(_session.getAttribute("loggedin")){
+          if (_session != null){
+
+         
+                if(_sessionManager.getSessions()[_session.getID()]["loggedin"] == true){
                   
                   path = req.path; 
                   
@@ -135,13 +123,12 @@ class RequestHandler {
                   _htmlResponse = createHtmlResponse(path);
                 }
                 else _htmlResponse = createLoginErrorPage();
-       
-            }
-            
+ 
           }
-          }
-          // non-html files
-          else {
+          else _htmlResponse = createLoginErrorPage();
+      }
+      // non-html files
+      else {
             
             // logout
             if(req.path.endsWith("invalidate")){
@@ -155,10 +142,13 @@ class RequestHandler {
               else _htmlResponse = createHtmlResponse(".${req.path}");
             }
 
-          }
+        }
       }
       // path = index.html
-      else _htmlResponse = createHtmlResponse("html/index.html");
+      else{
+        _sessionManager.getSession(req, resp);
+        _htmlResponse = createHtmlResponse("html/index.html");
+      }
  
     } catch (Exception error) {
       
@@ -185,7 +175,7 @@ class RequestHandler {
   
     _session = _sessionManager.getSession(req, resp);
     
-    if (_session != null) if (_session.isNew(_sessionManager.getSessions())) _session.setMaxInactiveInterval(_MaxInactiveInterval);
+    if (_session != null) if (_session.isNew(_sessionManager.getSessions())) _sessionManager.getSessions()[_session.getID()]["maxInactiveInterval"] = _MaxInactiveInterval;
 
     else log("session was null");
 
@@ -215,17 +205,28 @@ class RequestHandler {
       // registration
       if(bodyString.contains("repeatpassword")){
         
-       if(handleRegistration(bodyString)) _session.setAttribute("loggedin", true);
+       if(handleRegistration(bodyString)){
+         _sessionManager.getSessions()[_session.getID()]["loggedin"] = true;
+         _sessionManager.getSessions()[_session.getID()]["isNew"] = false;
+       }
        
-       else _session.setAttribute("loggedin", false);
+       else _sessionManager.getSessions()[_session.getID()]["loggedin"] = false;
 
       }
       // login
       else if (bodyString.contains("username=")){
         
-        if(handleLogin(bodyString)) _session.setAttribute("loggedin", true);
-        
-        else _session.setAttribute("loggedin", false);
+        if(handleLogin(bodyString)) {
+          
+          if(_sessionManager.getSessions()[_session.getID()] != null){
+            _sessionManager.getSessions()[_session.getID()]["loggedin"] = true;
+          }
+
+        }
+        else{
+          
+          if(_sessionManager.getSessions()[_session.getID()] != null) _sessionManager.getSessions()[_session.getID()]["loggedin"] = false;
+        }
 
       }
       // complete the main completer

@@ -40,11 +40,8 @@ class HttpSessionManager{
   // get the current Session for client or create a new one
   HttpSession getSession(HttpRequest request, HttpResponse response) {
     
-    if (_sessions == null) {
-      
-      print("sessions was null");
-      _sessions = new Map<String, Map>();
-    };
+    if (_sessions == null) _sessions = new Map<String, Map>();
+
     
     String id = getRequestSessionId(request);
     
@@ -59,7 +56,7 @@ class HttpSessionManager{
     
     else if (_sessions[id] == null) {
       
-      //print("session not found in sessions");
+      print("session $id not found in sessions ${_sessions.getKeys()}");
       HttpSession newSession =  new HttpSession.fromRequest(request, response);
       
       newSession.setID(id);
@@ -71,7 +68,7 @@ class HttpSessionManager{
     }
     // session exists
     else { 
-      
+
       HttpSession session = new HttpSession();
       session._sessionID = id;
       session._attributes = _sessions[id]["attributes"];

@@ -49,15 +49,17 @@ class HttpSession {
 
   int getMaxInactiveInterval() => _sessions[_sessionID]["maxInactiveInterval"];
 
-  // getAttribute(String name)
+
+  //
   Dynamic getAttribute(String name) {
-    if (_attributes.containsKey(name)) {
-      return _attributes[name];
+    
+    if (_sessions[_sessionID]["attributes"].containsKey(name)) {
+      return _sessions[_sessionID]["attributes"][name];
     }
     else return null;
   }
 
-  // setAttribute(String name, Dynamic value)
+  //
   void setAttribute(String name, Dynamic value) {
     
     _attributes[name] = value;
