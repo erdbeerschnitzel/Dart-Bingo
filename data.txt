@@ -4,3 +4,4 @@ admin5=huhn
 admin6=huhn
 admin1=huhn
 admin7=admin
+admin2=admin

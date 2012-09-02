@@ -68,10 +68,10 @@ class RequestHandler {
     
   
     if(_htmlResponse != "!File!"){
-  
-      resp.contentLength = _htmlResponse.splitChars().length;
-      
+
       if(_htmlResponse == "empty") _htmlResponse = createErrorPage("Error occured");
+      
+      resp.contentLength = _htmlResponse.splitChars().length;
   
       resp.outputStream.writeString(_htmlResponse);
     }
@@ -150,7 +150,7 @@ class RequestHandler {
         _htmlResponse = createHtmlResponse("html/index.html");
       }
  
-    } catch (Exception error) {
+    } catch (error) {
       
       _htmlResponse = createErrorPage(error.toString());
     }
