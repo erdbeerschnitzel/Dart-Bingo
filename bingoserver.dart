@@ -57,7 +57,6 @@ void addWebSocketHandlers(){
     messageHandler.connections.add(conn);    
     
     conn.onClosed = (a, b) => messageHandler.removeConnection(conn);
-    conn.onError = (_) => messageHandler.removeConnection(conn);
     conn.onMessage = (msg) => messageHandler.delegateMessage(msg, conn);
   };
   
