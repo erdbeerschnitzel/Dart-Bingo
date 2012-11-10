@@ -1,3 +1,4 @@
+part of onlinebingosingleplayer;
 /**
  * represents a bingo gamecard
  * 5x5 fields

@@ -1,4 +1,4 @@
-
+part of bingoserver;
 /**
  * simple Class representing a Client consisting of a Websocket Connection and a Gamecard object
  **/

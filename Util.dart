@@ -1,3 +1,4 @@
+part of MessageHandler;
 /**
 *
 * Utility methods

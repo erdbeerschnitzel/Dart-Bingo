@@ -1,3 +1,4 @@
+part of onlinebingosingleplayer;
 /**
  *  get a random number between 1 and 75
  *  no duplicates

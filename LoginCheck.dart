@@ -1,3 +1,4 @@
+part of MessageHandler;
 /**
  * Provides a simple Login check based on access data read from a txt file and http post data
  * 

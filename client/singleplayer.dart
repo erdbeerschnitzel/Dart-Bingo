@@ -2,6 +2,7 @@
  * client-side of Online-Bingo
  * singleplayer main
  **/
+library onlinebingosingleplayer;
 import 'dart:html';
 import 'dart:math';
 part 'Gamecard.dart';

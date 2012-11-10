@@ -2,7 +2,7 @@
  * Server-side of Online-Bingo
  * no class - only main()
  **/
-
+library bingoserver;
 // import dart Libs
 import 'dart:io';
 import 'dart:isolate';
