@@ -2,7 +2,7 @@
  * Manages standard HTTP requests
  *
  **/
-library MessageHandler;
+library RequestHandler;
 
 import "dart:io";
 import "dart:isolate";

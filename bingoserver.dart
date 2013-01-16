@@ -7,8 +7,8 @@ library bingoserver;
 import 'dart:io';
 import 'dart:isolate';
 // import own libs
-import 'MessageHandler.dart';
 import 'RequestHandler.dart';
+import 'MessageHandler.dart';
 // import normal source files
 part 'Client.dart';
 
