@@ -176,9 +176,15 @@ void log(var msg) => print("${new Date.now()}: $msg");
 // log to file server.log
 void logToFile(String msg){
 
-  File file = new File('log/server.log');
+  File file = new File('server.log');
 
-  OutputStream out = file.openOutputStream(FileMode.APPEND);
+  OutputStream out;
+  if(file.existsSync()){
+    out = file.openOutputStream(FileMode.APPEND);
+  }
+  else {
+    out = file.openOutputStream(FileMode.WRITE); 
+  }
   out.writeString("\r\n${new Date.now()}: $msg");
   out.close();
 
