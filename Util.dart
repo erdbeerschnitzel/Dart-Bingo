@@ -183,7 +183,7 @@ void logToFile(String msg){
     out = file.openOutputStream(FileMode.APPEND);
   }
   else {
-    out = file.openOutputStream(FileMode.WRITE); 
+    out = file.openOutputStream(FileMode.WRITE);
   }
   out.writeString("\r\n${new Date.now()}: $msg");
   out.close();

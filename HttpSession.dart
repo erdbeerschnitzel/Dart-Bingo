@@ -79,7 +79,7 @@ class HttpSessionObject {
 
     String id = "${(new Random().nextInt(55555) * 0x100000000 + 0x100000000).toString()} ${new Date.now().toString()}";
 
-    id = CryptoUtils.bytesToHex(new MD5().update(id.charCodes).digest());
+    id = CryptoUtils.bytesToHex(new MD5().add(id.charCodes).digest());
 
     // make it 16 chars long
     id = id.substring(id.length - 16);

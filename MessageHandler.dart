@@ -7,6 +7,7 @@ library MessageHandler;
 import "dart:io";
 import "dart:isolate";
 import "dart:math";
+import 'dart:async';
 part "client/Gamecard.dart";
 part "client/RandomNumberGenerator.dart";
 

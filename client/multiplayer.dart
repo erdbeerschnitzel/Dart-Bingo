@@ -324,12 +324,6 @@ void addChatEventHandlers() {
     }
   });
 
-
-  _nicknameInput.on.keyPress.add((UIEvent event) {
-    if (event.keyCode == 13) {
-      //ws.send(_nicknameInput.value);
-    }
-  });
 }
 
 
