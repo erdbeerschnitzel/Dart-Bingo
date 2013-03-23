@@ -142,12 +142,12 @@ StringBuffer cleanText(StringBuffer text) {
 
   for (int i = 0; i < s.length; i++){
 
-    if (s[i] == '&') { text.add('&amp;');
-    } else if (s[i] == '"') { text.add('&quot;');
-    } else if (s[i] == "'") { text.add('&#39;');
-    } else if (s[i] == '<') { text.add('&lt;');
-    } else if (s[i] == '>') { text.add('&gt;');
-    } else { text.add(s[i]);
+    if (s[i] == '&') { text.write('&amp;');
+    } else if (s[i] == '"') { text.write('&quot;');
+    } else if (s[i] == "'") { text.write('&#39;');
+    } else if (s[i] == '<') { text.write('&lt;');
+    } else if (s[i] == '>') { text.write('&gt;');
+    } else { text.write(s[i]);
     }
   }
 

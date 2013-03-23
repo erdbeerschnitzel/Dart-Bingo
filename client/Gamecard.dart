@@ -100,22 +100,22 @@ String createCardHTML(bool forComputer){
   for(List liste in fields){
 
     // open tr element
-    cardstring.add('<tr>');
+    cardstring.write('<tr>');
 
     for(var value in liste){
 
       // adds a td element with specific class and specific value
       if(forComputer){
 
-        if(x < 5 && i < 5) cardstring.add('<td id="c$i$x"class=top>${fields[i][x]}</td>');
+        if(x < 5 && i < 5) cardstring.write('<td id="c$i$x"class=top>${fields[i][x]}</td>');
       }
 
-      else if(x < 5 && i < 5)  cardstring.add('<td id="p$i$x"class=top>${fields[i][x]}</td>');
+      else if(x < 5 && i < 5)  cardstring.write('<td id="p$i$x"class=top>${fields[i][x]}</td>');
 
       // close the tr element
       if(x == 4){
 
-        cardstring.add('</tr>');
+        cardstring.write('</tr>');
         x = 0;
 
       } else { x++;
@@ -177,18 +177,18 @@ bool checkBingo(){
 
     StringBuffer sb = new StringBuffer();
 
-    sb.add("GAMECARD:");
+    sb.write("GAMECARD:");
 
     for(int i = 0; i < 5; i++){
 
       for(int x = 0; x < 5; x++){
 
-        if(i == 0 && x == 0) { sb.add("${fields[i][x]}");
+        if(i == 0 && x == 0) { sb.write("${fields[i][x]}");
 
         } else {
 
           if(i == 2 && x == 2) {}
-          else { sb.add(",${fields[i][x]}");
+          else { sb.write(",${fields[i][x]}");
           }
 
         }
