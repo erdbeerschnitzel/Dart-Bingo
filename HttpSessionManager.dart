@@ -51,8 +51,8 @@ class HttpSessionManager{
 
       HttpSessionObject sess = new HttpSessionObject.fromRequest(response);
 
-      _sessions[sess.getID()] = {"isNew": true, "creationTime": new Date.now(), "loggedin": false,
-                               "lastAccessedTime": new Date.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
+      _sessions[sess.getID()] = {"isNew": true, "creationTime": new DateTime.now(), "loggedin": false,
+                               "lastAccessedTime": new DateTime.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
       return sess;
     }
 
@@ -63,8 +63,8 @@ class HttpSessionManager{
 
       newSession.setID(id);
 
-      _sessions[id] = {"isNew": true, "creationTime": new Date.now(), "loggedin": false,
-                                 "lastAccessedTime": new Date.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
+      _sessions[id] = {"isNew": true, "creationTime": new DateTime.now(), "loggedin": false,
+                                 "lastAccessedTime": new DateTime.now().millisecondsSinceEpoch, "maxInactiveInterval": _defaultMaxInactiveInterval, "attributes": _attributes};
 
       return newSession;
     }
@@ -78,13 +78,13 @@ class HttpSessionManager{
       var lastAccessedTime =_sessions[id]["lastAccessedTime"];
       var maxInactiveInterval = _sessions[id]["maxInactiveInterval"];
 
-      _sessions[id]["lastAccessedTime"] = new Date.now().millisecondsSinceEpoch;
+      _sessions[id]["lastAccessedTime"] = new DateTime.now().millisecondsSinceEpoch;
       _sessions[id]["isNew"] = false;
 
       if (maxInactiveInterval < 0) { return session;
 
       // session expired
-      } else if (new Date.now().millisecondsSinceEpoch > lastAccessedTime + maxInactiveInterval * 1000){
+      } else if (new DateTime.now().millisecondsSinceEpoch > lastAccessedTime + maxInactiveInterval * 1000){
         _sessions.remove(id);
         print("session $id expired");
         session = new HttpSessionObject.fromRequest(response);
@@ -109,7 +109,7 @@ class HttpSessionManager{
     var id = getRequestSessionId(request);
     if (id == null) { return false;
     } else if (_sessions.containsKey(id) == false) { return false;
-    } else if (_sessions[id]["lastAccessedTime"] + _sessions[id]["maxInactiveInterval"] * 1000 > new Date.now()) {
+    } else if (_sessions[id]["lastAccessedTime"] + _sessions[id]["maxInactiveInterval"] * 1000 > new DateTime.now()) {
       return true;
     }
     else { return false;
@@ -147,16 +147,16 @@ class HttpSessionManager{
   // Session garbage collection
   void sessionGarbageCollect(timeevent) {
 
-    print("${new Date.now()}: sessionGarbageCollector started");
+    print("${new DateTime.now()}: sessionGarbageCollector started");
 
-      int now = new Date.now().millisecondsSinceEpoch;
+      int now = new DateTime.now().millisecondsSinceEpoch;
 
       _sessions.forEach((key, value){
 
         if (key != "" && _sessions[key]["lastAccessedTime"] + _sessions[key]["maxInactiveInterval"] * 1000 < now) {
 
           _sessions.remove(key);
-          print("${new Date.now()}: sessionGarbageCollector: removed session $key");
+          print("${new DateTime.now()}: sessionGarbageCollector: removed session $key");
         }
       });
 

@@ -171,7 +171,7 @@ List readNonTextFile(String path){
 }
 
 // simple logging method printing time and msg
-void log(var msg) => print("${new Date.now()}: $msg");
+void log(var msg) => print("${new DateTime.now()}: $msg");
 
 // log to file server.log
 void logToFile(String msg){
@@ -185,7 +185,7 @@ void logToFile(String msg){
   else {
     out = file.openOutputStream(FileMode.WRITE);
   }
-  out.writeString("\r\n${new Date.now()}: $msg");
+  out.writeString("\r\n${new DateTime.now()}: $msg");
   out.close();
 
 }

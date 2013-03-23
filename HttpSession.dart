@@ -77,7 +77,7 @@ class HttpSessionObject {
   // create  new session ID
   String createSessionId() {
 
-    String id = "${(new Random().nextInt(55555) * 0x100000000 + 0x100000000).toString()} ${new Date.now().toString()}";
+    String id = "${(new Random().nextInt(55555) * 0x100000000 + 0x100000000).toString()} ${new DateTime.now().toString()}";
 
     id = CryptoUtils.bytesToHex(new MD5().add(id.charCodes).digest());
 

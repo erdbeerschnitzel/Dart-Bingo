@@ -26,11 +26,11 @@ void main() {
  _playercard = new Gamecard();
 
  // attach handlers
- query('#getGamecard').on.click.add(GamecardHandler);
+ query('#getGamecard').onClick.listen(GamecardHandler);
 
- query('#startGame').on.click.add(GameHandler);
+ query('#startGame').onClick.listen(GameHandler);
 
- query('#Bingo').on.click.add(BingoHandler);
+ query('#Bingo').onClick.listen(BingoHandler);
 
  show('Welcome to Bingo');
 }
@@ -138,7 +138,7 @@ void addCellClickHandlers(){
 
         TableCellElement el = document.query('#p$i$x');
 
-        el.on.click.add((event2) {
+        el.onClick.listen((event2) {
 
           if(_currentNumber.toString() == el.innerHTML.toString()){
 

@@ -4,7 +4,7 @@
 
 import 'dart:html';
 
-main() => query('#register').on.click.add(registerHandler);
+main() => query('#register').onClick.listen(registerHandler);
 
 
 void registerHandler(registerevent){

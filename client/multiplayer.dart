@@ -28,11 +28,11 @@ InputElement _messageWindow;
 void main() {
 
  // attach handlers
- query('#getGamecard').on.click.add(GamecardHandler);
+ query('#getGamecard').onClick.listen(GamecardHandler);
 
- query('#startGame').on.click.add(GameHandler);
+ query('#startGame').onClick.listen(GameHandler);
 
- query('#Bingo').on.click.add(BingoHandler);
+ query('#Bingo').onClick.listen(BingoHandler);
 
  _messageWindow = query("#messagewindow");
 
@@ -93,7 +93,7 @@ void GameHandler(gameevent){
 
         query('#startGame').value = "I'm ready!";
 
-        query('#getGamecard').on.click.add(GamecardHandler);
+        query('#getGamecard').onClick.listen(GamecardHandler);
       }
     }
 
@@ -157,11 +157,11 @@ void BingoHandler(bingoevent){
 
     query('#Bingo').value = "Bingo!";
 
-    query('#startGame').on.click.add(GameHandler);
+    query('#startGame').onClick.listen(GameHandler);
     query('#startGame').hidden = false;
     query('#startGame').value = "I'm ready!";
     query('#getGamecard').hidden = false;
-    query('#getGamecard').on.click.add(GamecardHandler);
+    query('#getGamecard').onClick.listen(GamecardHandler);
 
     playercard = new Gamecard();
     query('#playertable').innerHTML = playercard.createCardHTML(false);
@@ -313,7 +313,7 @@ void addChatEventHandlers() {
   _nicknameInput = query("#nickname");
   InputElement messagewindow = query("#messagewindow");
 
-  _messageInput.on.keyPress.add((UIEvent event) {
+  _messageInput.onKeyPress.listen((UIEvent event) {
     if (event.keyCode == 13) {
 
       _ws.send("CHAT: <${_nicknameInput.value}> ${_messageInput.value}");
@@ -329,7 +329,7 @@ void addChatEventHandlers() {
 
 void addMessageToMessageWindow(String msg){
 
-  String time = "${new Date.now()}";
+  String time = "${new DateTime.now()}";
   time = time.substring(time.indexOf(" ") + 1);
   time = time.split(".")[0];
 
@@ -357,7 +357,7 @@ void addCellClickHandlers(){
 
         TableCellElement el = query('#p$i$x');
 
-        el.on.click.add((event2) {
+        el.onClick.listen((event2) {
 
           if(_currentNumber.toString() == el.innerHTML){
 

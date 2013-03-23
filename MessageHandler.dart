@@ -243,6 +243,6 @@ class MessageHandler{
 
 
     // simple logging method printing time and msg
-    void log(var msg) => print("${new Date.now()}: $msg");
+    void log(var msg) => print("${new DateTime.now()}: $msg");
 
 }
